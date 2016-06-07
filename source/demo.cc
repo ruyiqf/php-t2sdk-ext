@@ -229,7 +229,7 @@ void Connection::connect()
     if (!handle)  
     {  
        error = dlerror();
-       fputs(error)
+       puts(error)
     }  
 
     typedef CConfigInterface* config(); 
