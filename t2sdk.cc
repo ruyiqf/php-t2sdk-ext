@@ -47,15 +47,15 @@ zend_object_value connection_create_handler(zend_class_entry *type TSRMLS_DC)
 
 PHP_METHOD(Connection, __construct)
 {
-	long maxGear;
+	// long maxGear;
     Connection *connection = NULL;
     zval *object = getThis();
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &maxGear) == FAILURE) {
-        RETURN_NULL();
-    }
+    // if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &maxGear) == FAILURE) {
+    //     RETURN_NULL();
+    // }
 
-    connection = new Connection(maxGear);
+    connection = new Connection();
     connection_object *obj = (connection_object *)zend_object_store_get_object(object TSRMLS_CC);
     obj->connection = connection;
 }
@@ -73,7 +73,7 @@ PHP_METHOD(Connection, p_connect)
 
     connection = obj->connection;
     if (connection != NULL) {
-        connection->connect()
+        connection->connect();
     }
 }
 
