@@ -229,15 +229,15 @@ void Connection::connect()
     if (!handle)  
     {  
        error = dlerror();
-       puts(error)
+       puts(error);
     }  
 
     typedef CConfigInterface* config(); 
     typedef CConnectionInterface* connection(CConfigInterface*); 
     typedef IF2Packer* packer(int); 
-    config NewConfig = (config) dlsym(handel, "NewConfig");
-    connection NewConnection = (connection) dlsym(handel, "NewConnection");
-    packer NewPacker = (packer) dlsym(handel, "NewPacker");
+    config NewConfig = (config) dlsym(handle, "NewConfig");
+    connection NewConnection = (connection) dlsym(handle, "NewConnection");
+    packer NewPacker = (packer) dlsym(handle, "NewPacker");
   
     CConfigInterface* lpConfig = NewConfig(); 
     error = dlerror();
