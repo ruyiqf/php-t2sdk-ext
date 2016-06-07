@@ -232,9 +232,9 @@ void Connection::connect()
        puts(error);
     }  
 
-    typedef CConfigInterface* config(); 
-    typedef CConnectionInterface* connection(CConfigInterface*); 
-    typedef IF2Packer* packer(int); 
+    typedef CConfigInterface* (*config)(); 
+    typedef CConnectionInterface* (*connection)(CConfigInterface*); 
+    typedef IF2Packer* (*packer)(int); 
     config NewConfig = (config) dlsym(handle, "NewConfig");
     connection NewConnection = (connection) dlsym(handle, "NewConnection");
     packer NewPacker = (packer) dlsym(handle, "NewPacker");
