@@ -222,6 +222,11 @@ void CCallback::OnReceivedBizMsg(CConnectionInterface *lpConnection, int hSend, 
 	
 }
 
+Connection::Connection()
+{
+
+}
+
 void Connection::connect()
 {
     //CConnectionInterface *g_Connection = NULL;
