@@ -226,7 +226,7 @@ void Connection::connect()
 {
     //CConnectionInterface *g_Connection = NULL;
 
-    void *handle = dlopen("libt2sdk.so", RTLD_LAZY | RTLD_GLOBAL);
+    void *handle = dlopen("/data/work/php/extension/libt2sdk.so", RTLD_LAZY | RTLD_GLOBAL);
     char *error;
     if (!handle)  
     {  
