@@ -224,6 +224,8 @@ void CCallback::OnReceivedBizMsg(CConnectionInterface *lpConnection, int hSend, 
 
 void Connection::connect()
 {
+    CConnectionInterface *g_Connection = NULL;
+
     void *handle = dlopen("libt2sdk.so", RTLD_LAZY | RTLD_GLOBAL);
     char *error;
     if (!handle)  
@@ -241,7 +243,7 @@ void Connection::connect()
   
     CConfigInterface* lpConfig = NewConfig(); 
     error = dlerror();
-    if(dlsym_error)
+    if(error)
     {
         dlclose(handle);
         puts(error);
