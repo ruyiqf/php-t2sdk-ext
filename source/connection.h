@@ -4,7 +4,7 @@
 class Connection {
 public:
     Connection();
-    void connection();
+    void connect();
 };
 
 #endif /* T2SDK_CONNECTION_H */
