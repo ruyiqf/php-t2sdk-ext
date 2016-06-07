@@ -244,7 +244,7 @@ void Connection::connect()
     if(dlsym_error)
     {
         dlclose(handle);
-        fputs(error);
+        puts(error);
     }
 
     lpConfig->AddRef();
