@@ -1,0 +1,10 @@
+t2sdk.lo: /Users/caizixin/source/php-t2sdk-ext/t2sdk.cc
+	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/Users/caizixin/source/php-t2sdk-ext $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /Users/caizixin/source/php-t2sdk-ext/t2sdk.cc -o t2sdk.lo 
+demo.lo: /Users/caizixin/source/php-t2sdk-ext/demo.cc
+	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/Users/caizixin/source/php-t2sdk-ext $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /Users/caizixin/source/php-t2sdk-ext/demo.cc -o demo.lo 
+$(phplibdir)/t2sdk.la: ./t2sdk.la
+	$(LIBTOOL) --mode=install cp ./t2sdk.la $(phplibdir)
+
+./t2sdk.la: $(shared_objects_t2sdk) $(T2SDK_SHARED_DEPENDENCIES)
+	$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_t2sdk) $(T2SDK_SHARED_LIBADD)
+

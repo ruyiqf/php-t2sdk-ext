@@ -21,17 +21,28 @@
 #ifndef PHP_T2SDK_H
 #define PHP_T2SDK_H
 
+#define PHP_T2SDK_EXTNAME  "t2sdk"
+#define PHP_T2SDK_EXTVER   "1.0"
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif 
+
+extern "C" {
+#include "php.h"
+}
+
 extern zend_module_entry t2sdk_module_entry;
 #define phpext_t2sdk_ptr &t2sdk_module_entry
 
 #define PHP_T2SDK_VERSION "0.1.0" /* Replace with version number for your extension */
 
 #ifdef PHP_WIN32
-#	define PHP_T2SDK_API __declspec(dllexport)
+# define PHP_T2SDK_API __declspec(dllexport)
 #elif defined(__GNUC__) && __GNUC__ >= 4
-#	define PHP_T2SDK_API __attribute__ ((visibility("default")))
+# define PHP_T2SDK_API __attribute__ ((visibility("default")))
 #else
-#	define PHP_T2SDK_API
+# define PHP_T2SDK_API
 #endif
 
 #ifdef ZTS
@@ -44,15 +55,15 @@ PHP_RINIT_FUNCTION(t2sdk);
 PHP_RSHUTDOWN_FUNCTION(t2sdk);
 PHP_MINFO_FUNCTION(t2sdk);
 
-PHP_FUNCTION(confirm_t2sdk_compiled);	/* For testing, remove later. */
+PHP_FUNCTION(confirm_t2sdk_compiled); /* For testing, remove later. */
 
 /* 
-  	Declare any global variables you may need between the BEGIN
-	and END macros here:     
+    Declare any global variables you may need between the BEGIN
+  and END macros here:     
 
 ZEND_BEGIN_MODULE_GLOBALS(t2sdk)
-	long  global_value;
-	char *global_string;
+  long  global_value;
+  char *global_string;
 ZEND_END_MODULE_GLOBALS(t2sdk)
 */
 
@@ -72,7 +83,7 @@ ZEND_END_MODULE_GLOBALS(t2sdk)
 #define T2SDK_G(v) (t2sdk_globals.v)
 #endif
 
-#endif	/* PHP_T2SDK_H */
+#endif  /* PHP_T2SDK_H */
 
 
 /*
