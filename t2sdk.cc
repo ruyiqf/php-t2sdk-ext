@@ -7,7 +7,7 @@ zend_object_handlers connection_object_handlers;
 
 struct connection_object {
     zend_object std;
-     *connection;
+    Connection *connection;
 };
 
 void connection_free_storage(void *object TSRMLS_DC)
