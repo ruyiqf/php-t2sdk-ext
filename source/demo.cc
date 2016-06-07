@@ -224,7 +224,7 @@ void CCallback::OnReceivedBizMsg(CConnectionInterface *lpConnection, int hSend, 
 
 void Connection::connect()
 {
-    CConnectionInterface *g_Connection = NULL;
+    //CConnectionInterface *g_Connection = NULL;
 
     void *handle = dlopen("libt2sdk.so", RTLD_LAZY | RTLD_GLOBAL);
     char *error;
@@ -262,7 +262,7 @@ void Connection::connect()
     //在此设置一下就可以支持自动重连
     lpConfig->SetString("t2sdk", "auto_reconnect", "1");
 
-    g_Connection = new NewConnection(lpConfig);
+    g_Connection = NewConnection(lpConfig);
 
     g_Connection->AddRef();
 
