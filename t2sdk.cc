@@ -111,6 +111,11 @@ PHP_METHOD(Connection, __construct)
 	    }
 	}
 
+	puts(domain);
+	puts(lib_t2sdk_file);
+	puts(license_file);
+	puts(send_queue_size);
+	puts(auto_reconnect);
     connection = new Connection(domain, lib_t2sdk_file, license_file, send_queue_size, auto_reconnect);
     connection_object *obj = (connection_object *)zend_object_store_get_object(object TSRMLS_CC);
     obj->connection = connection;
