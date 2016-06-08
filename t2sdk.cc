@@ -31,7 +31,7 @@ zend_object_value t2connection_create_handler(zend_class_entry *type TSRMLS_DC)
     memset(obj, 0, sizeof(t2connection_object));
     obj->std.ce = type;
 
-    ALLOC_HASHTABLE(obj->std.properties)
+    ALLOC_HASHTABLE(obj->std.properties);
     zend_hash_init(obj->std.properties, 0, NULL, ZVAL_PTR_DTOR, 0);
 #if PHP_VERSION_ID < 50399
     zend_hash_copy(obj->std.properties, type->default_properties_table, (copy_ctor_func_t)zval_add_ref, (void *)&tmp, sizeof(zval *));
