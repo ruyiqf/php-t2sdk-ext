@@ -88,22 +88,22 @@ PHP_METHOD(Connection, __construct)
 	    		convert_to_string(&temp);
 	    		domain = Z_STRVAL(temp);
 	    	}
-	    	elseif( key == "lib_t2sdk_file")
+	    	else if( key == "lib_t2sdk_file")
 	    	{
 	    		convert_to_string(&temp);
 	    		lib_t2sdk_file = Z_STRVAL(temp);
 	    	}
-	    	elseif( key == "license_file")
+	    	else if( key == "license_file")
 	    	{
 	    		convert_to_string(&temp);
 	    		license_file = Z_STRVAL(temp);
 	    	}
-	    	elseif( key == "send_queue_size")
+	    	else if( key == "send_queue_size")
 	    	{
 	    		convert_to_long(&temp);
 	    		send_queue_size = (int)Z_LVAL(temp);
 	    	}
-	    	elseif( key == "auto_reconnect")
+	    	else if( key == "auto_reconnect")
 	    	{
 	    		convert_to_long(&temp);
 	    		auto_reconnect = (int)Z_LVAL(temp);
