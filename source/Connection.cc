@@ -1,6 +1,6 @@
 #include "connection.h"
 #include <Include/t2sdk_interface.h>
-#include "CCallback.h"
+#include "source/CCallback.h"
 #include <dlfcn.h> 
 
 // 全局连接对象
