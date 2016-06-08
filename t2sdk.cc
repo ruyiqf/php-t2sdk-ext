@@ -46,7 +46,7 @@ zend_object_value connection_create_handler(zend_class_entry *type TSRMLS_DC)
     return retval;
 }
 
-PHP_METHOD(Connection, __construct)
+PHP_METHOD(T2Connection, __construct)
 {
 	char *domain;
     char *lib_t2sdk_file;
@@ -123,7 +123,7 @@ PHP_METHOD(Connection, __construct)
 }
 
 
-PHP_METHOD(Connection, p_connect)
+PHP_METHOD(T2Connection, p_connect)
 {
 	Connection *connection;
     connection_object *obj = (connection_object *)zend_object_store_get_object(
@@ -140,8 +140,8 @@ PHP_METHOD(Connection, p_connect)
 }
 
 zend_function_entry connection_methods[] = {
-    PHP_ME(Connection,  __construct,     NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-    PHP_ME(Connection,  p_connect,  NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(T2Connection,  __construct,     NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME(T2Connection,  p_connect,  NULL, ZEND_ACC_PUBLIC)
     {NULL, NULL, NULL}
 };
 
