@@ -47,15 +47,76 @@ zend_object_value connection_create_handler(zend_class_entry *type TSRMLS_DC)
 
 PHP_METHOD(Connection, __construct)
 {
+	char *domain;
+    char *lib_t2sdk_file;
+    char *license_file;
+    int send_queue_size;
+    int auto_reconnect;
 	// long maxGear;
     Connection *connection = NULL;
     zval *object = getThis();
+    zval *config;
 
-    // if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &maxGear) == FAILURE) {
-    //     RETURN_NULL();
-    // }
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &config) == FAILURE) {
+         RETURN_NULL();
+    }
 
-    connection = new Connection();
+    if(Z_TYPE_P(config) != IS_ARRAY)
+    {
+    	RETURN_NULL();
+    }
+
+    HashTable *arr_hash;
+    HashPosition *pointer;
+    zval **data;
+    arr_hash = Z_ARRVAL_P(config);
+
+	for(zend_hash_internal_pointer_reset_ex(arr_hash, &pointer); zend_hash_get_current_data_ex(arr_hash, (void**) &data, &pointer) == SUCCESS; zend_hash_move_forward_ex(arr_hash, &pointer)) 
+	{
+
+	    zval temp;
+	    char *key;
+	    int key_len;
+	    long index;
+
+	    if (zend_hash_get_current_key_ex(arr_hash, &key, &key_len, &index, 0, &pointer) == HASH_KEY_IS_STRING) 
+	    {
+	    	temp = **data;
+	    	zval_copy_ctor(&temp);
+	    	switch($key)
+	    	{
+	    		case "domain":
+	    			convert_to_string(&temp);
+	    			domain = Z_STRVAL(temp);
+	    			break;
+	    		case "lib_t2sdk_file":
+	    			convert_to_string(&temp);
+	    			lib_t2sdk_file = Z_STRVAL(temp);
+	    			break;
+	    		case "license_file":
+	    			convert_to_string(&temp);
+	    			license_file = Z_STRVAL(temp);
+	    			break;
+	    		case "send_queue_size":
+	    			convert_to_long(&temp);
+	    			send_queue_size = (int)Z_LVAL(temp);
+	    			break;
+	    		case "auto_reconnect":
+	    			convert_to_long(&temp);
+	    			auto_reconnect = (int)Z_LVAL(temp);
+	    			break;
+	    	}
+	    }
+
+	    php_printf(" => ");
+
+	    
+	    PHPWRITE(Z_STRVAL(temp), Z_STRLEN(temp));
+	    php_printf(" ");
+	    zval_dtor(&temp);
+	}
+
+    connection = new Connection(domain, lib_t2sdk_file, license_file, send_queue_size, auto_reconnect);
     connection_object *obj = (connection_object *)zend_object_store_get_object(object TSRMLS_CC);
     obj->connection = connection;
 }
