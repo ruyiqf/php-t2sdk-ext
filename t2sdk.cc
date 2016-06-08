@@ -83,37 +83,32 @@ PHP_METHOD(Connection, __construct)
 	    {
 	    	temp = **data;
 	    	zval_copy_ctor(&temp);
-	    	switch(key)
+	    	if( key == "domain")
 	    	{
-	    		case "domain":
-	    			convert_to_string(&temp);
-	    			domain = Z_STRVAL(temp);
-	    			break;
-	    		case "lib_t2sdk_file":
-	    			convert_to_string(&temp);
-	    			lib_t2sdk_file = Z_STRVAL(temp);
-	    			break;
-	    		case "license_file":
-	    			convert_to_string(&temp);
-	    			license_file = Z_STRVAL(temp);
-	    			break;
-	    		case "send_queue_size":
-	    			convert_to_long(&temp);
-	    			send_queue_size = (int)Z_LVAL(temp);
-	    			break;
-	    		case "auto_reconnect":
-	    			convert_to_long(&temp);
-	    			auto_reconnect = (int)Z_LVAL(temp);
-	    			break;
+	    		convert_to_string(&temp);
+	    		domain = Z_STRVAL(temp);
+	    	}
+	    	elseif( key == "lib_t2sdk_file")
+	    	{
+	    		convert_to_string(&temp);
+	    		lib_t2sdk_file = Z_STRVAL(temp);
+	    	}
+	    	elseif( key == "license_file")
+	    	{
+	    		convert_to_string(&temp);
+	    		license_file = Z_STRVAL(temp);
+	    	}
+	    	elseif( key == "send_queue_size")
+	    	{
+	    		convert_to_long(&temp);
+	    		send_queue_size = (int)Z_LVAL(temp);
+	    	}
+	    	elseif( key == "auto_reconnect")
+	    	{
+	    		convert_to_long(&temp);
+	    		auto_reconnect = (int)Z_LVAL(temp);
 	    	}
 	    }
-
-	    php_printf(" => ");
-
-	    
-	    PHPWRITE(Z_STRVAL(temp), Z_STRLEN(temp));
-	    php_printf(" ");
-	    zval_dtor(&temp);
 	}
 
     connection = new Connection(domain, lib_t2sdk_file, license_file, send_queue_size, auto_reconnect);
