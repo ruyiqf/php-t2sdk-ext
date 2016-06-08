@@ -8,8 +8,6 @@
 */
 
 #include <Include/t2sdk_interface.h>
-#include <dlfcn.h> 
-#include "source/connection.h"
 
 // 全局事件
 
