@@ -50,8 +50,8 @@ PHP_METHOD(Connection, __construct)
 	char *domain;
     char *lib_t2sdk_file;
     char *license_file;
-    int send_queue_size;
-    int auto_reconnect;
+    char *send_queue_size;
+    char *auto_reconnect;
 	// long maxGear;
     Connection *connection = NULL;
     zval *object = getThis();
@@ -100,13 +100,13 @@ PHP_METHOD(Connection, __construct)
 	    	}
 	    	else if( key == "send_queue_size")
 	    	{
-	    		convert_to_long(&temp);
-	    		send_queue_size = (int)Z_LVAL(temp);
+	    		convert_to_string(&temp);
+	    		send_queue_size = Z_STRVAL(temp);
 	    	}
 	    	else if( key == "auto_reconnect")
 	    	{
-	    		convert_to_long(&temp);
-	    		auto_reconnect = (int)Z_LVAL(temp);
+	    		convert_to_string(&temp);
+	    		auto_reconnect = Z_STRVAL(temp);
 	    	}
 	    }
 	}
