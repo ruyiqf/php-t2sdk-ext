@@ -1,5 +1,6 @@
 #include "php_t2sdk.h"
 #include "source/connection.h"
+#include <string.h>
 
 zend_class_entry *connection_ce;
 
@@ -83,27 +84,27 @@ PHP_METHOD(Connection, __construct)
 	    {
 	    	temp = **data;
 	    	zval_copy_ctor(&temp);
-	    	if( key == "domain")
+	    	if(strcmp(key, "domain") == 0)
 	    	{
 	    		convert_to_string(&temp);
 	    		domain = Z_STRVAL(temp);
 	    	}
-	    	else if( key == "lib_t2sdk_file")
+	    	else if(strcmp(key, "lib_t2sdk_file") == 0)
 	    	{
 	    		convert_to_string(&temp);
 	    		lib_t2sdk_file = Z_STRVAL(temp);
 	    	}
-	    	else if( key == "license_file")
+	    	else if(strcmp(key, "license_file") == 0)
 	    	{
 	    		convert_to_string(&temp);
 	    		license_file = Z_STRVAL(temp);
 	    	}
-	    	else if( key == "send_queue_size")
+	    	else if(strcmp(key, "send_queue_size") == 0)
 	    	{
 	    		convert_to_string(&temp);
 	    		send_queue_size = Z_STRVAL(temp);
 	    	}
-	    	else if( key == "auto_reconnect")
+	    	else if(strcmp(key, "auto_reconnect") == 0)
 	    	{
 	    		convert_to_string(&temp);
 	    		auto_reconnect = Z_STRVAL(temp);
