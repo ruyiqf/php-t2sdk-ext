@@ -63,5 +63,5 @@ if test "$PHP_T2SDK" != "no"; then
 	PHP_REQUIRE_CXX()
 	PHP_SUBST(T2SDK_SHARED_LIBADD)
   PHP_ADD_LIBRARY(stdc++, 1, T2SDK_SHARED_LIBADD)
-	PHP_NEW_EXTENSION(t2sdk, t2sdk.cc source/Connection.cc source/CCallback.cc, $ext_shared)
+	PHP_NEW_EXTENSION(t2sdk, t2sdk.cc source/T2Connection.cc source/CCallback.cc, $ext_shared)
 fi

@@ -1,20 +1,20 @@
 #include "php_t2sdk.h"
-#include "source/connection.h"
+#include "source/t2connection.h"
 #include <string.h>
 
-zend_class_entry *connection_ce;
+zend_class_entry *t2connection_ce;
 
-zend_object_handlers connection_object_handlers;
+zend_object_handlers t2connection_object_handlers;
 
-struct connection_object {
+struct t2connection_object {
     zend_object std;
-    Connection *connection;
+    T2Connection *t2connection;
 };
 
-void connection_free_storage(void *object TSRMLS_DC)
+void t2connection_free_storage(void *object TSRMLS_DC)
 {
-    connection_object *obj = (connection_object *)object;
-    delete obj->connection; 
+    t2connection_object *obj = (t2connection_object *)object;
+    delete obj->t2connection; 
 
     zend_hash_destroy(obj->std.properties);
     FREE_HASHTABLE(obj->std.properties);
@@ -22,16 +22,16 @@ void connection_free_storage(void *object TSRMLS_DC)
     efree(obj);
 }
 
-zend_object_value connection_create_handler(zend_class_entry *type TSRMLS_DC)
+zend_object_value t2connection_create_handler(zend_class_entry *type TSRMLS_DC)
 {
     zval *tmp;
     zend_object_value retval;
 
-    connection_object *obj = (connection_object *)emalloc(sizeof(connection_object));
-    memset(obj, 0, sizeof(connection_object));
+    t2connection_object *obj = (t2connection_object *)emalloc(sizeof(t2connection_object));
+    memset(obj, 0, sizeof(t2connection_object));
     obj->std.ce = type;
 
-    ALLOC_HASHTABLE(obj->std.properties);
+    ALLOC_HASHTABLE(obj->std.properties)
     zend_hash_init(obj->std.properties, 0, NULL, ZVAL_PTR_DTOR, 0);
 #if PHP_VERSION_ID < 50399
     zend_hash_copy(obj->std.properties, type->default_properties_table, (copy_ctor_func_t)zval_add_ref, (void *)&tmp, sizeof(zval *));
@@ -40,8 +40,8 @@ zend_object_value connection_create_handler(zend_class_entry *type TSRMLS_DC)
 #endif
 
     retval.handle = zend_objects_store_put(obj, NULL,
-        connection_free_storage, NULL TSRMLS_CC);
-    retval.handlers = &connection_object_handlers;
+        t2connection_free_storage, NULL TSRMLS_CC);
+    retval.handlers = &t2connection_object_handlers;
 
     return retval;
 }
@@ -54,7 +54,7 @@ PHP_METHOD(T2Connection, __construct)
     char *send_queue_size;
     char *auto_reconnect;
 	// long maxGear;
-    Connection *connection = NULL;
+    T2Connection *t2connection = NULL;
     zval *object = getThis();
     zval *config;
 
@@ -117,29 +117,29 @@ PHP_METHOD(T2Connection, __construct)
 	puts(license_file);
 	puts(send_queue_size);
 	puts(auto_reconnect);
-    connection = new Connection(domain, lib_t2sdk_file, license_file, send_queue_size, auto_reconnect);
-    connection_object *obj = (connection_object *)zend_object_store_get_object(object TSRMLS_CC);
-    obj->connection = connection;
+    t2connection = new T2Connection(domain, lib_t2sdk_file, license_file, send_queue_size, auto_reconnect);
+    t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(object TSRMLS_CC);
+    obj->t2connection = t2connection;
 }
 
 
 PHP_METHOD(T2Connection, p_connect)
 {
-	Connection *connection;
-    connection_object *obj = (connection_object *)zend_object_store_get_object(
+	T2Connection *t2connection;
+    t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
         getThis() TSRMLS_CC);
 
     // if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name) == FAILURE) {
     //     RETURN_NULL();
     // }
 
-    connection = obj->connection;
-    if (connection != NULL) {
-        connection->connect();
+    t2connection = obj->t2connection;
+    if (t2connection != NULL) {
+        t2connection->connect();
     }
 }
 
-zend_function_entry connection_methods[] = {
+zend_function_entry t2connection_methods[] = {
     PHP_ME(T2Connection,  __construct,     NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     PHP_ME(T2Connection,  p_connect,  NULL, ZEND_ACC_PUBLIC)
     {NULL, NULL, NULL}
@@ -148,12 +148,12 @@ zend_function_entry connection_methods[] = {
 PHP_MINIT_FUNCTION(t2sdk)
 {
     zend_class_entry ce;
-    INIT_CLASS_ENTRY(ce, "T2Connection", connection_methods);
-    connection_ce = zend_register_internal_class(&ce TSRMLS_CC);
-    connection_ce->create_object = connection_create_handler;
-    memcpy(&connection_object_handlers,
+    INIT_CLASS_ENTRY(ce, "T2Connection", t2connection_methods);
+    t2connection_ce = zend_register_internal_class(&ce TSRMLS_CC);
+    t2connection_ce->create_object = t2connection_create_handler;
+    memcpy(&t2connection_object_handlers,
         zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-    connection_object_handlers.clone_obj = NULL;
+    t2connection_object_handlers.clone_obj = NULL;
     return SUCCESS;
 }
 

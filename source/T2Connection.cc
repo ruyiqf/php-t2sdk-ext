@@ -1,4 +1,4 @@
-#include "connection.h"
+#include "t2connection.h"
 #include <Include/t2sdk_interface.h>
 #include "source/CCallback.h"
 #include <dlfcn.h> 
@@ -6,7 +6,7 @@
 // 全局连接对象
 CConnectionInterface *g_Connection = NULL;
 
-Connection::Connection(char *domain, char* lib_t2sdk_file, char *license_file, char *send_queue_size, char *auto_reconnect)
+T2Connection::T2Connection(char *domain, char* lib_t2sdk_file, char *license_file, char *send_queue_size, char *auto_reconnect)
 {
     this->domain = domain;
     this->lib_t2sdk_file = lib_t2sdk_file;
@@ -15,7 +15,7 @@ Connection::Connection(char *domain, char* lib_t2sdk_file, char *license_file, c
     this->auto_reconnect = auto_reconnect;
 }
 
-void Connection::connect()
+void T2Connection::connect()
 {
     //CConnectionInterface *g_Connection = NULL;
 
