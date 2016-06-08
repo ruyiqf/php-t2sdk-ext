@@ -67,7 +67,7 @@ PHP_METHOD(Connection, __construct)
     }
 
     HashTable *arr_hash;
-    HashPosition *pointer;
+    HashPosition pointer;
     zval **data;
     arr_hash = Z_ARRVAL_P(config);
 
@@ -76,14 +76,14 @@ PHP_METHOD(Connection, __construct)
 
 	    zval temp;
 	    char *key;
-	    int key_len;
-	    long index;
+	    uint key_len;
+	    ulong index;
 
 	    if (zend_hash_get_current_key_ex(arr_hash, &key, &key_len, &index, 0, &pointer) == HASH_KEY_IS_STRING) 
 	    {
 	    	temp = **data;
 	    	zval_copy_ctor(&temp);
-	    	switch($key)
+	    	switch(key)
 	    	{
 	    		case "domain":
 	    			convert_to_string(&temp);
