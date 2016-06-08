@@ -148,7 +148,7 @@ zend_function_entry connection_methods[] = {
 PHP_MINIT_FUNCTION(t2sdk)
 {
     zend_class_entry ce;
-    INIT_CLASS_ENTRY(ce, "Connection", connection_methods);
+    INIT_CLASS_ENTRY(ce, "T2Connection", connection_methods);
     connection_ce = zend_register_internal_class(&ce TSRMLS_CC);
     connection_ce->create_object = connection_create_handler;
     memcpy(&connection_object_handlers,
