@@ -3,15 +3,11 @@
 
 class T2Connection {
 public:
-    T2Connection(char *domain, char* lib_t2sdk_file, char *license_file, char *send_queue_size = "100", char *auto_reconnect = "1");
+    T2Connection(char *ini_file);
     void connect();
 
 private:
-    char *domain;
-    char *lib_t2sdk_file;
-    char *license_file;
-    char *send_queue_size;
-    char *auto_reconnect;
+    char *ini_file;
 };
 
 #endif /* T2SDK_T2CONNECTION_H */

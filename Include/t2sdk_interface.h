@@ -21,6 +21,8 @@ struct IKnown
     virtual unsigned long  FUNCTION_CALL_MODE AddRef() = 0;
 
     virtual unsigned long  FUNCTION_CALL_MODE Release() =  0;
+    
+    ~IKnown(){}
 };
 #endif
 
@@ -36,30 +38,41 @@ typedef unsigned int		uint32;
 typedef uint32_t			uint32;
 #endif
 
-///ESB×éÃû³¤¶È£¬Ãû×ÖÎª¿É¼û×Ö·û£¬²»ÄÜ°üº¬ÊµÀý·Ö¸ô·û¡¢¿Õ¸ñ¡¢·ÖºÅ;
+///ESB组名长度，名字为可见字符，不能包含实例分隔符、空格、分号;
 #define IDENTITY_NAME_LENGTH	32
-///ÊµÀý±àºÅ×î´óÕ¼Î»³¤¶È
+///实例编号最大占位长度
 #define ID_LENGTH               4 
-///½ÚµãÃûÈ«³¤,¶¨ÒåÊ±Ê¹ÓÃchar sName[ID_STR_LEN+1]
+///节点名全长,定义时使用char sName[ID_STR_LEN+1]
 #define ID_STR_LEN		       (IDENTITY_NAME_LENGTH + ID_LENGTH + 1)
 
 
-//	²å¼þ½Ó¿ÚÃûµÄ×î´ó³¤¶È,¶¨ÒåÊ±Ê¹ÓÃchar sName[PLUGINID_LENGTH+1]
+//	插件接口名的最大长度,定义时使用char sName[PLUGINID_LENGTH+1]
 #define PLUGINID_LENGTH	256
-//	²å¼þÊµÀýÃûµÄ×î´ó³¤¶È,¶¨ÒåÊ±Ê¹ÓÃchar sName[PLUGIN_NAME_LENGTH+1]
+//	插件实例名的最大长度,定义时使用char sName[PLUGIN_NAME_LENGTH+1]
 #define PLUGIN_NAME_LENGTH	(PLUGINID_LENGTH+ID_LENGTH+1)
-//	½ø³ÌÃû×î´ó³¤¶È.¶¨ÒåÊ±Ê¹ÓÃchar sName[SVR_NAME_LENGTH+1]
+//	进程名最大长度.定义时使用char sName[SVR_NAME_LENGTH+1]
 #define SVR_NAME_LENGTH	256
-//	½ø³ÌÊµÀýÃû×î´ó³¤¶È.¶¨ÒåÊ±Ê¹ÓÃchar sName[PLUGINID_NAME_LENGTH+1]
+//	进程实例名最大长度.定义时使用char sName[PLUGINID_NAME_LENGTH+1]
 #define SVRINSTANCE_NAME_LENGTH	(SVR_NAME_LENGTH+ID_LENGTH+1)
-//ÒµÎñÏûÏ¢ÀàÐÍ
 
+//文件更新列表字段
+/** 文件更新：以下宏为API库中文件更新功能与界面间交互的打包器中的字段 */
+#define PACKER_INT_FILE_LIST            "file_list"     /**< 文件列表 */
+#define PACKER_INT_FILE_ID              "file_id"       /**< 文件id */
+#define PACKER_INT_FILE_SIZE            "file_size"     /**< 文件大小 */
+#define PACKER_INT_TIME                 "time"          /**< 文件时间 */
+#define PACKER_STRING_FILE_NAME         "file_name"     /**< 文件名 */
+#define PACKER_STRING_FILE_PATH         "file_path"     /**< 文件路径 */
+#define PACKER_STRING_LOCAL_PATH        "local_path"    /**< 本地文件路径 */
+#define PACKER_STRING_MD5_CODE          "md5_code"      /**< 文件md5值 */
+#define PACKER_STRING_FILE_FLAG         "file_flag"     /**< 文件标识 */
 
-//ÇëÇó
+//业务消息类型
+//请求
 #define REQUEST_PACKET 0 
-//Ó¦´ð
+//应答
 #define ANSWER_PACKET  1 
-//20110302 xuxp Ôö¼ÓÂ·ÓÉÐÅÏ¢µÄ½á¹¹Ìå¶¨Òå
+//20110302 xuxp 增加路由信息的结构体定义
 typedef struct tagRouteInfo
 {
 	char ospfName[ID_STR_LEN+1];
@@ -76,7 +89,7 @@ typedef struct tagRouteInfo
 }Route_Info;
 
 
-//20101228 xuxp ÎªÁË·¢ËÍºÍ·µ»Ø¶©ÔÄÍÆËÍÐÅÏ¢¶øÔö¼ÓµÄ½á¹¹ÌåµÄ¶¨Òå
+//20101228 xuxp 为了发送和返回订阅推送信息而增加的结构体的定义
 typedef struct tagRequestData
 {	
 	int sequeceNo;
@@ -85,9 +98,10 @@ typedef struct tagRequestData
 	int keyInfoLen;
 	void* lpFileHead;
 	int fileHeadLen;
-	int packetType;//20100111 xuxp ÐÂ¼ÓµÄ°üÀàÐÍ
-	Route_Info routeInfo;//20110302 xuxp ÇëÇóÀïÃæÔö¼ÓÂ·ÓÉÐÅÏ¢
-	int iSubSystemNo;//20130508 xuxp ²ÎÊýÖÐÔö¼Ó×ÓÏµÍ³ºÅ´«Èë
+	int packetType;//20100111 xuxp 新加的包类型
+	Route_Info routeInfo;//20110302 xuxp 请求里面增加路由信息
+	int iSubSystemNo;//20130508 xuxp 参数中增加子系统号传入
+	int iCompanyID;//20140114 xuxp 增加公司编号
 }REQ_DATA, *LPREQ_DATA;
 typedef struct tagRespondData
 {
@@ -98,129 +112,129 @@ typedef struct tagRespondData
 	int issueType;
 	void* lpKeyInfo;
 	int keyInfoLen;
-	Route_Info sendInfo;//20110302 xuxp Ó¦´ðÀïÃæÔö¼Ó·¢ËÍÕßÐÅÏ¢
+	Route_Info sendInfo;//20110302 xuxp 应答里面增加发送者信息
 }RET_DATA, *LPRET_DATA;
 
 
-///½â°üÆ÷½Ó¿Ú
+///解包器接口
 struct IF2ResultSet : public IKnown
 {
 
-	///È¡×Ö¶ÎÊý
-    /**@return ·µ»Ø×Ö¶ÎÊý.
+	///取字段数
+    /**@return 返回字段数.
       */
     virtual int FUNCTION_CALL_MODE GetColCount()=0;
 
-    ///È¡×Ö¶ÎÃû
-    /** @param column:×Ö¶ÎÐòºÅ(ÒÔ0Îª»ùÊý)
-      * @return ·µ»Ø×Ö¶ÎÃû  ÏÂ±êÔ½½ç ·µ»ØNULL
+    ///取字段名
+    /** @param column:字段序号(以0为基数)
+      * @return 返回字段名  下标越界 返回NULL
       */
     virtual const char * FUNCTION_CALL_MODE GetColName(int column)=0;
 
-    //È¡×Ö¶ÎÊý¾ÝÀàÐÍ
-    /** @param column:×Ö¶ÎÐòºÅ(ÒÔ0Îª»ùÊý)
-      * @return:¼ûÉÏÃæ³£Á¿¶¨Òå;ÏÂ±êÔ½½ç ·µ»Ø-1
+    //取字段数据类型
+    /** @param column:字段序号(以0为基数)
+      * @return:见上面常量定义;下标越界 返回-1
       */
     virtual char FUNCTION_CALL_MODE GetColType(int column)=0;
 
 
-   ///È¡Êý×ÖÐÍ×Ö¶ÎÐ¡ÊýÎ»Êý
-   /** @param column:×Ö¶ÎÐòºÅ(ÒÔ0Îª»ùÊý)
-     * @return int ·µ»Ø×Ö¶ÎÊý¾ÝÐ¡ÊýÎ»Êý ÏÂ±êÔ½½ç ·µ»Ø-1
+   ///取数字型字段小数位数
+   /** @param column:字段序号(以0为基数)
+     * @return int 返回字段数据小数位数 下标越界 返回-1
      */
    virtual int FUNCTION_CALL_MODE GetColScale(int column)=0;
   
-   //È¡×Ö¶ÎÔÊÐí´æ·ÅÊý¾ÝµÄ×î´ó¿í¶È.
-   /** @param column:×Ö¶ÎÐòºÅ(ÒÔ0Îª»ùÊý)
-     * @return int ·µ»Ø×Ö¶Î¿í¶È ÏÂ±êÔ½½ç ·µ»Ø-1
+   //取字段允许存放数据的最大宽度.
+   /** @param column:字段序号(以0为基数)
+     * @return int 返回字段宽度 下标越界 返回-1
      */
    virtual int FUNCTION_CALL_MODE GetColWidth(int column) = 0;
 
-   ///È¡×Ö¶ÎÃû¶ÔÓ¦µÄ×Ö¶ÎÐòºÅ
-   /**@param columnName: ×Ö¶ÎÃû
-     *@return ·µ»Ø×Ö¶ÎÐòºÅ. ²»´æÔÚ·µ»Ø-1
+   ///取字段名对应的字段序号
+   /**@param columnName: 字段名
+     *@return 返回字段序号. 不存在返回-1
      */
    virtual int  FUNCTION_CALL_MODE FindColIndex(const char * columnName)=0;
 
     //
-    //°´×Ö¶ÎÐòºÅ(ÒÔ0Îª»ùÊý)£¬È¡×Ö¶ÎÖµ(×Ö·û´®)
-    /**@param column:×Ö¶ÎÐòºÅ(ÒÔ0Îª»ùÊý)
-      *@return ×Ö·û´®ÐÍ×Ö¶ÎÖµ,ÏÂ±êÔ½½ç·µ»ØNULL
+    //按字段序号(以0为基数)，取字段值(字符串)
+    /**@param column:字段序号(以0为基数)
+      *@return 字符串型字段值,下标越界返回NULL
       */
     virtual const char *  FUNCTION_CALL_MODE GetStrByIndex(int column)=0;
 
-    //°´×Ö¶ÎÃû£¬È¡×Ö¶ÎÖµ(×Ö·û´®)
-    /**@param columnName: ×Ö¶ÎÃû
-      *@return ×Ö·û´®ÐÍ×Ö¶ÎÖµ,²»´æÔÚ·µ»ØNULL
+    //按字段名，取字段值(字符串)
+    /**@param columnName: 字段名
+      *@return 字符串型字段值,不存在返回NULL
       */
     virtual const char *  FUNCTION_CALL_MODE GetStr(const char * columnName)=0;
 
-    //°´×Ö¶ÎÐòºÅ(ÒÔ0Îª»ùÊý)£¬È¡×Ö¶ÎÖµ
-    /**@param column:×Ö¶ÎÐòºÅ(ÒÔ0Îª»ùÊý)
-      *@return ×Ö·ûÐÍ×Ö¶ÎÖµ,ÏÂ±êÔ½½ç·µ»Ø'\0'.
+    //按字段序号(以0为基数)，取字段值
+    /**@param column:字段序号(以0为基数)
+      *@return 字符型字段值,下标越界返回'\0'.
       */
      virtual char  FUNCTION_CALL_MODE  GetCharByIndex(int column)=0;
 
-    //°´×Ö¶ÎÃû£¬È¡×Ö¶ÎÖµ
-    /**@param columnName: ×Ö¶ÎÃû
-     *@return ×Ö·ûÐÍ×Ö¶ÎÖµ,²»´æÔÚ·µ»Ø'\0'
+    //按字段名，取字段值
+    /**@param columnName: 字段名
+     *@return 字符型字段值,不存在返回'\0'
      */
     virtual char   FUNCTION_CALL_MODE GetChar(const char * columnName)=0;
 
-    //°´×Ö¶ÎÐòºÅ£¬È¡×Ö¶ÎÖµ
-    /**@param column:×Ö¶ÎÐòºÅ(ÒÔ0Îª»ùÊý)
-      *@return doubleÐÍ×Ö¶ÎÖµ,ÏÂ±êÔ½½ç·µ»Ø0
+    //按字段序号，取字段值
+    /**@param column:字段序号(以0为基数)
+      *@return double型字段值,下标越界返回0
       */
     virtual double  FUNCTION_CALL_MODE GetDoubleByIndex( int column)=0;
     
-	///°´×Ö¶ÎÃû£¬È¡×Ö¶ÎÖµ
-    /**@param columnName:×Ö¶ÎÃû
-      *@return doubleÐÍ×Ö¶ÎÖµ,²»´æÔÚ·µ»Ø0
+	///按字段名，取字段值
+    /**@param columnName:字段名
+      *@return double型字段值,不存在返回0
       */
     virtual double  FUNCTION_CALL_MODE GetDouble(const char * columnName)=0;
 
-    ///°´×Ö¶ÎÐòºÅ£¬È¡×Ö¶ÎÖµ
-    /**@param column:×Ö¶ÎÐòºÅ(ÒÔ0Îª»ùÊý)
-      *@return intÐÍ×Ö¶ÎÖµ,ÏÂ±êÔ½½ç·µ»Ø0
+    ///按字段序号，取字段值
+    /**@param column:字段序号(以0为基数)
+      *@return int型字段值,下标越界返回0
       */
     virtual int  FUNCTION_CALL_MODE GetIntByIndex(int column)=0;
 
-    ///°´×Ö¶ÎÃû£¬È¡×Ö¶ÎÖµ
-    /**@param columnName:×Ö¶ÎÃû
-      *@return intÐÍ×Ö¶ÎÖµ,²»´æÔÚ·µ»Ø0
+    ///按字段名，取字段值
+    /**@param columnName:字段名
+      *@return int型字段值,不存在返回0
       */
     virtual int FUNCTION_CALL_MODE GetInt(const char * columnName)=0;
 
-	///°´×Ö¶ÎÐòºÅ»ñµÃ×Ö¶ÎÖµ,¶þ½øÖÆÊý¾Ý
-	/**@param column: ×Ö¶ÎÐòºÅ(ÒÔ0Îª»ùÊý)
-	*@param   lpRawLen: [out]Êý¾Ý³¤¶È
-	*@return : Êý¾ÝÊ×µØÖ·
+	///按字段序号获得字段值,二进制数据
+	/**@param column: 字段序号(以0为基数)
+	*@param   lpRawLen: [out]数据长度
+	*@return : 数据首地址
 	*/
 	virtual void *  FUNCTION_CALL_MODE GetRawByIndex(int column,int * lpRawLen) = 0;
 
-	///°´×Ö¶ÎÃû£¬È¡×Ö¶ÎÖµ
-	/**@param columnName:×Ö¶ÎÃû
-	*@param   lpRawLen: [out]Êý¾Ý³¤¶È
-	*@return : Êý¾ÝÊ×µØÖ·
+	///按字段名，取字段值
+	/**@param columnName:字段名
+	*@param   lpRawLen: [out]数据长度
+	*@return : 数据首地址
 	*/
 	virtual void *  FUNCTION_CALL_MODE GetRaw(const char * columnName,int * lpRawLen) = 0;
 
 
-	///×îºóÒ»´ÎÈ¡µÄ×Ö¶ÎÖµÊÇ·ñÎªNULL
-   /**@return 0 ÊÇ£¬ 1²»ÊÇ
+	///最后一次取的字段值是否为NULL
+   /**@return 0 是， 1不是
    */
     virtual int  FUNCTION_CALL_MODE WasNull()=0;
 
-    ///È¡ÏÂÒ»Ìõ¼ÇÂ¼
+    ///取下一条记录
     virtual void  FUNCTION_CALL_MODE Next()=0;
 
-    ///ÅÐ¶ÏÊÇ·ñÎª½áÎ²
-    /**@return 1 ÊÇ£¬0 ²»ÊÇ;
+    ///判断是否为结尾
+    /**@return 1 是，0 不是;
       */
     virtual int  FUNCTION_CALL_MODE IsEOF()=0;
    
-	///ÅÐ¶ÏÊÇ·ñÎª¿Õ
-    /**@return 1 ÊÇ£¬0 ²»ÊÇ;
+	///判断是否为空
+    /**@return 1 是，0 不是;
       */
     virtual int  FUNCTION_CALL_MODE IsEmpty()=0;
     
@@ -229,142 +243,142 @@ struct IF2ResultSet : public IKnown
 
 struct IF2UnPacker;
 
-///¶à½á¹û¼¯´ò°ü½Ó¿Ú(Ò»¸ö°ü¿ÉÓÐ¶à¸öÒì¹¹½á¹û¼¯)
-/**Ö´ÐÐÐòÁÐ:
+///多结果集打包接口(一个包可有多个异构结果集)
+/**执行序列:
  *
- * 0¡¢×¼±¸(¿ÉÑ¡, Èô²»½øÐÐ¸Ã²Ù×÷, ÔòÓÉIF2PackerÄÚ²¿ÉêÇëÄÚ´æ»º³å)£º SetBuffer(),Èç¹û´ò°ü»º´æÇøÓÉµ÷ÓÃÕßÌá¹©,Ôò±ØÐëÔÚBeginPack()Ö®Ç°×¼±¸;
+ * 0、准备(可选, 若不进行该操作, 则由IF2Packer内部申请内存缓冲)： SetBuffer(),如果打包缓存区由调用者提供,则必须在BeginPack()之前准备;
  *
- * 1¡¢¿ªÊ¼:  BeginPack(),´ò°üÆ÷¸´Î»;
+ * 1、开始:  BeginPack(),打包器复位;
  *
- * 2¡¢µÚÒ»¸ö½á¹û¼¯´ò°ü£º
+ * 2、第一个结果集打包：
  *
- *(a)Ìí¼Ó×Ö¶ÎÃûÁÐ±íÓò£ºAddField()
+ *(a)添加字段名列表域：AddField()
  *
- *(b)°´ÕÕ½á¹û¼¯¶þÎ¬±íË³Ðò£¬Öð×Ö¶Î£¬ÖðÌõ¼ÇÂ¼°´×Ö¶ÎÀàÐÍÌí¼ÓÄÚÈÝ£ºAddStr() {AddInt(), AddDouble(), AddRaw()}
+ *(b)按照结果集二维表顺序，逐字段，逐条记录按字段类型添加内容：AddStr() {AddInt(), AddDouble(), AddRaw()}
  *
- * 3¡¢ÉèÖÃ½á¹û¼¯µÄ·µ»ØÂë(¿ÉÑ¡£¬Èô²»ÉèÖÃ, Ôò·µ»ØÂëÎª0) SetReturnCode()
+ * 3、设置结果集的返回码(可选，若不设置, 则返回码为0) SetReturnCode()
  *
- * 4¡¢´òÏÂÒ»¸ö½á¹û¼¯(¿ÉÑ¡) NewDataSet()£¬´Ë´¦Í¬Ê±ÉèÖÃÁË¸Ã½á¹û¼¯µÄ·µ»ØÂë£»
+ * 4、打下一个结果集(可选) NewDataSet()，此处同时设置了该结果集的返回码；
  * 
- * 5¡¢²Î¿¼µÚ2²½ÊµÏÖÏÂÒ»¸ö½á¹û¼¯´ò°ü(¿ÉÑ¡)£»
+ * 5、参考第2步实现下一个结果集打包(可选)；
  *
- * 6¡¢½áÊø£ºEndPack(),ÖØ¸´µ÷ÓÃ»áµ¼ÖÂ¼ÓÈë¿Õ½á¹û¼¯;
+ * 6、结束：EndPack(),重复调用会导致加入空结果集;
  *
- * 7¡¢È¡´ò°ü½á¹û(»º´æÇø£¬»º´æÇø´óÐ¡£¬Êý¾Ý³¤¶È)
- *    ´ò°ü½á¹ûÒ²¿ÉÒÔÖ±½Ó½â°üUnPack()·µ»Ø½â°ü½Ó¿Ú
+ * 7、取打包结果(缓存区，缓存区大小，数据长度)
+ *    打包结果也可以直接解包UnPack()返回解包接口
  *
- *Ê¹ÓÃ×¢ÒâÊÂÏî:IF2PackerËùÊ¹ÓÃµÄÄÚ´æ»º´æÇø£¬ÓÉµ÷ÓÃÕß¸ºÔð»ØÊÕ£»
- *             ½á¹û¼¯¸½´øµÄ·µ»ØÂë£¬Ö»ÓÐÔÚ°ü¸ñÊ½°æ±¾0x21¼°ÒÔÉÏÊ±ÓÐÐ§£»
+ *使用注意事项:IF2Packer所使用的内存缓存区，由调用者负责回收；
+ *             结果集附带的返回码，只有在包格式版本0x21及以上时有效；
  */
 struct IF2Packer : public IKnown
 {
-    ///´ò°üÆ÷³õÊ¼»¯(Ê¹ÓÃµ÷ÓÃÕßµÄ»º´æÇø)
-	/** µÚÒ»´ÎÊ¹ÓÃ´ò°üÆ÷Ê±£¬¿ÉÏÈÊ¹ÓÃ±¾·½·¨ÉèÖÃºÃ»º³åÇø(Êý¾Ý³¤¶È±»ÖÃÎªiDataLen)
-	 *@param  char * pBuf  »º³åÇøµØÖ·
- 	 *@param  int iBufSize  »º³åÇø¿Õ¼ä
- 	 *@param  int iDataLen  ÒÑÓÐÊý¾Ý³¤¶È£¬ÐÂÔöÊý¾Ý¼ÓÔÚÒÑÓÐÊý¾ÝÖ®ºó£¨Ö»¶ÔV1.0¸ñÊ½µÄ°üÓÐÐ§£© 	 
+    ///打包器初始化(使用调用者的缓存区)
+	/** 第一次使用打包器时，可先使用本方法设置好缓冲区(数据长度被置为iDataLen)
+	 *@param  char * pBuf  缓冲区地址
+ 	 *@param  int iBufSize  缓冲区空间
+ 	 *@param  int iDataLen  已有数据长度，新增数据加在已有数据之后（只对V1.0格式的包有效） 	 
  	 */
 	virtual void FUNCTION_CALL_MODE SetBuffer(void * pBuf,int iBufSize,int iDataLen=0 )=0;
 
-	///¸´Î»£¬ÖØÐÂ¿ªÊ¼´òÁíÒ»¸ö°ü(×Ö¶ÎÊýÓë¼ÇÂ¼ÊýÖÃÎª0ÐÐ0Àý)
+	///复位，重新开始打另一个包(字段数与记录数置为0行0例)
 	/**
-	 * ¹¦ÄÜ£º¿ªÊ¼´ò°ü£¬°Ñ°ü³¤¶ÈÇåÁã(ÖØ¸´Ê¹ÓÃÒÑÓÐµÄ»º´æÇø¿Õ¼ä)
-	 *@return ÎÞ
+	 * 功能：开始打包，把包长度清零(重复使用已有的缓存区空间)
+	 *@return 无
 	 */
 	virtual void FUNCTION_CALL_MODE BeginPack(void)=0;
 
-	///¿ªÊ¼´òÒ»¸ö½á¹û¼¯
-	/**ÔÚ´òµ¥½á¹û¼¯µÄ°üÊ±£¬¿ÉÒÔ²»µ÷ÓÃ±¾·½·¨,¾ùÈ¡Ä¬ÈÏÖµ
-	 *@param const char *szDatasetName 0x20°æ´ò°üÐèÒªÖ¸Ã÷½á¹û¼¯Ãû×Ö
-	 *@param int iReturnCode           0x20°æ´ò°üÐèÒªÎªÃ¿¸ö½á¹û¼¯Ö¸Ã÷·µ»ØÖµ
+	///开始打一个结果集
+	/**在打单结果集的包时，可以不调用本方法,均取默认值
+	 *@param const char *szDatasetName 0x20版打包需要指明结果集名字
+	 *@param int iReturnCode           0x20版打包需要为每个结果集指明返回值
 	 */
 	virtual int FUNCTION_CALL_MODE NewDataset(const char *szDatasetName, int iReturnCode = 0)=0;
 
 	/**
-	 * ¹¦ÄÜ£ºÏò°üÌí¼Ó×Ö¶Î
+	 * 功能：向包添加字段
 	 *
-	 *ÓÐÖ´ÐÐ´ÎÐòÒªÇó:ÔÚ NewDataset()»òReset(),SetBuffer()Ö®ºó,Öð¸ö×Ö¶Î°´Ë³ÐòÌí¼Ó;
+	 *有执行次序要求:在 NewDataset()或Reset(),SetBuffer()之后,逐个字段按顺序添加;
 	 *
-	 *@param szFieldName£º×Ö¶ÎÃû
-	 *@param cFieldType £º×Ö¶ÎÀàÐÍ:IÕûÊý£¬F¸¡µãÊý£¬C×Ö·û£¬S×Ö·û´®£¬RÈÎÒâ¶þ½øÖÆÊý¾Ý
-	 *@param iFieldWidth £º×Ö¶Î¿í¶È£¨ËùÕ¼×î´ó×Ö½ÚÊý£©
-	 *@param iFieldScale £º×Ö¶Î¾«¶È,¼´cFieldType='F'Ê±µÄÐ¡ÊýÎ»Êý(È±Ê¡Îª4Î»Ð¡Êý)
-	 *@return ¸ºÊý±íÊ¾Ê§°Ü£¬·ñÔòÎªÄ¿Ç°°üµÄ³¤¶È
+	 *@param szFieldName：字段名
+	 *@param cFieldType ：字段类型:I整数，D浮点数，C字符，S字符串，R任意二进制数据
+	 *@param iFieldWidth ：字段宽度（所占最大字节数）
+	 *@param iFieldScale ：字段精度,即cFieldType='D'时的小数位数(缺省为4位小数)
+	 *@return 负数表示失败，否则为目前包的长度
 	 */
 	virtual int FUNCTION_CALL_MODE AddField(const char *szFieldName,char cFieldType ='S',int iFieldWidth=255,int iFieldScale=4)=0;
 
 	/**
-	 * ¹¦ÄÜ£ºÏò°üÌí¼Ó×Ö·û´®Êý¾Ý
-     * ÓÐÖ´ÐÐ´ÎÐòÒªÇó:±ØÐëÔÚËùÓÐ×Ö¶ÎÔö¼ÓÍêÖ®ºó,Öð¸ö×Ö¶Î°´Ë³ÐòÌí¼Ó;
-	 *@param       szValue£º×Ö·û´®Êý¾Ý
-	 *@return ¸ºÊý±íÊ¾Ê§°Ü£¬·ñÔòÎªÄ¿Ç°°üµÄ³¤¶È
+	 * 功能：向包添加字符串数据
+     * 有执行次序要求:必须在所有字段增加完之后,逐个字段按顺序添加;
+	 *@param       szValue：字符串数据
+	 *@return 负数表示失败，否则为目前包的长度
 	 */
 	virtual int FUNCTION_CALL_MODE AddStr(const char *szValue)=0;
 
 	/**
-     * ¹¦ÄÜ£ºÏò°üÌí¼ÓÕûÊýÊý¾Ý
- 	 *@param       iValue£ºÕûÊýÊý¾Ý
-	 *@return ¸ºÊý±íÊ¾Ê§°Ü£¬·ñÔòÎªÄ¿Ç°°üµÄ³¤¶È
+     * 功能：向包添加整数数据
+ 	 *@param       iValue：整数数据
+	 *@return 负数表示失败，否则为目前包的长度
 	 */
 	virtual int FUNCTION_CALL_MODE AddInt(int iValue)=0;
 	
     /**
-	 * ¹¦ÄÜ£ºÏò°üÌí¼Ó¸¡µãÊý¾Ý
-	 *@param       fValue£º¸¡µãÊý¾Ý
-	 *@return ¸ºÊý±íÊ¾Ê§°Ü£¬·ñÔòÎªÄ¿Ç°°üµÄ³¤¶È
+	 * 功能：向包添加浮点数据
+	 *@param       fValue：浮点数据
+	 *@return 负数表示失败，否则为目前包的长度
 	 */
 	virtual int FUNCTION_CALL_MODE AddDouble(double fValue)=0;
 
 	/**
-	 * ¹¦ÄÜ£ºÏò°üÌí¼ÓÒ»¸ö×Ö·û
-	 *@param		 cValue£º×Ö·û
-	 *@return ¸ºÊý±íÊ¾Ê§°Ü£¬·ñÔòÎªÄ¿Ç°°üµÄ³¤¶È
+	 * 功能：向包添加一个字符
+	 *@param		 cValue：字符
+	 *@return 负数表示失败，否则为目前包的长度
 	 */
 	virtual int FUNCTION_CALL_MODE AddChar(char cValue)=0;
 
 	/**
-	 * ¹¦ÄÜ£ºÏò°üÌí¼ÓÒ»¸ö´ó¶ÔÏó
-	 *@param	void * lpBuff Êý¾ÝÇø
-	 *@param	int iLen  Êý¾Ý³¤¶È	 
-	 *@return ¸ºÊý±íÊ¾Ê§°Ü£¬·ñÔòÎªÄ¿Ç°°üµÄ³¤¶È
+	 * 功能：向包添加一个大对象
+	 *@param	void * lpBuff 数据区
+	 *@param	int iLen  数据长度	 
+	 *@return 负数表示失败，否则为目前包的长度
 	 */
 	virtual int FUNCTION_CALL_MODE AddRaw(void * lpBuff,int iLen)=0;
 
-    ///½áÊø´ò°ü
+    ///结束打包
 	virtual void FUNCTION_CALL_MODE EndPack()=0;
  
 	/**
-     * ¹¦ÄÜ£ºÈ¡´ò°ü½á¹ûÖ¸Õë
-	 *@return ´ò°ü½á¹ûÖ¸Õë
+     * 功能：取打包结果指针
+	 *@return 打包结果指针
      */
 	virtual void * FUNCTION_CALL_MODE GetPackBuf(void) = 0;
 	
 	/**
-     * ¹¦ÄÜ£ºÈ¡´ò°ü½á¹û³¤¶È
-     *@return ´ò°ü½á¹û³¤¶È
+     * 功能：取打包结果长度
+     *@return 打包结果长度
 	 */
 	virtual int FUNCTION_CALL_MODE GetPackLen(void) = 0;
 	
 	/**
-	 * ¹¦ÄÜ£ºÈ¡´ò°ü½á¹û»º³åÇø´óÐ¡
-     *@return ´ò°ü½á¹û»º³åÇø´óÐ¡
+	 * 功能：取打包结果缓冲区大小
+     *@return 打包结果缓冲区大小
 	 */
 	virtual int FUNCTION_CALL_MODE GetPackBufSize(void) = 0;
 	
 	/**
-	 * ¹¦ÄÜ£ºÈ¡´ò°ü¸ñÊ½°æ±¾
-     *@return °æ±¾
+	 * 功能：取打包格式版本
+     *@return 版本
 	 */
 	virtual int FUNCTION_CALL_MODE GetVersion(void) = 0;
 	
-	///ÉèÖÃ½á¹û¼¯µÄ·µ»ØÂë(0x20°æÒÔÉÏÒªÇó)£¬´íÎó½á¹û¼¯ÐèÒªÉèÖÃ
-	/**·µ»ØÂëÈ¡È±Ê¡Öµ0£¬Ôò²»ÉèÖÃ£¬Èç¹ûÉèÖÃ£¬Ôò±ØÐëÔÚEndPack()Ö®Ç°µ÷ÓÃ
-     *@return °æ±¾
+	///设置结果集的返回码(0x20版以上要求)，错误结果集需要设置
+	/**返回码取缺省值0，则不设置，如果设置，则必须在EndPack()之前调用
+     *@return 版本
 	 */
 	virtual void FUNCTION_CALL_MODE SetReturnCode(unsigned long dwRetCode) = 0;
 
-	/**Ö±½Ó·µ»Øµ±Ç°´ò°ü½á¹ûµÄ½â°ü½Ó¿Ú,±ØÐëÔÚEndPack()Ö®ºó²ÅÄÜµ÷ÓÃ,ÔÚ´ò°üÆ÷ÊÍ·ÅÊ±ÏàÓ¦µÄ½â°üÆ÷ÊµÀýÒ²ÊÍ·Å
-     *@return ½â°üÆ÷½Ó¿Ú£¬´Ë½â°ü½Ó¿Ú²»ÄÜµ÷ÓÃ destroy()À´ÊÍ·Å
+	/**直接返回当前打包结果的解包接口,必须在EndPack()之后才能调用,在打包器释放时相应的解包器实例也释放
+     *@return 解包器接口，此解包接口不能调用 destroy()来释放
 	 */
 	virtual IF2UnPacker * FUNCTION_CALL_MODE UnPack(void) = 0;
 
@@ -379,137 +393,157 @@ struct IF2Packer : public IKnown
 	virtual void FUNCTION_CALL_MODE ClearValue() = 0;
 	
 	
-	//20110302 xuxp Ôö¼ÓÒ»¸ö½Ó¿Úº¯Êý£¬ÓÃÀ´´«µÝµÚÒ»¸ö½á¹û¼¯µÄÃû×Ö
-	///¸´Î»£¬ÖØÐÂ¿ªÊ¼´òÁíÒ»¸ö°ü(×Ö¶ÎÊýÓë¼ÇÂ¼ÊýÖÃÎª0ÐÐ0Àý)
+	//20110302 xuxp 增加一个接口函数，用来传递第一个结果集的名字
+	///复位，重新开始打另一个包(字段数与记录数置为0行0例)
 	/**
-	 * ¹¦ÄÜ£º¿ªÊ¼´ò°ü£¬°Ñ°ü³¤¶ÈÇåÁã(ÖØ¸´Ê¹ÓÃÒÑÓÐµÄ»º´æÇø¿Õ¼ä)
-	 *@return ÎÞ
+	 * 功能：开始打包，把包长度清零(重复使用已有的缓存区空间)
+	 *@return 无
 	 */
 	virtual void FUNCTION_CALL_MODE BeginPackEx(char* szName = NULL) = 0;
 
-	//20110324 dongpf Ôö¼ÓÒ»¸ö½Ó¿Úº¯Êý£¬ÓÃÀ´¸´Î»µ±Ç°½á¹û¼¯
-	///¸´Î»µ±Ç°½á¹û¼¯(×Ö¶ÎÊýÓë¼ÇÂ¼ÊýÖÃÎª0ÐÐ0Àý)£¬²»Ó°ÏìÆäËû½á¹û¼¯
+	//20110324 dongpf 增加一个接口函数，用来复位当前结果集
+	///复位当前结果集(字段数与记录数置为0行0例)，不影响其他结果集
 	/**
-	 * ¹¦ÄÜ£º¸´Î»µ±Ç°½á¹û¼¯
-	 *@return ÎÞ
+	 * 功能：复位当前结果集
+	 *@return 无
 	 */
 	virtual void FUNCTION_CALL_MODE ClearDataSet() = 0;
 };
 
-///½â°üÆ÷½Ó¿Ú
+///解包器接口
 struct IF2UnPacker : public IF2ResultSet
 {
-	/**È¡´ò°ü¸ñÊ½°æ±¾
-     *@return °æ±¾
+	/**取打包格式版本
+     *@return 版本
 	 */
 	virtual int FUNCTION_CALL_MODE GetVersion(void) = 0;
 
-	/**È¡½â°üÊý¾Ý³¤¶È
-     *@return 							0 ±íÊ¾³É¹¦£¬ ÆäËüÎªÊ§°Ü
+	/**取解包数据长度
+     *@return 							0 表示成功， 其它为失败
 	 */
 	virtual int FUNCTION_CALL_MODE Open(void * lpBuffer,unsigned int iLen) = 0;
 
-    ///È¡½á¹û¼¯¸öÊý(0x20ÒÔÉÏ°æ±¾Ö§³Ö)
+    ///取结果集个数(0x20以上版本支持)
     virtual int FUNCTION_CALL_MODE GetDatasetCount()=0;
 
-    ///ÉèÖÃµ±Ç°½á¹û¼¯(0x20ÒÔÉÏ°æ±¾Ö§³Ö)
+    ///设置当前结果集(0x20以上版本支持)
     /**
-	 *@param  int nIndex				½á¹û¼¯±àºÅ
-	 *@return int						0±íÊ¾³É¹¦£¬·ñÔòÎªÊ§°Ü
+	 *@param  int nIndex				结果集编号
+	 *@return int						非0 表示成功，否则为失败
 	 */
     virtual int FUNCTION_CALL_MODE SetCurrentDatasetByIndex(int nIndex)=0;
 
-    ///ÉèÖÃµ±Ç°½á¹û¼¯ (0x20ÒÔÉÏ°æ±¾Ö§³Ö)
+    ///设置当前结果集 (0x20以上版本支持)
     /**
-	 *@param  const char *szDatasetName	½á¹û¼¯Ãû³Æ
-	 *@return int						0 ±íÊ¾³É¹¦£¬·ñÔòÎªÊ§°Ü
+	 *@param  const char *szDatasetName	结果集名称
+	 *@return int						非0 表示成功，否则为失败
 	 */
     virtual int FUNCTION_CALL_MODE SetCurrentDataset(const char *szDatasetName)=0;
 
-	/** È¡½â°üÊý¾ÝÇøÖ¸Õë
-	 *@return Êý¾ÝÇøÖ¸Õë
+	/** 取解包数据区指针
+	 *@return 数据区指针
      */
 	virtual void * FUNCTION_CALL_MODE GetPackBuf(void) = 0;
 
-	/** È¡½â°üÊý¾Ý³¤¶È
-     *@return ½â°üÊý¾Ý³¤¶È
+	/** 取解包数据长度
+     *@return 解包数据长度
 	 */
 	virtual unsigned int FUNCTION_CALL_MODE GetPackLen(void) = 0;
 
-	/**È¡½â°üÊý¾Ý¼ÇÂ¼ÌõÊý,20051207ÒÔºó°æ±¾Ö§³Ö
-     *@return ¼ÇÂ¼ÌõÊý
+	/**取解包数据记录条数,20051207以后版本支持
+     *@return 记录条数
 	 */
 	virtual unsigned int FUNCTION_CALL_MODE GetRowCount(void) = 0;
 	
-	///½á¹û¼¯ÐÐ¼ÇÂ¼ÓÎ±ê½Ó¿Ú£ºÈ¡½á¹û¼¯µÄÊ×Ìõ¼ÇÂ¼
+	///结果集行记录游标接口：取结果集的首条记录
     virtual void FUNCTION_CALL_MODE First() = 0;
 
-    ///½á¹û¼¯ÐÐ¼ÇÂ¼ÓÎ±ê½Ó¿Ú£ºÈ¡½á¹û¼¯µÄ×îºóÒ»Ìõ¼ÇÂ¼
+    ///结果集行记录游标接口：取结果集的最后一条记录
     virtual void FUNCTION_CALL_MODE Last() = 0;
 
-    ///½á¹û¼¯ÐÐ¼ÇÂ¼ÓÎ±ê½Ó¿Ú£ºÈ¡½á¹û¼¯µÄµÚnÌõ¼ÇÂ¼£¬È¡Öµ·¶Î§[1, GetRowCount()]
+    ///结果集行记录游标接口：取结果集的第n条记录，取值范围[1, GetRowCount()]
     virtual void FUNCTION_CALL_MODE Go(int nRow) = 0;
 	
-	///»ñÈ¡µ±Ç°½á¹û¼¯Ãû×ÖµÄ½Ó¿Ú,Ã»ÓÐÃû×Ö·µ»Ø""
+	///获取当前结果集名字的接口,没有名字返回""
 	virtual const char* FUNCTION_CALL_MODE GetDatasetName() = 0;
 	
 	virtual int FUNCTION_CALL_MODE OpenAndCopy(void * lpBuffer,unsigned int iLen) = 0;
+	
+	//20140623 majc 增加根据名字获取字段类型，字段精度，字段最大长度
+	//取字段数据类型
+    /** @param columnName:字段名
+      * @return:见上面常量定义;列名不存在 默认返回'S'
+      */
+    virtual char FUNCTION_CALL_MODE GetColTypeByName(const char * columnName)=0;
+
+
+   ///取数字型字段小数位数
+   /** @param columnName:字段名
+     * @return int 返回字段数据小数位数 列名不存在 返回0 
+     */
+   virtual int FUNCTION_CALL_MODE GetColScaleByName(const char * columnName)=0;
+  
+   //取字段允许存放数据的最大宽度.
+   /** @param columnName:字段名
+     * @return int 返回字段宽度 列名不存在 返回1
+     */
+   virtual int FUNCTION_CALL_MODE GetColWidthByName(const char * columnName) = 0;
 };
 
-///Á¬½Ó¶ÔÏó CConnectionInterface µÄ²ÎÊýÅäÖÃ¶ÔÏóCConfigInterface
+///连接对象 CConnectionInterface 的参数配置对象CConfigInterface
 /**
-* °üÀ¨´ÓÎÄ¼þ¼ÓÔØ¡¢±£´æµ½ÎÄ¼þ£¬¶ÁÐ´²Ù×÷
+* 包括从文件加载、保存到文件，读写操作
 */
 class CConfigInterface: public IKnown
 {
 public:
 	/**
-    * ´ÓÎÄ¼þ¼ÓÔØ
-    * @param szFileName ÎÄ¼þÃû£¬¸ñÊ½ÀàËÆini£¬¾ßÌå²Î¿¼¿ª·¢°üÊ¾Àý
-    * @return ·µ»Ø0±íÊ¾³É¹¦£¬·ñÔòÊ§°Ü
+    * 从文件加载
+    * @param szFileName 文件名，格式类似ini，具体参考开发包示例
+    * @return 返回0表示成功，否则失败
     */
     virtual int FUNCTION_CALL_MODE Load(const char *szFileName) = 0;
 
     /**
-    * ±£´æµ½ÎÄ¼þ
-    * @param szFileName ÎÄ¼þÃû
-    * @return ·µ»Ø0±íÊ¾³É¹¦£¬·ñÔòÊ§°Ü
+    * 保存到文件
+    * @param szFileName 文件名
+    * @return 返回0表示成功，否则失败
     */
     virtual int FUNCTION_CALL_MODE Save(const char *szFileName) = 0;
 
     /**
-    * È¡×Ö·û´®Öµ
-    * @param szSection ½ÚÃû
-    * @param szEntry   ±äÁ¿Ãû
-    * @param szDefault È±Ê¡Öµ
-    * @return ×Ö·û´®Öµ£¬Ã»ÓÐÕÒµ½Ê±·µ»ØszDefault
+    * 取字符串值
+    * @param szSection 节名
+    * @param szEntry   变量名
+    * @param szDefault 缺省值
+    * @return 字符串值，没有找到时返回szDefault
     */
     virtual const char * FUNCTION_CALL_MODE GetString(const char *szSection, const char *szEntry, const char *szDefault) = 0;
 
     /**
-    * È¡ÕûÊýÖµ
-    * @param szSection ½ÚÃû
-    * @param szEntry   ±äÁ¿Ãû
-    * @param iDefault  È±Ê¡Öµ
-    * @return ÕûÊýÖµ£¬Ã»ÓÐÕÒµ½Ê±·µ»ØiDefault
+    * 取整数值
+    * @param szSection 节名
+    * @param szEntry   变量名
+    * @param iDefault  缺省值
+    * @return 整数值，没有找到时返回iDefault
     */
     virtual int FUNCTION_CALL_MODE GetInt(const char *szSection, const char *szEntry, int iDefault) = 0;
 
     /**
-    * ÉèÖÃ×Ö·û´®Öµ
-    * @param szSection ½ÚÃû
-    * @param szEntry   ±äÁ¿Ãû
-    * @param szValue   Öµ
-    * @return 0±íÊ¾³É¹¦£¬·ñÔòÊ§°Ü
+    * 设置字符串值
+    * @param szSection 节名
+    * @param szEntry   变量名
+    * @param szValue   值
+    * @return 0表示成功，否则失败
     */
     virtual int FUNCTION_CALL_MODE SetString(const char *szSection, const char *szEntry, const char *szValue) = 0;
 
     /**
-    * ÉèÖÃÕûÊýÖµ
-    * @param szSection ½ÚÃû
-    * @param szEntry   ±äÁ¿Ãû
-    * @param iValue    Öµ
-    * @return 0±íÊ¾³É¹¦£¬·ñÔòÊ§°Ü
+    * 设置整数值
+    * @param szSection 节名
+    * @param szEntry   变量名
+    * @param iValue    值
+    * @return 0表示成功，否则失败
     */
     virtual int FUNCTION_CALL_MODE SetInt(const char *szSection, const char *szEntry, int iValue) = 0;
 };
@@ -517,12 +551,12 @@ public:
 
 typedef struct tagBizRouteInfo
 {
-	char ospfName[ID_STR_LEN+1];//Â·ÓÉÄ¿±ê½ÚµãÖÐ¼ä¼þÃû×Ö
-	char nbrName[ID_STR_LEN+1];//ÖÐ¼ä¼þ½ÚµãµÄÁÚ¾ÓÃû×Ö
-	char svrName[SVRINSTANCE_NAME_LENGTH+1];//ÖÐ¼ä¼þµÄ½ø³ÌÃû×Ö
-	char pluginID[PLUGIN_NAME_LENGTH+1];//ÖÐ¼ä¼þ²å¼þÃû
-	int connectID;//Á¬½ÓºÅ
-	int memberNO;//³ÉÔ±±àºÅ
+	char ospfName[ID_STR_LEN+1];//路由目标节点中间件名字
+	char nbrName[ID_STR_LEN+1];//中间件节点的邻居名字
+	char svrName[SVRINSTANCE_NAME_LENGTH+1];//中间件的进程名字
+	char pluginID[PLUGIN_NAME_LENGTH+1];//中间件插件名
+	int connectID;//连接号
+	int memberNO;//成员编号
 	
 	tagBizRouteInfo()
 	{
@@ -533,281 +567,291 @@ typedef struct tagBizRouteInfo
 
 struct IBizMessage : public IKnown
 {
-	//ÉèÖÃ¹¦ÄÜºÅ
+	//设置功能号
 	virtual void FUNCTION_CALL_MODE SetFunction(const int nFUnctionNo) = 0;
-	//»ñÈ¡¹¦ÄÜºÅ
+	//获取功能号
 	virtual int FUNCTION_CALL_MODE GetFunction() = 0;
 
-	//ÉèÖÃ°üÀàÐÍ
+	//设置包类型
 	virtual void FUNCTION_CALL_MODE SetPacketType(const int nPacketType) = 0;
-	//»ñÈ¡°üÀàÐÍ
+	//获取包类型
 	virtual int FUNCTION_CALL_MODE GetPacketType() = 0;
 
-	//ÉèÖÃÓªÒµ²¿ºÅ
+	//设置营业部号
 	virtual void FUNCTION_CALL_MODE SetBranchNo(const int nBranchNo) = 0;
-	//»ñÈ¡ÓªÒµ²¿ºÅ
+	//获取营业部号
 	virtual int FUNCTION_CALL_MODE GetBranchNo() = 0;
 
-	//ÉèÖÃÏµÍ³ºÅ
+	//设置系统号
 	virtual void FUNCTION_CALL_MODE SetSystemNo(const int nSystemNo) = 0;
-	//»ñÈ¡ÏµÍ³ºÅ
+	//获取系统号
 	virtual int FUNCTION_CALL_MODE GetSystemNo() = 0;
 
-	//ÉèÖÃ×ÓÏµÍ³ºÅ
+	//设置子系统号
 	virtual void FUNCTION_CALL_MODE SetSubSystemNo(const int nSubSystemNo) = 0;
-	//»ñÈ¡×ÓÏµÍ³ºÅ
+	//获取子系统号
 	virtual int FUNCTION_CALL_MODE GetSubSystemNo() = 0;
 
-	//ÉèÖÃ·¢ËÍÕß±àºÅ
+	//设置发送者编号
 	virtual void FUNCTION_CALL_MODE SetSenderId(const int nSenderId) = 0;
-	//»ñÈ¡·¢ËÍÕß±àºÅ
+	//获取发送者编号
 	virtual int FUNCTION_CALL_MODE GetSenderId() = 0;
 
-	//ÉèÖÃ°üÐòºÅ
+	//设置包序号
 	virtual void FUNCTION_CALL_MODE SetPacketId(const int nPacketId) = 0;
-	//»ñÈ¡°üÐòºÅ
+	//获取包序号
 	virtual int FUNCTION_CALL_MODE GetPacketId() = 0;
 
-	//ÉèÖÃÄ¿µÄµØÂ·ÓÉ
+	//设置目的地路由
 	virtual void FUNCTION_CALL_MODE SetTargetInfo(const BIZROUTE_INFO targetInfo) = 0;
-	//»ñÈ¡Ä¿µÄµØÂ·ÓÉ
+	//获取目的地路由
 	virtual void FUNCTION_CALL_MODE GetTargetInfo(BIZROUTE_INFO& targetInfo) = 0;
 	
-	//ÉèÖÃ·¢ËÍÕßÂ·ÓÉ
+	//设置发送者路由
 	virtual void FUNCTION_CALL_MODE SetSendInfo(const BIZROUTE_INFO sendInfo) = 0;
-	//»ñÈ¡·¢ËÍÕßÂ·ÓÉ
+	//获取发送者路由
 	virtual void FUNCTION_CALL_MODE GetSendInfo(BIZROUTE_INFO& sendInfo) = 0;
 
-	//ÉèÖÃ´íÎóºÅ
+	//设置错误号
 	virtual void FUNCTION_CALL_MODE SetErrorNo(const int nErrorNo) = 0;
-	//»ñÈ¡´íÎóºÅ
+	//获取错误号
 	virtual int FUNCTION_CALL_MODE GetErrorNo() = 0;
 	
-	//ÉèÖÃ´íÎóÐÅÏ¢
+	//设置错误信息
 	virtual void FUNCTION_CALL_MODE SetErrorInfo(const char* strErrorInfo) = 0;
-	//»ñÈ¡´íÎóÐÅÏ¢
+	//获取错误信息
 	virtual const char* FUNCTION_CALL_MODE GetErrorInfo() = 0;
 	
-	//ÉèÖÃ·µ»ØÂë
+	//设置返回码
 	virtual void FUNCTION_CALL_MODE SetReturnCode(const int nReturnCode) = 0;
-	//»ñÈ¡·µ»ØÂë
+	//获取返回码
 	virtual int FUNCTION_CALL_MODE GetReturnCode() = 0;
 
-	//ÉèÖÃÒµÎñÄÚÈÝ
+	//设置业务内容
 	virtual void FUNCTION_CALL_MODE SetContent(void* lpContent,int iLen) = 0;
-	//»ñÈ¡ÒµÎñÄÚÈÝ
+	//获取业务内容
 	virtual const void* FUNCTION_CALL_MODE GetContent(int& iLen) = 0;
 
-	//ÒÔÏÂ½Ó¿ÚÓÃÓÚÏûÏ¢ÖÐÐÄ1.0µÄ¶©ÔÄ
-	//ÉèÖÃ¶©ÔÄÀàÐÍ
+	//以下接口用于消息中心1.0的订阅
+	//设置订阅类型
 	virtual void FUNCTION_CALL_MODE SetIssueType(const int nIssueType) = 0;
-	//»ñÈ¡¶©ÔÄÀàÐÍ
+	//获取订阅类型
 	virtual int FUNCTION_CALL_MODE GetIssueType() = 0;
 
-	//ÉèÖÃÐòºÅ
+	//设置序号
 	virtual void FUNCTION_CALL_MODE SetSequeceNo(const int nSequeceNo) = 0;
-	//»ñÈ¡ÐòºÅ
+	//获取序号
 	virtual int FUNCTION_CALL_MODE GetSequeceNo() = 0;
 
-	//ÉèÖÃ¹Ø¼ü×Ö¶ÎÐÅÏ¢
+	//设置关键字段信息
 	virtual void FUNCTION_CALL_MODE SetKeyInfo(void* lpKeyData,int iLen) = 0;
-	//»ñÈ¡¹Ø¼ü×Ö¶ÎÐÅÏ¢
+	//获取关键字段信息
 	virtual const void* FUNCTION_CALL_MODE GetKeyInfo(int& iLen) = 0;
 
-	//ÉèÖÃ¸½¼ÓÊý¾Ý£¬¶©ÔÄÍÆËÍÊ±Ô­Ñù·µ»Ø
+	//设置附加数据，订阅推送时原样返回
 	virtual void FUNCTION_CALL_MODE SetAppData(const void* lpAppdata,int nAppLen) = 0;
-	//»ñÈ¡¸½¼ÓÊý¾Ý£¬¶©ÔÄÍÆËÍÊ±Ô­Ñù·µ»Ø
+	//获取附加数据，订阅推送时原样返回
 	virtual const void* FUNCTION_CALL_MODE GetAppData(int& nAppLen) = 0;
 
-	//ÇëÇó×ªÓ¦´ð
+	//请求转应答
 	virtual int	FUNCTION_CALL_MODE ChangeReq2AnsMessage() = 0;
 
-	//»ñÈ¡¶þ½øÖÆ
+	//获取二进制
 	virtual void* FUNCTION_CALL_MODE GetBuff(int& nBuffLen) = 0;
-	//½âÎö¶þ½øÖÆ
+	//解析二进制
 	virtual int	FUNCTION_CALL_MODE SetBuff(const void* lpBuff,int nBuffLen) = 0;
 
-	//Çå³ýÏûÏ¢ÄÚµÄ×Ö¶Î£¬¿ÉÒÔÏÂ´Î¸´ÓÃ¡£
+	//清除消息内的字段，可以下次复用。
 	virtual void FUNCTION_CALL_MODE ReSet() = 0;
+	
+	//设置公司编号
+	virtual void FUNCTION_CALL_MODE SetCompanyID(const int nCompanyID) = 0;
+	//获取公司编号
+	virtual int FUNCTION_CALL_MODE GetCompanyID() = 0;
+	
+	//设置发送者公司编号
+	virtual void FUNCTION_CALL_MODE SetSenderCompanyID(const int nSenderCompanyID) = 0;
+	//获取发送者公司编号
+	virtual int FUNCTION_CALL_MODE GetSenderCompanyID() = 0;
 };
 
-#define IDENTITY_NAME_LENGTH    32  /**< ¿Í»§¶ËÃû×Ö³¤¶È */
-#define MAX_MACADDRESS_LEN	    18  /**< MAC µØÖ·³¤¶È */
-#define MAX_RAND_LEN	        4   /**< Ëæ»úÊý³¤¶È */
+#define IDENTITY_NAME_LENGTH    32  /**< 客户端名字长度 */
+#define MAX_MACADDRESS_LEN	    18  /**< MAC 地址长度 */
+#define MAX_RAND_LEN	        4   /**< 随机数长度 */
 
-/** ¿Í»§±êÊ¶³¤¶È */
+/** 客户标识长度 */
 #define MAX_BIZNAME_LEN \
 	IDENTITY_NAME_LENGTH+1+MAX_MACADDRESS_LEN+1+MAX_RAND_LEN+2
 
-#define INIT_RECVQ_LEN 256          /**< ½ÓÊÕ¶ÓÁÐ³õÊ¼³¤¶È */
-#define STEP_RECVQ_LEN 512          /**< ½ÓÊÕ¶ÓÁÐÀ©Õ¹²½³¤ */
-#define SIMPLIFIED_CHINESE      0   /**< ´íÎóÐÅÏ¢ÓïÑÔ:¼òÌåÖÐÎÄ */
-#define ENGLISH                 1   /**< ´íÎóÐÅÏ¢ÓïÑÔ:Ó¢ÎÄ */
-#define MAX_FILTERFIELD_LEN 63      /**< ¹ýÂË×Ö¶Î³¤¶È */
+#define INIT_RECVQ_LEN 256          /**< 接收队列初始长度 */
+#define STEP_RECVQ_LEN 512          /**< 接收队列扩展步长 */
+#define SIMPLIFIED_CHINESE      0   /**< 错误信息语言:简体中文 */
+#define ENGLISH                 1   /**< 错误信息语言:英文 */
+#define MAX_FILTERFIELD_LEN 63      /**< 过滤字段长度 */
 
-/** Ö÷Ìâ¿É¿¿µÈ¼¶ */
+/** 主题可靠等级 */
 enum ReliableLevel
 {
-    LEVEL_DOBEST            = 0,    /**< ¾¡Á¦¶øÎª */
-    LEVEL_DOBEST_BYSEQ      = 1,    /**< ¾¡Á¦ÓÐÐò */
-    LEVEL_MEM               = 2,    /**< ÄÚ´æ */
-    LEVEL_FILE              = 3,    /**< ÎÄ¼þ */
-    LEVEL_SYSTEM            = 4     /**< ÏµÍ³ */
+    LEVEL_DOBEST            = 0,    /**< 尽力而为 */
+    LEVEL_DOBEST_BYSEQ      = 1,    /**< 尽力有序 */
+    LEVEL_MEM               = 2,    /**< 内存 */
+    LEVEL_FILE              = 3,    /**< 文件 */
+    LEVEL_SYSTEM            = 4     /**< 系统 */
 };
 
 /** 
- * ¹ýÂËÆ÷½Ó¿Ú
+ * 过滤器接口
  */
 class CFilterInterface:public IKnown
 {
 public:
    /**
-    * ¸ù¾ÝÏÂ±ê»ñÈ¡¹ýÂËÌõ¼þµÄÃû×Ö
-    * @param index ¶ÔÓ¦µÄ¹ýÂËÌõ¼þÏÂ±ê
-    * @return ·µ»Ø¶ÔÓ¦µÄÏÂ±ê¹ýÂËÌõ¼þµÄÃû×Ö£¬·ñÔò·µ»ØNULL.
+    * 根据下标获取过滤条件的名字
+    * @param index 对应的过滤条件下标
+    * @return 返回对应的下标过滤条件的名字，否则返回NULL.
     */
     virtual char* FUNCTION_CALL_MODE GetFilterNameByIndex(int index) = 0;
 
    /**
-    * ¸ù¾ÝÏÂ±ê»ñÈ¡¹ýÂËÌõ¼þµÄÖµ
-    * @param index ¶ÔÓ¦µÄ¹ýÂËÌõ¼þÏÂ±ê
-    * @return ·µ»Ø¶ÔÓ¦µÄÏÂ±ê¹ýÂËÌõ¼þµÄÖµ£¬·ñÔò·µ»ØNULL.
+    * 根据下标获取过滤条件的值
+    * @param index 对应的过滤条件下标
+    * @return 返回对应的下标过滤条件的值，否则返回NULL.
     */
     virtual char* FUNCTION_CALL_MODE GetFilterValueByIndex(int index)= 0;
 
    /**
-    * ¸ù¾Ý¹ýÂËÌõ¼þµÄÃû×Ö»ñÈ¡¹ýÂËÌõ¼þµÄÖµ
-    * @param fileName ¶ÔÓ¦µÄ¹ýÂËÌõ¼þÃû×Ö
-    * @return ·µ»Ø¶ÔÓ¦µÄ¹ýÂËÌõ¼þÃû×ÖµÄÌõ¼þÖµ£¬·ñÔò·µ»ØNULL.
+    * 根据过滤条件的名字获取过滤条件的值
+    * @param fileName 对应的过滤条件名字
+    * @return 返回对应的过滤条件名字的条件值，否则返回NULL.
     */
     virtual char* FUNCTION_CALL_MODE GetFilterValue(char*  fileName)= 0;
 
    /**
-    * »ñÈ¡¹ýÂËÌõ¼þµÄ¸öÊý
-    * @return ·µ»Ø¶ÔÓ¦¹ýÂËÌõ¼þµÄ¸öÊý£¬Ã»ÓÐ·µ»Ø0
+    * 获取过滤条件的个数
+    * @return 返回对应过滤条件的个数，没有返回0
     */
     virtual int   FUNCTION_CALL_MODE GetCount() = 0;
 
    /**
-    * ÉèÖÃ¹ýÂËÌõ¼þ£¬¸ù¾Ý¹ýÂËÌõ¼þÃû×ÖºÍÖµ
-    * @param filterName ¶ÔÓ¦µÄ¹ýÂËÌõ¼þÃû×Ö
-    * @param filterValue ¶ÔÓ¦µÄ¹ýÂËÌõ¼þÃû×ÖµÄÖµ
+    * 设置过滤条件，根据过滤条件名字和值
+    * @param filterName 对应的过滤条件名字
+    * @param filterValue 对应的过滤条件名字的值
     */
     virtual void FUNCTION_CALL_MODE  SetFilter(char* filterName,char* filterValue) =0;
 };
 
 /**
- * ¶©ÔÄ²ÎÊýÀà½Ó¿Ú
+ * 订阅参数类接口
  */
 class CSubscribeParamInterface:public IKnown
 {
 public:
 
    /**
-    * ÉèÖÃÖ÷ÌâÃû×Ö
-    * @param szName ¶ÔÓ¦µÄÖ÷ÌâÃû×Ö
+    * 设置主题名字
+    * @param szName 对应的主题名字
     */
     virtual void FUNCTION_CALL_MODE  SetTopicName(char* szName) =0;
 
    /**
-    * ÉèÖÃ¸½¼ÓÊý¾Ý
-    * @param lpData ¸½¼ÓÊý¾ÝµÄÊ×µØÖ·
-    * @param iLen ¸½¼ÓÊý¾ÝµÄ³¤¶È
+    * 设置附加数据
+    * @param lpData 附加数据的首地址
+    * @param iLen 附加数据的长度
     */
     virtual void FUNCTION_CALL_MODE  SetAppData(void* lpData,int iLen)=0;
     
    /**
-    * Ìí¼Ó¹ýÂËÌõ¼þ
-    * @param filterName ¹ýÂËÌõ¼þµÄÃû×Ö
-    * @param filterValue ¹ýÂËÌõ¼þµÄÖµ
+    * 添加过滤条件
+    * @param filterName 过滤条件的名字
+    * @param filterValue 过滤条件的值
     */
     virtual void FUNCTION_CALL_MODE  SetFilter(char* filterName,char* filterValue)=0;
 
    /**
-    * Ìí¼Ó·µ»Ø×Ö¶Î
-    * @param filedName ÐèÒªÌí¼ÓµÄ·µ»Ø×Ö¶Î
+    * 添加返回字段
+    * @param filedName 需要添加的返回字段
     */
     virtual void FUNCTION_CALL_MODE  SetReturnFiled(char* filedName)=0;
 
    /**
-    * ÉèÖÃÊÇ·ñ²¹È±±êÖ¾
-    * @param bFromNow true±íÊ¾ÐèÒªÖ®Ç°µÄÊý¾Ý£¬Ò²¾ÍÊÇ²¹È±£¬false±íÊ¾²»ÐèÒª²¹È±
+    * 设置是否补缺标志
+    * @param bFromNow true表示需要之前的数据，也就是补缺，false表示不需要补缺
     */
     virtual void FUNCTION_CALL_MODE  SetFromNow(bool bFromNow)=0;
 
    /**
-    * ÉèÖÃ¸²¸Ç¶©ÔÄ±êÖ¾
-    * @param bReplace true±íÊ¾¸²¸Ç¶©ÔÄ£¬È¡ÏûÖ®Ç°µÄËùÓÐ¶©ÔÄ£¬Ö»±£Áôµ±Ç°µÄ¶©ÔÄ£¬false±íÊ¾×·¼Ó¶©ÔÄ
+    * 设置覆盖订阅标志
+    * @param bReplace true表示覆盖订阅，取消之前的所有订阅，只保留当前的订阅，false表示追加订阅
     */
     virtual void FUNCTION_CALL_MODE  SetReplace(bool bReplace)=0;
 
    /**
-    * ÉèÖÃ·¢ËÍ¼ä¸ô
-    * @param nSendInterval µ¥Î»ÊÇÃë
+    * 设置发送间隔
+    * @param nSendInterval 单位是秒
     */
     virtual void FUNCTION_CALL_MODE  SetSendInterval(int nSendInterval)=0;
 
    /**
-    * »ñÈ¡Ö÷ÌâÃû×Ö
-    * @return ·µ»ØÖ÷ÌâÃû×ÖÐÅÏ¢
+    * 获取主题名字
+    * @return 返回主题名字信息
     */
     virtual char* FUNCTION_CALL_MODE  GetTopicName() =0;
 
    /**
-    * »ñÈ¡¸½¼ÓÊý¾Ý
-    * @param iLen ³ö²Î£¬±íÊ¾¸½¼ÓÊý¾ÝµÄ³¤¶È
-    * @return ·µ»Ø¸½¼ÓÊý¾ÝÊ×µØÖ·£¬Ã»ÓÐ·µ»ØNULL
+    * 获取附加数据
+    * @param iLen 出参，表示附加数据的长度
+    * @return 返回附加数据首地址，没有返回NULL
     */
     virtual void* FUNCTION_CALL_MODE  GetAppData(int *iLen) =0;
 
    /**
-    * »ñÈ¡¶ÔÓ¦µÄ¹ýÂË×Ö¶ÎµÄÃû×Ö
-    * @param index ¶ÔÓ¦µÄ¹ýÂËÌõ¼þÏÂ±ê
-    * @return ·µ»Ø¶ÔÓ¦µÄÏÂ±ê¹ýÂËÌõ¼þµÄÃû×Ö£¬·ñÔò·µ»ØNULL.
+    * 获取对应的过滤字段的名字
+    * @param index 对应的过滤条件下标
+    * @return 返回对应的下标过滤条件的名字，否则返回NULL.
     */
     virtual char* FUNCTION_CALL_MODE  GetFilterNameByIndex(int index) = 0;
 
    /**
-    * ¸ù¾ÝÏÂ±ê»ñÈ¡¹ýÂËÌõ¼þµÄÖµ
-    * @param index ¶ÔÓ¦µÄ¹ýÂËÌõ¼þÏÂ±ê
-    * @return ·µ»Ø¶ÔÓ¦µÄÏÂ±ê¹ýÂËÌõ¼þµÄÖµ£¬·ñÔò·µ»ØNULL.
+    * 根据下标获取过滤条件的值
+    * @param index 对应的过滤条件下标
+    * @return 返回对应的下标过滤条件的值，否则返回NULL.
     */
     virtual char* FUNCTION_CALL_MODE  GetFilterValueByIndex(int index)= 0;
 
    /**
-    * ¸ù¾Ý¹ýÂËÌõ¼þµÄÃû×Ö»ñÈ¡¹ýÂËÌõ¼þµÄÖµ
-    * @param fileName ¶ÔÓ¦µÄ¹ýÂËÌõ¼þÃû×Ö
-    * @return ·µ»Ø¶ÔÓ¦µÄ¹ýÂËÌõ¼þÃû×ÖµÄÌõ¼þÖµ£¬·ñÔò·µ»ØNULL.
+    * 根据过滤条件的名字获取过滤条件的值
+    * @param fileName 对应的过滤条件名字
+    * @return 返回对应的过滤条件名字的条件值，否则返回NULL.
     */
     virtual char* FUNCTION_CALL_MODE  GetFilterValue(char*  fileName)= 0;
 
    /**
-    * »ñÈ¡¹ýÂËÌõ¼þµÄ¸öÊý
-    * @return ·µ»Ø¶ÔÓ¦¹ýÂËÌõ¼þµÄ¸öÊý£¬Ã»ÓÐ·µ»Ø0
+    * 获取过滤条件的个数
+    * @return 返回对应过滤条件的个数，没有返回0
     */
     virtual int   FUNCTION_CALL_MODE  GetFilterCount() = 0;
 
    /**
-    * »ñÈ¡·µ»Ø×Ö¶Î
-    * @return ·µ»Ø¶ÔÓ¦µÄ·µ»Ø×Ö¶ÎÐÅÏ¢
+    * 获取返回字段
+    * @return 返回对应的返回字段信息
     */
     virtual char* FUNCTION_CALL_MODE  GetReturnFiled()=0;
 
    /**
-    * »ñÈ¡ÊÇ·ñ²¹È±µÄ±êÖ¾
-    * @return ·µ»Ø¶ÔÓ¦µÄ²¹È±±êÖ¾
+    * 获取是否补缺的标志
+    * @return 返回对应的补缺标志
     */
     virtual bool  FUNCTION_CALL_MODE  GetFromNow()=0 ;
 
    /**
-    * »ñÈ¡ÊÇ·ñ¸²¸Ç¶©ÔÄµÄ±êÖ¾
-    * @return ·µ»Ø¶ÔÓ¦µÄ¸²¸Ç¶©ÔÄ±êÖ¾
+    * 获取是否覆盖订阅的标志
+    * @return 返回对应的覆盖订阅标志
     */
     virtual bool  FUNCTION_CALL_MODE  GetReplace() =0;
 
    /**
-    * »ñÈ¡¶ÔÓ¦µÄ·¢ËÍÆµÂÊ
-    * @return ·µ»Ø¶ÔÓ¦µÄ·¢ËÍ¼ä¸ô
+    * 获取对应的发送频率
+    * @return 返回对应的发送间隔
     */
     virtual int   FUNCTION_CALL_MODE  GetSendInterval()=0;
 };
@@ -815,18 +859,18 @@ public:
 class CSubscribeInterface;
 
 /**
- * @brief ¶©ÔÄ»Øµ÷½Ó¿Ú·µ»ØµÄÊý¾Ý¶¨Òå£¬³ýÁË¶©ÔÄÐèÒªµÄÒµÎñÌåÖ®Íâ£¬»¹ÐèÒª·µ»ØµÄÊý¾Ý
+ * @brief 订阅回调接口返回的数据定义，除了订阅需要的业务体之外，还需要返回的数据
  */
 typedef struct tagSubscribeRecvData
 {
-	char* lpFilterData;     /**< ¹ýÂË×Ö¶ÎµÄÊý¾ÝÍ·Ö¸Õë£¬ÓÃ½â°üÆ÷½â°ü */
-	int iFilterDataLen;     /**< ¹ýÂË×Ö¶ÎµÄÊý¾Ý³¤¶È */
-	char* lpAppData;        /**< ¸½¼ÓÊý¾ÝµÄÊý¾ÝÍ·Ö¸Õë */
-	int iAppDataLen;        /**< ¸½¼ÓÊý¾ÝµÄ³¤¶È */
-	char szTopicName[260];  /**< Ö÷ÌâÃû×Ö */
+	char* lpFilterData;     /**< 过滤字段的数据头指针，用解包器解包 */
+	int iFilterDataLen;     /**< 过滤字段的数据长度 */
+	char* lpAppData;        /**< 附加数据的数据头指针 */
+	int iAppDataLen;        /**< 附加数据的长度 */
+	char szTopicName[260];  /**< 主题名字 */
 	
    /**
-    * tagSubscribeRecvData ¹¹Ôìº¯Êý
+    * tagSubscribeRecvData 构造函数
     */
 	tagSubscribeRecvData()
 	{
@@ -835,80 +879,80 @@ typedef struct tagSubscribeRecvData
 }SUBSCRIBE_RECVDATA, *LPSUBSCRIBE_RECVDATA;
 
 /**
- * ¶©ÔÄ»Øµ÷½Ó¿Ú£¬ÉÏ²ãÓ¦ÓÃÍ¨¹ýÕâ¸ö½Ó¿Ú£¬½ÓÊÕÖ÷ÍÆ¹ýÀ´µÄÏûÏ¢
+ * 订阅回调接口，上层应用通过这个接口，接收主推过来的消息
  */
 class CSubCallbackInterface: public IKnown
 {
 public:
 
    /**
-    * ÊÕµ½·¢²¼ÏûÏ¢µÄ»Øµ÷
-    * @param lpSub »Øµ÷µÄ¶©ÔÄÖ¸Õë
-    * @param subscribeIndex ÏûÏ¢¶ÔÓ¦µÄ¶©ÔÄ±êÊ¶£¬Õâ¸ö±êÊ¶À´×ÔÓÚSubscribeTopicº¯ÊýµÄ·µ»Ø
-    * @param lpData ·µ»ØÏûÏ¢µÄ¶þ½øÖÆÖ¸Õë£¬Ò»°ãÊÇÏûÏ¢µÄÒµÎñÌå´ò°üÄÚÈÝ
-    * @param nLength ¶þ½øÖÆÊý¾ÝµÄ³¤¶È
-	* @param lpRecvData Ö÷ÍÆÏûÏ¢µÄÆäËû×Ö¶Î·µ»Ø£¬Ö÷Òª°üº¬ÁË¸½¼ÓÊý¾Ý£¬¹ýÂËÐÅÏ¢£¬Ö÷ÌâÃû×Ö£¬ÏêÏ¸²Î¿´Ç°Ãæ½á¹¹Ìå¶¨Òå
-    * @return ÎÞ
+    * 收到发布消息的回调
+    * @param lpSub 回调的订阅指针
+    * @param subscribeIndex 消息对应的订阅标识，这个标识来自于SubscribeTopic函数的返回
+    * @param lpData 返回消息的二进制指针，一般是消息的业务体打包内容
+    * @param nLength 二进制数据的长度
+	* @param lpRecvData 主推消息的其他字段返回，主要包含了附加数据，过滤信息，主题名字，详细参看前面结构体定义
+    * @return 无
     */
     virtual void FUNCTION_CALL_MODE OnReceived(CSubscribeInterface *lpSub,int subscribeIndex, const void *lpData, int nLength,LPSUBSCRIBE_RECVDATA lpRecvData) = 0;
 
    /**
-    * ÊÕµ½ÌÞ³ý¶©ÔÄÏîµÄÏûÏ¢»Øµ÷£¬Ò»°ãÔÚÓµÓÐÌßÈË²ßÂÔµÄÖ÷ÌâÏÂ»á»Øµ÷Õâ¸ö½Ó¿Ú,Õâ¸ö»Øµ÷ÀïÃæ²»ÐèÒªÈ¡Ïû¶©ÔÄ£¬µ×²ãÒÑ¾­È¡ÏûÕâ¸ö¶©ÔÄ£¬Ö»ÊÇÒ»¸öÍ¨Öª½Ó¿Ú
-    * @param lpSub »Øµ÷µÄ¶©ÔÄÖ¸Õë
-    * @param subscribeIndex ÏûÏ¢¶ÔÓ¦µÄ¶©ÔÄ±êÊ¶£¬Õâ¸ö±êÊ¶À´×ÔÓÚSubscribeTopicº¯ÊýµÄ·µ»Ø
-    * @param TickMsgInfo ÌßÈËµÄ´íÎóÐÅÏ¢£¬Ö÷ÒªÊÇ°üº¬¾ßÌåÖØ¸´µÄ¶©ÔÄÏîÎ»ÖÃÐÅÏ¢
-    * @return ÎÞ
+    * 收到剔除订阅项的消息回调，一般在拥有踢人策略的主题下会回调这个接口,这个回调里面不需要取消订阅，底层已经取消这个订阅，只是一个通知接口
+    * @param lpSub 回调的订阅指针
+    * @param subscribeIndex 消息对应的订阅标识，这个标识来自于SubscribeTopic函数的返回
+    * @param TickMsgInfo 踢人的错误信息，主要是包含具体重复的订阅项位置信息
+    * @return 无
     */
     virtual void FUNCTION_CALL_MODE OnRecvTickMsg(CSubscribeInterface *lpSub,int subscribeIndex,const char* TickMsgInfo) = 0;
 };
 
 
 /**
- * ¶©ÔÄ½Ó¿ÚµÄ¶¨Òå
+ * 订阅接口的定义
  */
 class CSubscribeInterface: public IKnown
 {
 public:
 
    /**
-    * ¶©ÔÄÖ÷Ìâ
-    * @param lpSubscribeParamInter ÉÏÃæ¶¨ÒåµÄ¶©ÔÄ²ÎÊý½á¹¹
-    * @param uiTimeout ³¬Ê±Ê±¼ä
-    * @param lppBizUnPack ÒµÎñÐ£ÑéÊ±£¬Ê§°Ü·µ»ØµÄÒµÎñ´íÎóÐÅÏ¢£¬Èç¹û¶©ÔÄ³É¹¦Ã»ÓÐ·µ»Ø£¬Êä³ö²ÎÊý£¬ÐèÒªÍâÃæµ÷ÓÃReleaseÊÍ·Å
-                          Èç¹û½ÓÊÜÒµÎñÐ£ÑéµÄ´íÎóÐÅÏ¢£¬Ð´·¨ÈçÏÂ£º
+    * 订阅主题
+    * @param lpSubscribeParamInter 上面定义的订阅参数结构
+    * @param uiTimeout 超时时间
+    * @param lppBizUnPack 业务校验时，失败返回的业务错误信息，如果订阅成功没有返回，输出参数，需要外面调用Release释放
+                          如果接受业务校验的错误信息，写法如下：
                           IF2UnPacker* lpBizUnPack =NULL;
                           SubscribeTopic(...,&lpBizUnPack);
-                          ×îºó¸ù¾Ý·µ»ØÖµ£¬Èç¹ûÊÇÊ§°ÜµÄ¾ÍÅÐ¶Ï lpBizUnPack ÊÇ²»ÊÇNULL.
-                          ×îºó´íÎóÐÅÏ¢»ñÈ¡ÍêÖ®ºó,ÊÍ·Å
+                          最后根据返回值，如果是失败的就判断 lpBizUnPack 是不是NULL.
+                          最后错误信息获取完之后,释放
                           lpBizUnPack->Release();
-    * @param lpBizPack ÒµÎñÐ£ÑéÐèÒªÔö¼ÓµÄÒµÎñ×Ö¶ÎÒÔ¼°Öµ£¬Ã»ÓÐ¾Í¸ù¾Ý¹ýÂËÊôÐÔ×÷ÎªÒµÎñÐ£Ñé×Ö¶Î
-    * @return ·µ»ØÖµ´óÓÚ0£¬±íÊ¾µ±Ç°¶©ÔÄ³É¹¦µÄ¶©ÔÄ±êÊ¶£¬ÍâÃæÒª¼Ç×¡Õâ¸ö±êÊ¶ºÍ¶©ÔÄÏîÖ®¼äµÄÓ³Éä¹ØÏµ£¬Õâ¸ö±êÊ¶ÐèÒªÓÃÓÚÈ¡Ïû¶©ÔÄºÍ½ÓÊÕÏûÏ¢µÄ»Øµ÷ÀïÃæ.
-	*		  ·µ»ØÆäËûÖµ£¬¸ù¾Ý´íÎóºÅ»ñÈ¡´íÎóÐÅÏ¢.
+    * @param lpBizPack 业务校验需要增加的业务字段以及值，没有就根据过滤属性作为业务校验字段
+    * @return 返回值大于0，表示当前订阅成功的订阅标识，外面要记住这个标识和订阅项之间的映射关系，这个标识需要用于取消订阅和接收消息的回调里面.
+	*		  返回其他值，根据错误号获取错误信息.
     */
     virtual int FUNCTION_CALL_MODE SubscribeTopic(CSubscribeParamInterface* lpSubscribeParamInter ,unsigned int uiTimeout,IF2UnPacker** lppBizUnPack=NULL,IF2Packer* lpBizPack=NULL) = 0;
 
    /**
-    * È¡Ïû¶©ÔÄÖ÷Ìâ
-    * @param subscribeIndex ÏûÏ¢¶ÔÓ¦µÄ¶©ÔÄ±êÊ¶£¬Õâ¸ö±êÊ¶À´×ÔÓÚSubscribeTopicº¯ÊýµÄ·µ»Ø
-    * @return ·µ»Ø0±íÊ¾È¡Ïû¶©ÔÄ³É¹¦£¬·µ»ØÆäËûÖµ£¬¸ù¾Ý´íÎóºÅ»ñÈ¡´íÎóÐÅÏ¢.
+    * 取消订阅主题
+    * @param subscribeIndex 消息对应的订阅标识，这个标识来自于SubscribeTopic函数的返回
+    * @return 返回0表示取消订阅成功，返回其他值，根据错误号获取错误信息.
     */
     virtual int FUNCTION_CALL_MODE CancelSubscribeTopic(int subscribeIndex) = 0;
 
 
 	/**
-    * È¡Ïû¶©ÔÄÖ÷Ìâ
-    * @param topicName Ö÷ÌâÃû×Ö
-    * @param lpFilterInterface ¶ÔÓ¦µÄ¹ýÂËÌõ¼þ
-    * @return ·µ»Ø0±íÊ¾È¡Ïû¶©ÔÄ³É¹¦£¬·µ»ØÆäËûÖµ£¬¸ù¾Ý´íÎóºÅ»ñÈ¡´íÎóÐÅÏ¢.
+    * 取消订阅主题
+    * @param topicName 主题名字
+    * @param lpFilterInterface 对应的过滤条件
+    * @return 返回0表示取消订阅成功，返回其他值，根据错误号获取错误信息.
     */
     virtual int FUNCTION_CALL_MODE CancelSubscribeTopicEx(char* topicName,CFilterInterface* lpFilterInterface) = 0;
 
 
 
    /**
-    * »ñÈ¡µ±Ç°¶©ÔÄ½Ó¿ÚÒÑ¾­¶©ÔÄµÄËùÓÐÖ÷ÌâÒÔ¼°¹ýÂËÌõ¼þÐÅÏ¢
-    * @param lpPack ÍâÃæ´«ÈëµÄ´ò°üÆ÷
-    * @note packer±¨ÎÄ×Ö¶Î
+    * 获取当前订阅接口已经订阅的所有主题以及过滤条件信息
+    * @param lpPack 外面传入的打包器
+    * @note packer报文字段
         - SubcribeIndex
         - IsBornTopic
         - TopicName
@@ -924,105 +968,164 @@ public:
 };
 
 /**
- * ·¢²¼½Ó¿Ú
+ * 发布接口
  */
 class CPublishInterface: public IKnown
 {
 public:
 
    /**
-    * ÒµÎñ´ò°ü¸ñÊ½µÄÄÚÈÝ·¢²¼½Ó¿Ú
-    * @param topicName Ö÷ÌâÃû×Ö£¬²»ÖªµÀÃû×Ö¾Í´«NULL
-    * @param lpUnPacker ¾ßÌåµÄÄÚÈÝ
-    * @param iTimeOut ³¬Ê±Ê±¼ä
-    * @param lppBizUnPack ÒµÎñÐ£ÑéÊ±£¬Ê§°Ü·µ»ØµÄÒµÎñ´íÎóÐÅÏ¢£¬Èç¹û·¢²¼³É¹¦Ã»ÓÐ·µ»Ø£¬Êä³ö²ÎÊý£¬ÐèÒªÍâÃæµ÷ÓÃReleaseÊÍ·Å
-                            Èç¹û½ÓÊÜÒµÎñÐ£ÑéµÄ´íÎóÐÅÏ¢£¬Ð´·¨ÈçÏÂ£º
+    * 业务打包格式的内容发布接口
+    * @param topicName 主题名字，不知道名字就传NULL
+    * @param lpUnPacker 具体的内容
+    * @param iTimeOut 超时时间
+    * @param lppBizUnPack 业务校验时，失败返回的业务错误信息，如果发布成功没有返回，输出参数，需要外面调用Release释放
+                            如果接受业务校验的错误信息，写法如下：
                             IF2UnPacker* lpBizUnPack =NULL;
                             PubMsgByPacker(...,&lpBizUnPack);
-                            ×îºó¸ù¾Ý·µ»ØÖµ£¬Èç¹ûÊÇÊ§°ÜµÄ¾ÍÅÐ¶Ï lpBizUnPack ÊÇ²»ÊÇNULL.
-                            ×îºó´íÎóÐÅÏ¢»ñÈ¡ÍêÖ®ºó,ÊÍ·Å
+                            最后根据返回值，如果是失败的就判断 lpBizUnPack 是不是NULL.
+                            最后错误信息获取完之后,释放
                             lpBizUnPack->Release();
-    * @param bAddTimeStamp ÊÇ·ñÌí¼ÓÊ±¼ä´Á£¬ÅäºÏµ¥±ÊÐÔÄÜ²éÕÒ
-    * @return ·µ»Ø0±íÊ¾³É¹¦£¬·µ»ØÆäËûÖµ£¬¸ù¾Ý´íÎóºÅ»ñÈ¡´íÎóÐÅÏ¢.
+    * @param bAddTimeStamp 是否添加时间戳，配合单笔性能查找
+    * @return 返回0表示成功，返回其他值，根据错误号获取错误信息.
     */
     virtual int FUNCTION_CALL_MODE PubMsgByPacker(char* topicName ,IF2UnPacker* lpUnPacker,int iTimeOut=-1,
         IF2UnPacker** lppBizUnPack=NULL,bool bAddTimeStamp=false) = 0;
     
    /**
-    * ·ÇÒµÎñ´ò°ü¸ñÊ½µÄÄÚÈÝ·¢²¼½Ó¿Ú£¬Ò»°ã¶þ½øÖÆ¸ñÊ½±¨ÎÄ·¢²¼
-    * @param topicName Ö÷ÌâÃû×Ö£¬²»ÖªµÀÃû×Ö¾Í´«NULL
-    * @param lpFilterInterface ¹ýÂËÌõ¼þ£¬ÐèÒªÉÏ²ã×Ô¼ºÖ¸¶¨£¬·ñÔòÄ¬ÈÏÃ»ÓÐ¹ýÂËÌõ¼þ
-    * @param lpData ¾ßÌåµÄÄÚÈÝ
-    * @param nLength ÄÚÈÝ³¤¶È
-    * @param iTimeOut ³¬Ê±Ê±¼ä
-    * @param lppBizUnPack ÒµÎñÐ£ÑéÊ±£¬Ê§°Ü·µ»ØµÄÒµÎñ´íÎóÐÅÏ¢£¬Èç¹û·¢²¼³É¹¦Ã»ÓÐ·µ»Ø£¬Êä³ö²ÎÊý£¬ÐèÒªÍâÃæµ÷ÓÃReleaseÊÍ·Å
-                            Èç¹û½ÓÊÜÒµÎñÐ£ÑéµÄ´íÎóÐÅÏ¢£¬Ð´·¨ÈçÏÂ£º
+    * 非业务打包格式的内容发布接口，一般二进制格式报文发布
+    * @param topicName 主题名字，不知道名字就传NULL
+    * @param lpFilterInterface 过滤条件，需要上层自己指定，否则默认没有过滤条件
+    * @param lpData 具体的内容
+    * @param nLength 内容长度
+    * @param iTimeOut 超时时间
+    * @param lppBizUnPack 业务校验时，失败返回的业务错误信息，如果发布成功没有返回，输出参数，需要外面调用Release释放
+                            如果接受业务校验的错误信息，写法如下：
                             IF2UnPacker* lpBizUnPack =NULL;
                             PubMsgByPacker(...,&lpBizUnPack);
-                            ×îºó¸ù¾Ý·µ»ØÖµ£¬Èç¹ûÊÇÊ§°ÜµÄ¾ÍÅÐ¶Ï lpBizUnPack ÊÇ²»ÊÇNULL.
-                            ×îºó´íÎóÐÅÏ¢»ñÈ¡ÍêÖ®ºó,ÊÍ·Å
+                            最后根据返回值，如果是失败的就判断 lpBizUnPack 是不是NULL.
+                            最后错误信息获取完之后,释放
                             lpBizUnPack->Release();
-    * @param bAddTimeStamp ÊÇ·ñÌí¼ÓÊ±¼ä´Á£¬ÅäºÏµ¥±ÊÐÔÄÜ²éÕÒ
-    * @return ·µ»Ø0±íÊ¾³É¹¦£¬·µ»ØÆäËûÖµ£¬¸ù¾Ý´íÎóºÅ»ñÈ¡´íÎóÐÅÏ¢.
+    * @param bAddTimeStamp 是否添加时间戳，配合单笔性能查找
+    * @return 返回0表示成功，返回其他值，根据错误号获取错误信息.
     */
     virtual int FUNCTION_CALL_MODE PubMsg(char* topicName, CFilterInterface* lpFilterInterface, const void *lpData, int nLength,int iTimeOut=-1,
         IF2UnPacker** lppBizUnPack=NULL,bool bAddTimeStamp=false) = 0;
 
    /**
-    * ·µ»Øµ±Ç°Ö÷ÌâµÄ·¢²¼ÐòºÅ
-    * @param topicName Ö÷ÌâÃû×Ö
-    * @return ·µ»Ø0±íÊ¾Ã»ÓÐ¶ÔÓ¦µÄÖ÷Ìâ£¬·µ»ØÆäËûÖµ±íÊ¾³É¹¦
+    * 返回当前主题的发布序号
+    * @param topicName 主题名字
+    * @return 返回0表示没有对应的主题，返回其他值表示成功
     */
     virtual uint32 FUNCTION_CALL_MODE GetMsgNoByTopicName(char* topicName)=0;
 
    /**
-    * È¡·þÎñÆ÷µØÖ·
-    * @param lpPort Êä³öµÄ·þÎñÆ÷¶Ë¿Ú£¬¿ÉÒÔÎªNULL
-    * @return ·µ»Ø·þÎñÆ÷µØÖ·
+    * 取服务器地址
+    * @param lpPort 输出的服务器端口，可以为NULL
+    * @return 返回服务器地址
     */
     virtual const char * FUNCTION_CALL_MODE GetServerAddress(int *lpPort) = 0;
 };
+/**
+ * 文件更新回调接口
+ */
+class CFileUpdateCallbackInterface: public IKnown
+{
+public:
 
+   /**
+    * 收到更新文件列表的回调
+    * @param lpData 返回二进制指针
+    * @param nLength 二进制数据的长度，如果为负数则为错误码
+	* @param lpErrorInfo 如果不为NULL则为错误信息，发生错误，应该先去看错误信息，如果没有再去拿错误码信息
+    * @return 无
+    */
+    virtual void FUNCTION_CALL_MODE OnRecvFileList(const void *lpData, int nLength, const char * lpErrorInfo) = 0;
+
+   /**
+    * 收到通知文件更新进度
+    * @param iOneFileProcessBar 当前文件进度
+    * @param iTotalProcessBar 总进度
+	* @param lpErrorInfo 如果不为NULL则为错误信息，发生错误，应该先去看错误信息，如果没有再去拿错误码信息
+    * @return 无
+    */
+    virtual void FUNCTION_CALL_MODE OnShowProcessBar(int iOneFileProcessBar, int iTotalProcessBar, const char * lpErrorInfo) = 0;
+	
+	/**
+    * 收到成功取消文件更新
+    * @return 无
+    */
+    virtual void FUNCTION_CALL_MODE OnCancel() = 0;
+
+
+};
+/**
+ * 文件更新接口
+ */
+class CFileUpdateInterface: public IKnown
+{
+public:
+
+   /**
+    * 根据前面回调显示的文件列表，由用户选择后下发需要更新的文件列表
+    * @param lpPack 更新文件列表指针
+    * @return 返回0表示成功，其他值表示失败.
+    */
+    virtual int FUNCTION_CALL_MODE UpdateFile(IF2Packer* lpPack) = 0;
+
+   /**
+    * 界面取消正在更新中的更新动作
+    * @return 返回0表示成功，其他值表示失败
+    */
+    virtual int FUNCTION_CALL_MODE CancelUpdateFile() = 0;
+
+   /**
+    * 获取更新文件列表
+    * @return 文件列表解包器，不允许外部操作，只能读，不能释放
+	* @note 解包器里面的字段见该文件define字段,注意：在OnRecvFileList回调以后该方法有效
+    */
+    virtual IF2UnPacker* FUNCTION_CALL_MODE GetFileUpdateList() = 0;
+};
 class CConnectionInterface;
 
-///Á¬½Ó¶ÔÏó CConnectionInterface ÐèÒªµÄ»Øµ÷¶ÔÏó½Ó¿Ú¶¨Òå
+///连接对象 CConnectionInterface 需要的回调对象接口定义
 /**
-* °üÀ¨Á¬½Ó³É¹¦¡¢Á¬½Ó¶Ï¿ª¡¢·¢ËÍÍê³É¡¢ÊÕµ½Êý¾ÝµÈÊÂ¼þ    
+* 包括连接成功、连接断开、发送完成、收到数据等事件    
 */
 class CCallbackInterface: public IKnown
 {
 public:
     /**
-    * Ì×½Ó×ÖÁ¬½Ó³É¹¦
-    * @param lpConnection ·¢Éú¸ÃÊÂ¼þµÄÁ¬½Ó¶ÔÏó
+    * 套接字连接成功
+    * @param lpConnection 发生该事件的连接对象
     */
     virtual void FUNCTION_CALL_MODE OnConnect(CConnectionInterface *lpConnection) = 0;
 
     /**
-    * Íê³É°²È«Á¬½Ó
-    * @param lpConnection ·¢Éú¸ÃÊÂ¼þµÄÁ¬½Ó¶ÔÏó
+    * 完成安全连接
+    * @param lpConnection 发生该事件的连接对象
     */
     virtual void FUNCTION_CALL_MODE OnSafeConnect(CConnectionInterface *lpConnection) = 0;
 
     /**
-    * Íê³É×¢²á
-    * @param lpConnection ·¢Éú¸ÃÊÂ¼þµÄÁ¬½Ó¶ÔÏó
+    * 完成注册
+    * @param lpConnection 发生该事件的连接对象
     */
     virtual void FUNCTION_CALL_MODE OnRegister(CConnectionInterface *lpConnection) = 0;
 
     /**
-    * Á¬½Ó±»¶Ï¿ª
-    * @param lpConnection ·¢Éú¸ÃÊÂ¼þµÄÁ¬½Ó¶ÔÏó
+    * 连接被断开
+    * @param lpConnection 发生该事件的连接对象
     */
     virtual void FUNCTION_CALL_MODE OnClose(CConnectionInterface *lpConnection) = 0;
 
     /**
-    * ·¢ËÍÍê³É
-    * @param lpConnection ·¢Éú¸ÃÊÂ¼þµÄÁ¬½Ó¶ÔÏó
-    * @param hSend        ·¢ËÍ¾ä±ú
-    * @param reserved1    ±£Áô×Ö¶Î
-    * @param reserved2    ±£Áô×Ö¶Î
-    * @param nQueuingData ·¢ËÍ¶ÓÁÐÖÐÊ£Óà¸öÊý£¬Ê¹ÓÃÕß¿ÉÒÔÓÃ´ËÊýÖµ¿ØÖÆ·¢ËÍµÄËÙ¶È£¬¼´Ð¡ÓÚÄ³ÖµÊ±½øÐÐ·¢ËÍ
+    * 发送完成
+    * @param lpConnection 发生该事件的连接对象
+    * @param hSend        发送句柄
+    * @param reserved1    保留字段
+    * @param reserved2    保留字段
+    * @param nQueuingData 发送队列中剩余个数，使用者可以用此数值控制发送的速度，即小于某值时进行发送
     * @see Send()
     */
     virtual void FUNCTION_CALL_MODE OnSent(CConnectionInterface *lpConnection, int hSend, void *reserved1, void *reserved2, int nQueuingData) = 0;
@@ -1042,37 +1145,39 @@ public:
     virtual void FUNCTION_CALL_MODE Reserved7() = 0;
 
     /**
-    * ÊÕµ½SendBizÒì²½·¢ËÍµÄÇëÇóµÄÓ¦´ð
-    * @param lpConnection    ·¢Éú¸ÃÊÂ¼þµÄÁ¬½Ó¶ÔÏó
-    * @param hSend           ·¢ËÍ¾ä±ú
-    * @param lpUnPackerOrStr Ö¸Ïò½â°üÆ÷Ö¸Õë»òÕß´íÎóÐÅÏ¢
-    * @param nResult         ÊÕ°ü½á¹û
-    * Èç¹ûnResultµÈÓÚ0£¬±íÊ¾ÒµÎñÊý¾Ý½ÓÊÕ³É¹¦£¬²¢ÇÒÒµÎñ²Ù×÷³É¹¦£¬lpUnPackerOrStrÖ¸ÏòÒ»¸ö½â°üÆ÷£¬´ËÊ±Ó¦Ê×ÏÈ½«¸ÃÖ¸Õë×ª»»ÎªIF2UnPacker *¡£
-    * Èç¹ûnResultµÈÓÚ1£¬±íÊ¾ÒµÎñÊý¾Ý½ÓÊÕ³É¹¦£¬µ«ÒµÎñ²Ù×÷Ê§°ÜÁË£¬lpUnPackerOrStrÖ¸ÏòÒ»¸ö½â°üÆ÷£¬´ËÊ±Ó¦Ê×ÏÈ½«¸ÃÖ¸Õë×ª»»ÎªIF2UnPacker *¡£
-    * Èç¹ûnResultµÈÓÚ2£¬±íÊ¾ÊÕµ½·ÇÒµÎñ´íÎóÐÅÏ¢£¬lpUnPackerOrStrÖ¸ÏòÒ»¸ö¿É¶ÁµÄ×Ö·û´®´íÎóÐÅÏ¢¡£
-    * Èç¹ûnResultµÈÓÚ3£¬±íÊ¾ÒµÎñ°ü½â°üÊ§°Ü¡£lpUnPackerOrStrÖ¸ÏòNULL¡£
+    * 收到SendBiz异步发送的请求的应答
+    * @param lpConnection    发生该事件的连接对象
+    * @param hSend           发送句柄
+    * @param lpUnPackerOrStr 指向解包器指针或者错误信息
+    * @param nResult         收包结果
+    * 如果nResult等于0，表示业务数据接收成功，并且业务操作成功，lpUnPackerOrStr指向一个解包器，此时应首先将该指针转换为IF2UnPacker *。
+    * 如果nResult等于1，表示业务数据接收成功，但业务操作失败了，lpUnPackerOrStr指向一个解包器，此时应首先将该指针转换为IF2UnPacker *。
+    * 如果nResult等于2，表示收到非业务错误信息，lpUnPackerOrStr指向一个可读的字符串错误信息。
+    * 如果nResult等于3，表示业务包解包失败。lpUnPackerOrStr指向NULL。
+    * 如果nResult等于4，表示业务包为空。lpUnpackerOrStr指向NULL。lpRetData这部分结果还会存在
     */
     virtual void FUNCTION_CALL_MODE OnReceivedBiz(CConnectionInterface *lpConnection, int hSend, const void *lpUnPackerOrStr, int nResult) = 0;
 
 		/**
-    * ÊÕµ½SendBizÒì²½·¢ËÍµÄÇëÇóµÄÓ¦´ð
-    * @param lpConnection    ·¢Éú¸ÃÊÂ¼þµÄÁ¬½Ó¶ÔÏó
-    * @param hSend           ·¢ËÍ¾ä±ú
-    * @param lpRetData ÆäËûÐèÒª·µ»ØµÄÓ¦´ðÄÚÈÝ£¬¸ù¾ÝÐèÒª»ñÈ¡
-    * @param lpUnPackerOrStr Ö¸Ïò½â°üÆ÷Ö¸Õë»òÕß´íÎóÐÅÏ¢
-    * @param nResult         ÊÕ°ü½á¹û
-    * Èç¹ûnResultµÈÓÚ0£¬±íÊ¾ÒµÎñÊý¾Ý½ÓÊÕ³É¹¦£¬²¢ÇÒÒµÎñ²Ù×÷³É¹¦£¬lpUnpackerOrStrÖ¸ÏòÒ»¸ö½â°üÆ÷£¬´ËÊ±Ó¦Ê×ÏÈ½«¸ÃÖ¸Õë×ª»»ÎªIF2UnPacker *¡£
-    * Èç¹ûnResultµÈÓÚ1£¬±íÊ¾ÒµÎñÊý¾Ý½ÓÊÕ³É¹¦£¬µ«ÒµÎñ²Ù×÷Ê§°ÜÁË£¬lpUnpackerOrStrÖ¸ÏòÒ»¸ö½â°üÆ÷£¬´ËÊ±Ó¦Ê×ÏÈ½«¸ÃÖ¸Õë×ª»»ÎªIF2UnPacker *¡£
-    * Èç¹ûnResultµÈÓÚ2£¬±íÊ¾ÊÕµ½·ÇÒµÎñ´íÎóÐÅÏ¢£¬lpUnpackerOrStrÖ¸ÏòÒ»¸ö¿É¶ÁµÄ×Ö·û´®´íÎóÐÅÏ¢¡£
-    * Èç¹ûnResultµÈÓÚ3£¬±íÊ¾ÒµÎñ°ü½â°üÊ§°Ü¡£lpUnpackerOrStrÖ¸ÏòNULL¡£
+    * 收到SendBiz异步发送的请求的应答
+    * @param lpConnection    发生该事件的连接对象
+    * @param hSend           发送句柄
+    * @param lpRetData 其他需要返回的应答内容，根据需要获取
+    * @param lpUnPackerOrStr 指向解包器指针或者错误信息
+    * @param nResult         收包结果
+    * 如果nResult等于0，表示业务数据接收成功，并且业务操作成功，lpUnpackerOrStr指向一个解包器，此时应首先将该指针转换为IF2UnPacker *。
+    * 如果nResult等于1，表示业务数据接收成功，但业务操作失败了，lpUnpackerOrStr指向一个解包器，此时应首先将该指针转换为IF2UnPacker *。
+    * 如果nResult等于2，表示收到非业务错误信息，lpUnpackerOrStr指向一个可读的字符串错误信息。
+    * 如果nResult等于3，表示业务包解包失败。lpUnpackerOrStr指向NULL。
+    * 如果nResult等于4，表示业务包为空。lpUnpackerOrStr指向NULL。lpRetData这部分结果还会存在
     */
     virtual void FUNCTION_CALL_MODE OnReceivedBizEx(CConnectionInterface *lpConnection, int hSend, LPRET_DATA lpRetData, const void *lpUnpackerOrStr, int nResult) = 0;
-	//20130624 xuxp »Øµ÷Ôö¼ÓBizMessage½Ó¿Ú
+	//20130624 xuxp 回调增加BizMessage接口
 		/**
-		* ÊÕµ½·¢ËÍÊ±Ö¸¶¨ÁËReplyCallbackÑ¡ÏîµÄÇëÇóµÄÓ¦´ð»òÕßÊÇÃ»ÓÐ¶ÔÓ¦ÇëÇóµÄÊý¾Ý
-		* @param lpConnection ·¢Éú¸ÃÊÂ¼þµÄÁ¬½Ó¶ÔÏó
-		* @param hSend        ·¢ËÍ¾ä±ú
-		* @param lpMsg        ÒµÎñÏûÏ¢Ö¸Õë
+		* 收到发送时指定了ReplyCallback选项的请求的应答或者是没有对应请求的数据
+		* @param lpConnection 发生该事件的连接对象
+		* @param hSend        发送句柄
+		* @param lpMsg        业务消息指针
 		*/
 	virtual void FUNCTION_CALL_MODE OnReceivedBizMsg(CConnectionInterface *lpConnection, int hSend, IBizMessage* lpMsg) = 0;
 
@@ -1080,51 +1185,51 @@ public:
 
 };
 
-///T2_SDKÁ¬½Ó¶ÔÏó½Ó¿Ú
+///T2_SDK连接对象接口
 /**
-* Á¬½ÓµÄ¶ÔÏóÊÇÏß³Ì²»°²È«£¬Í¬Ê±Ò»¸öÁ¬½Ó×îºÃÊÇ¹éÓÚÒ»¸öÏß³ÌËùÓÃ£¬²»Òª¶àÏß³ÌÊ¹ÓÃ£¡£¡£¡
-* °üÀ¨Á¬½Ó¡¢¶Ï¿ª¡¢·¢ËÍ¡¢½ÓÊÕµÈ
+* 连接的对象是线程不安全，同时一个连接最好是归于一个线程所用，不要多线程使用！！！
+* 包括连接、断开、发送、接收等
 */
 class CConnectionInterface: public IKnown
 {
 public:
-    ///Á¬½Ó×´Ì¬£¬¿É×éºÏ
+    ///连接状态，可组合
     enum ConnectionStatus
     {
-        Disconnected	= 0x0000, /**< Î´Á¬½Ó */
-        Connecting		= 0x0001, /**< socketÕýÔÚÁ¬½Ó */
-        Connected		= 0x0002, /**< socketÒÑÁ¬½Ó */
-        SafeConnecting	= 0x0004, /**< ÕýÔÚ½¨Á¢°²È«Á¬½Ó */
-        SafeConnected	= 0x0008, /**< ÒÑ½¨Á¢°²È«Á¬½Ó */
-        Registering		= 0x0010, /**< Õý×¢²á */
-        Registered		= 0x0020, /**< ÒÑ×¢²á */
-        Rejected		= 0x0040  /**< ±»¾Ü¾ø£¬½«±»¹Ø±Õ */
+        Disconnected	= 0x0000, /**< 未连接 */
+        Connecting		= 0x0001, /**< socket正在连接 */
+        Connected		= 0x0002, /**< socket已连接 */
+        SafeConnecting	= 0x0004, /**< 正在建立安全连接 */
+        SafeConnected	= 0x0008, /**< 已建立安全连接 */
+        Registering		= 0x0010, /**< 正注册 */
+        Registered		= 0x0020, /**< 已注册 */
+        Rejected		= 0x0040  /**< 被拒绝，将被关闭 */
     };
 
-    ///½ÓÊÕÑ¡Ïî£¨¿É×éºÏ£¬0±íÊ¾½ÓÊÕ³¬Ê±Ê±£¬²»É¾³ý°üID£¬ÈÔ¿ÉÔÙ´Îµ÷ÓÃRecvBiz·½·¨À´³¢ÊÔ½ÓÊÕ£©
+    ///接收选项（可组合，0表示接收超时时，不删除包ID，仍可再次调用RecvBiz方法来尝试接收）
     enum RecvFlags
     {
-        JustRemoveHandle = 0x0001   /**< µ±½ÓÊÕ³¬Ê±Ê±£¬°Ñpacket_idÉ¾³ý */
+        JustRemoveHandle = 0x0001   /**< 当接收超时时，把packet_id删除 */
     };
 
     /**
-    * ³õÊ¼»¯Á¬½Ó¶ÔÏó
-    * @param lpCallback »Øµ÷¶ÔÏó
-    * @return ·µ»Ø0±íÊ¾³É¹¦£¬·ñÔò±íÊ¾Ê§°Ü£¬Í¨¹ýµ÷ÓÃGetErrorMsg¿ÉÒÔ»ñÈ¡ÏêÏ¸´íÎóÐÅÏ¢
-    * Èç¹ûÓ¦ÓÃ²»ÐèÒªÈÎºÎ»Øµ÷·½·¨£¬Ôò¿ÉÏò¸Ã·½·¨´«µÝNULL£¬¶ø²»±Ø×Ô¶¨Òå»Øµ÷ÀàºÍ¶ÔÏó
+    * 初始化连接对象
+    * @param lpCallback 回调对象
+    * @return 返回0表示成功，否则表示失败，通过调用GetErrorMsg可以获取详细错误信息
+    * 如果应用不需要任何回调方法，则可向该方法传递NULL，而不必自定义回调类和对象
     */
     virtual int FUNCTION_CALL_MODE Create(CCallbackInterface *lpCallback) = 0;
 
     /**
-    * ¿ªÊ¼Á¬½Ó/×¢²á
-    * @param uiTimeout ³¬Ê±Ê±¼ä£¬µ¥Î»ºÁÃë£¬0±íÊ¾²»µÈ´ý£¨Ê¹ÓÃ´úÀíÁ¬½Ó·þÎñÆ÷Ê±£¬¸Ã²ÎÊý²»Æð×÷ÓÃ£©
-    * @return ·µ»Ø0±íÊ¾³É¹¦£¬·ñÔò±íÊ¾Ê§°Ü£¬Í¨¹ýµ÷ÓÃGetErrorMsg¿ÉÒÔ»ñÈ¡ÏêÏ¸´íÎóÐÅÏ¢
+    * 开始连接/注册
+    * @param uiTimeout 超时时间，单位毫秒，0表示不等待（使用代理连接服务器时，该参数不起作用）
+    * @return 返回0表示成功，否则表示失败，通过调用GetErrorMsg可以获取详细错误信息
     */
     virtual int FUNCTION_CALL_MODE Connect(unsigned int uiTimeout) = 0;
 
     /**
-    * ¶Ï¿ªÁ¬½Ó
-    * @return ·µ»Ø0±íÊ¾³É¹¦£¬·ñÔò±íÊ¾Ê§°Ü£¬Í¨¹ýµ÷ÓÃGetErrorMsg¿ÉÒÔ»ñÈ¡ÏêÏ¸´íÎóÐÅÏ¢
+    * 断开连接
+    * @return 返回0表示成功，否则表示失败，通过调用GetErrorMsg可以获取详细错误信息
     */
     virtual int FUNCTION_CALL_MODE Close() = 0;
 
@@ -1141,120 +1246,120 @@ public:
     virtual int FUNCTION_CALL_MODE Reserved6() = 0;
 
     /**
-    * È¡·þÎñÆ÷µØÖ·
-    * @param lpPort Êä³öµÄ·þÎñÆ÷¶Ë¿Ú£¬¿ÉÒÔÎªNULL
-    * @return ·µ»Ø·þÎñÆ÷µØÖ·
+    * 取服务器地址
+    * @param lpPort 输出的服务器端口，可以为NULL
+    * @return 返回服务器地址
     */
     virtual const char * FUNCTION_CALL_MODE GetServerAddress(int *lpPort) = 0;
 
     /**
-    * È¡Á¬½Ó×´Ì¬
-    * @return ·µ»ØÁ¬½Ó×´Ì¬
+    * 取连接状态
+    * @return 返回连接状态
     */
     virtual int FUNCTION_CALL_MODE GetStatus() = 0;
 
     /**
-    * È¡·þÎñÆ÷¸ºÔØ£¬Ê¹ÓÃÕß¿ÉÒÔÍ¬Ê±´´½¨¶à¸öÁ¬½ÓÊµÀýÍ¬Ê±Á¬½Ó²»Í¬µÄ·þÎñÆ÷£¬¸ù¾ÝÍê³ÉÁ¬½ÓµÄÊ±¼äÒÔ¼°¸ºÔØ¾ö¶¨Ê¹ÓÃÄÄ¸ö·þÎñÆ÷
-    * @return ·µ»Ø·þÎñÆ÷¸ºÔØ£¨·Ç¸ºÊý£©£¬Ô½´ó±íÊ¾Ô½·±Ã¦£¬·ñÔò±íÊ¾Ê§°Ü£¬Í¨¹ýµ÷ÓÃGetErrorMsg¿ÉÒÔ»ñÈ¡ÏêÏ¸´íÎóÐÅÏ¢
+    * 取服务器负载，使用者可以同时创建多个连接实例同时连接不同的服务器，根据完成连接的时间以及负载决定使用哪个服务器
+    * @return 返回服务器负载（非负数），越大表示越繁忙，否则表示失败，通过调用GetErrorMsg可以获取详细错误信息
     */
     virtual int FUNCTION_CALL_MODE GetServerLoad() = 0;
 
     /**
-    * È¡´íÎóÂë¶ÔÓ¦µÄ´íÎóÐÅÏ¢£¬Ä¿Ç°Ö§³Ö¼òÌåÖÐÎÄºÍÓ¢ÎÄ£¬Ö§³ÖÆäËûÓïÑÔ¿ÉÒÔÍ¨¹ýÁ¬½Ó¶ÔÏóÅäÖÃerrormsg
-    * @param nErrorCode ´íÎóÂë
-    * @return ·µ»Ø´íÎóÐÅÏ¢
+    * 取错误码对应的错误信息，目前支持简体中文和英文，支持其他语言可以通过连接对象配置errormsg
+    * @param nErrorCode 错误码
+    * @return 返回错误信息
     */
     virtual const char * FUNCTION_CALL_MODE GetErrorMsg(int nErrorCode) = 0;
 
     /**
-    * È¡Á¬½Ó´íÎóºÅ£¬µ±Á¬½ÓÎÞ·¨Óë·þÎñ¶ËÍê³É×¢²áÊ±£¬¼È¿ÉÍ¨¹ýConnectµÄ·µ»ØÖµ»ñÈ¡´íÎóºÅ£¬
-    * Ò²¿ÉÍ¨¹ýµ÷ÓÃ±¾·½·¨À´»ñÈ¡´íÎóºÅ£¬È»ºóÓÃ¸Ã´íÎóºÅµ÷ÓÃGetErrorMsg¿É»ñÈ¡¿É¶ÁµÄ´íÎóÐÅÏ¢
-    * @return ·µ»ØÁ¬½Ó´íÎóºÅ
+    * 取连接错误号，当连接无法与服务端完成注册时，既可通过Connect的返回值获取错误号，
+    * 也可通过调用本方法来获取错误号，然后用该错误号调用GetErrorMsg可获取可读的错误信息
+    * @return 返回连接错误号
     */
     virtual int FUNCTION_CALL_MODE GetConnectError() = 0;
 
     /**
-    * ·¢ËÍÒµÎñÊý¾Ý
-    * @param iFunID      ¹¦ÄÜºÅ
-    * @param lpPacker    ´ò°üÆ÷Ö¸Õë
-    * @param nAsy        0±íÊ¾Í¬²½£¬·ñÔò±íÊ¾Òì²½
-    * @param iSystemNo   Èç¹ûiSystemNo > 0ÔòÉèÖÃÏµÍ³ºÅ
-    * @param nCompressID ¶ÔÒµÎñ°üÌå½øÐÐÑ¹ËõµÄÑ¹ËõËã·¨ID£¬Ä¿Ç°Ö»Ö§³ÖID = 1µÄÑ¹ËõËã·¨¡£
-    * ID = 0±íÊ¾²»Ñ¹Ëõ¡£×¢Òâ£¬Ñ¹ËõÖ»ÊÇÏòSDKÌá³ö½¨Òé£¬ÊÇ·ñÕæÕýÑ¹Ëõ»¹È¡¾öÓÚ°üµÄÊµ¼Ê´óÐ¡¡£
-    * Í¬²½·¢ËÍµÄ°ü£¬Í¨¹ýµ÷ÓÃRecvBizÀ´½ÓÊÕ£¬Òì²½·¢ËÍµÄ°ü£¬µ±ÊÕµ½Ó¦´ð°üºó£¬×Ô¶¯´¥·¢»Øµ÷º¯ÊýOnReceivedBiz¡£
-    * @return ·µ»Ø·¢ËÍ¾ä±ú£¨ÕýÊý£©£¬·ñÔò±íÊ¾Ê§°Ü£¬Í¨¹ýµ÷ÓÃGetErrorMsg¿ÉÒÔ»ñÈ¡ÏêÏ¸´íÎóÐÅÏ¢
+    * 发送业务数据
+    * @param iFunID      功能号
+    * @param lpPacker    打包器指针
+    * @param nAsy        0表示同步，否则表示异步
+    * @param iSystemNo   如果iSystemNo > 0则设置系统号
+    * @param nCompressID 对业务包体进行压缩的压缩算法ID，目前只支持ID = 1的压缩算法。
+    * ID = 0表示不压缩。注意，压缩只是向SDK提出建议，是否真正压缩还取决于包的实际大小。
+    * 同步发送的包，通过调用RecvBiz来接收，异步发送的包，当收到应答包后，自动触发回调函数OnReceivedBiz。
+    * @return 返回发送句柄（正数），否则表示失败，通过调用GetErrorMsg可以获取详细错误信息
     */
     virtual int FUNCTION_CALL_MODE SendBiz(int iFunID, IF2Packer *lpPacker, int nAsy = 0, int iSystemNo = 0, int nCompressID = 1) = 0;
 
     /**
-    * ½ÓÊÕÒµÎñÊý¾Ý
-    * @param hSend            ·¢ËÍ¾ä±ú£¨SendBizµÄ³É¹¦·µ»ØÖµ£©
-    * @param lppUnPackerOrStr Èç¹û·µ»ØÖµµÈÓÚ0£¬±íÊ¾ÒµÎñÊý¾Ý½ÓÊÕ³É¹¦£¬²¢ÇÒÒµÎñ²Ù×÷³É¹¦£¬*lppUnPackerOrStrÖ¸ÏòÒ»¸ö½â°üÆ÷£¬´ËÊ±Ó¦Ê×ÏÈ½«¸ÃÖ¸Õë×ª»»ÎªIF2UnPacker *¡£
-    *                         Èç¹û·µ»ØÖµµÈÓÚ1£¬±íÊ¾ÒµÎñÊý¾Ý½ÓÊÕ³É¹¦£¬µ«ÒµÎñ²Ù×÷Ê§°ÜÁË£¬*lppUnPackerOrStrÖ¸ÏòÒ»¸ö½â°üÆ÷£¬´ËÊ±Ó¦Ê×ÏÈ½«¸ÃÖ¸Õë×ª»»ÎªIF2UnPacker *¡£
-    *                         Èç¹û·µ»ØÖµµÈÓÚ2£¬±íÊ¾ÊÕµ½·ÇÒµÎñ´íÎóÐÅÏ¢£¬*lppUnPackerOrStrÖ¸ÏòÒ»¸ö¿É¶ÁµÄ×Ö·û´®´íÎóÐÅÏ¢¡£
-    *                         Èç¹û·µ»ØÖµµÈÓÚ3£¬±íÊ¾ÒµÎñ°ü½â°üÊ§°Ü¡£*lppUnPackerOrStrÔ­ÏÈËùÖ¸ÏòµÄÄÚÈÝ²»»á±»¸Ä±ä¡£
-    * @param uiTimeout        ³¬Ê±Ê±¼ä£¬µ¥Î»ºÁÃë¡£
-    * @param uiFlag           ½ÓÊÕÑ¡Ïî£¬0±íÊ¾½ÓÊÕ³¬Ê±ºóÈÔ¿É¼ÌÐøµ÷ÓÃRecvBizÀ´½ÓÊÕ£¬
-    *                         JustRemoveHandle±íÊ¾µ±½ÓÊÕ³¬Ê±ºó£¬°ÑhSendÏà¹ØÊý¾ÝÉ¾³ý
-    * @return Ð¡ÓÚ0±íÊ¾RecvBiz²Ù×÷±¾ÉíÊ§°Ü£¬Í¨¹ýµ÷ÓÃGetErrorMsg¿ÉÒÔ»ñÈ¡ÏêÏ¸´íÎóÐÅÏ¢
-    * ×¢Òâ£¡Íâ²¿Ö¸ÕëËùÖ¸ÏòµÄ½â°üÆ÷µÄÄÚ´æÓÉSDKÄÚ²¿¹ÜÀí£¬Íâ²¿ÇÐÎðÊÍ·Å£¡
-	* ×¢Òâ£¡lppUnPackerOrStr¶ÔÓ¦µÄ½â°üÆ÷ÊÇÁÙÊ±µÄ£¬ÉÏ²ã²»¿ÉÒÔ»º´æÖ¸Õë£¬ÔÙ´Îµ÷ÓÃÕâ¸öÁ¬½ÓµÄRecvBiz£¬Ö¸ÕëÖ¸ÏòµÄÄÚÈÝ¾Í»á¸Ä±ä
-	* Èç¹ûÒª¿½±´£¬ÐèÒªµ÷ÓÃ½â°üÆ÷µÄGetPackBuf·½·¨£¬¶þ½øÖÆ¿½±´³öÈ¥£¬ÆäËûÏß³ÌÐèÒªÔÙ½â°ü
+    * 接收业务数据
+    * @param hSend            发送句柄（SendBiz的成功返回值）
+    * @param lppUnPackerOrStr 如果返回值等于0，表示业务数据接收成功，并且业务操作成功，*lppUnPackerOrStr指向一个解包器，此时应首先将该指针转换为IF2UnPacker *。
+    *                         如果返回值等于1，表示业务数据接收成功，但业务操作失败了，*lppUnPackerOrStr指向一个解包器，此时应首先将该指针转换为IF2UnPacker *。
+    *                         如果返回值等于2，表示收到非业务错误信息，*lppUnPackerOrStr指向一个可读的字符串错误信息。
+    *                         如果返回值等于3，表示业务包解包失败。*lppUnPackerOrStr原先所指向的内容不会被改变。
+    * @param uiTimeout        超时时间，单位毫秒。
+    * @param uiFlag           接收选项，0表示接收超时后仍可继续调用RecvBiz来接收，
+    *                         JustRemoveHandle表示当接收超时后，把hSend相关数据删除
+    * @return 小于0表示RecvBiz操作本身失败，通过调用GetErrorMsg可以获取详细错误信息
+    * 注意！外部指针所指向的解包器的内存由SDK内部管理，外部切勿释放！
+	* 注意！lppUnPackerOrStr对应的解包器是临时的，上层不可以缓存指针，再次调用这个连接的RecvBiz，指针指向的内容就会改变
+	* 如果要拷贝，需要调用解包器的GetPackBuf方法，二进制拷贝出去，其他线程需要再解包
     */
     virtual int FUNCTION_CALL_MODE RecvBiz(int hSend, void **lppUnPackerOrStr, unsigned uiTimeout = 1000, unsigned uiFlag = 0) = 0;
     
-   //20101228 xuxp ÐÂÔö·¢ËÍºÍ½ÓÊÜµÄÁ½¸ö½Ó¿Úº¯Êý£¬ÓÃÓÚ¶©ÔÄºÍÍÆËÍ
+   //20101228 xuxp 新增发送和接受的两个接口函数，用于订阅和推送
 	/**
-    * ·¢ËÍÒµÎñÊý¾Ý
-    * @param iFunID      ¹¦ÄÜºÅ
-    * @param lpPacker    ´ò°üÆ÷Ö¸Õë
-	* @param svrName     Ö¸¶¨ÖÐ¼ä¼þµÄ½Úµã
-    * @param nAsy        0±íÊ¾Í¬²½£¬·ñÔò±íÊ¾Òì²½¡£
-    * @param iSystemNo   Èç¹ûiSystemNo > 0ÔòÉèÖÃÏµÍ³ºÅ
-    * @param nCompressID ¶ÔÒµÎñ°üÌå½øÐÐÑ¹ËõµÄÑ¹ËõËã·¨ID£¬Ä¿Ç°Ö»Ö§³ÖID = 1µÄÑ¹ËõËã·¨¡£
-    * ID = 0±íÊ¾²»Ñ¹Ëõ¡£×¢Òâ£¬Ñ¹ËõÖ»ÊÇÏòSDKÌá³ö½¨Òé£¬ÊÇ·ñÕæÕýÑ¹Ëõ»¹È¡¾öÓÚ°üµÄÊµ¼Ê´óÐ¡¡£
-    * Í¬²½·¢ËÍµÄ°ü£¬Í¨¹ýµ÷ÓÃRecvBizExÀ´½ÓÊÕ£¬Òì²½·¢ËÍµÄ°ü£¬µ±ÊÕµ½Ó¦´ð°üºó£¬×Ô¶¯´¥·¢»Øµ÷º¯ÊýOnReceivedBizEx¡£
-    * @param branchNo  ÓªÒµ²¿ºÅ¡£
-    * @param lpRequest  ÇëÇóÀïÃæµÄÆäËûÄÚÈÝ£¬¸ù¾Ý½á¹¹Ìå¶¨Òå¸³Öµ¡£
-    * @return ·µ»Ø·¢ËÍ¾ä±ú£¨ÕýÊý£©£¬·ñÔò±íÊ¾Ê§°Ü£¬Í¨¹ýµ÷ÓÃGetErrorMsg¿ÉÒÔ»ñÈ¡ÏêÏ¸´íÎóÐÅÏ¢
+    * 发送业务数据
+    * @param iFunID      功能号
+    * @param lpPacker    打包器指针
+	* @param svrName     指定中间件的节点
+    * @param nAsy        0表示同步，否则表示异步。
+    * @param iSystemNo   如果iSystemNo > 0则设置系统号
+    * @param nCompressID 对业务包体进行压缩的压缩算法ID，目前只支持ID = 1的压缩算法。
+    * ID = 0表示不压缩。注意，压缩只是向SDK提出建议，是否真正压缩还取决于包的实际大小。
+    * 同步发送的包，通过调用RecvBizEx来接收，异步发送的包，当收到应答包后，自动触发回调函数OnReceivedBizEx。
+    * @param branchNo  营业部号。
+    * @param lpRequest  请求里面的其他内容，根据结构体定义赋值。
+    * @return 返回发送句柄（正数），否则表示失败，通过调用GetErrorMsg可以获取详细错误信息
     */
     virtual int FUNCTION_CALL_MODE SendBizEx(int iFunID, IF2Packer *lpPacker,char* svrName, int nAsy = 0, int iSystemNo = 0, int nCompressID = 1,int branchNo=0,LPREQ_DATA lpRequest=NULL) = 0;
     
     /**
-    * ½ÓÊÕÒµÎñÊý¾Ý
-    * @param hSend            ·¢ËÍ¾ä±ú£¨SendBizµÄ³É¹¦·µ»ØÖµ£©
-    * @param lppUnPackerOrStr Èç¹û·µ»ØÖµµÈÓÚ0£¬±íÊ¾ÒµÎñÊý¾Ý½ÓÊÕ³É¹¦£¬²¢ÇÒÒµÎñ²Ù×÷³É¹¦£¬*lppUnPackerOrStrÖ¸ÏòÒ»¸ö½â°üÆ÷£¬´ËÊ±Ó¦Ê×ÏÈ½«¸ÃÖ¸Õë×ª»»ÎªIF2UnPacker *¡£
-    *                         Èç¹û·µ»ØÖµµÈÓÚ1£¬±íÊ¾ÒµÎñÊý¾Ý½ÓÊÕ³É¹¦£¬µ«ÒµÎñ²Ù×÷Ê§°ÜÁË£¬*lppUnPackerOrStrÖ¸ÏòÒ»¸ö½â°üÆ÷£¬´ËÊ±Ó¦Ê×ÏÈ½«¸ÃÖ¸Õë×ª»»ÎªIF2UnPacker *¡£
-    *                         Èç¹û·µ»ØÖµµÈÓÚ2£¬±íÊ¾ÊÕµ½·ÇÒµÎñ´íÎóÐÅÏ¢£¬*lppUnPackerOrStrÖ¸ÏòÒ»¸ö¿É¶ÁµÄ×Ö·û´®´íÎóÐÅÏ¢¡£
-    *                         Èç¹û·µ»ØÖµµÈÓÚ3£¬±íÊ¾ÒµÎñ°ü½â°üÊ§°Ü¡£*lppUnPackerOrStrÔ­ÏÈËùÖ¸ÏòµÄÄÚÈÝ²»»á±»¸Ä±ä¡£
-    * @param lpRetData ÆäËûÐèÒª·µ»ØµÄÓ¦´ðÄÚÈÝ£¬¸ù¾ÝÐèÒª»ñÈ¡
-    * @param uiTimeout        ³¬Ê±Ê±¼ä£¬µ¥Î»ºÁÃë£¬0±íÊ¾²»µÈ´ý¡£
-    * @param uiFlag           ½ÓÊÕÑ¡Ïî£¬0±íÊ¾½ÓÊÕ³¬Ê±ºóÈÔ¿É¼ÌÐøµ÷ÓÃRecvBizÀ´½ÓÊÕ£¬
-    *                         JustRemoveHandle±íÊ¾µ±½ÓÊÕ³¬Ê±ºó£¬°ÑhSendÏà¹ØÊý¾ÝÉ¾³ý
-    * @return Ð¡ÓÚ0±íÊ¾RecvBizEx²Ù×÷±¾ÉíÊ§°Ü£¬Í¨¹ýµ÷ÓÃGetErrorMsg¿ÉÒÔ»ñÈ¡ÏêÏ¸´íÎóÐÅÏ¢
-    * ×¢Òâ£¡Íâ²¿Ö¸ÕëËùÖ¸ÏòµÄ½â°üÆ÷µÄÄÚ´æÓÉSDKÄÚ²¿¹ÜÀí£¬Íâ²¿ÇÐÎðÊÍ·Å£¡
-	* ×¢Òâ£¡Íâ²¿Ö¸ÕëËùÖ¸ÏòµÄLPRET_DATAµÄÄÚ´æÓÉSDKÄÚ²¿¹ÜÀí£¬Íâ²¿ÇÐÎðÊÍ·Å£¡
-	* ×¢Òâ£¡lppUnPackerOrStr¶ÔÓ¦µÄ½â°üÆ÷ºÍLPRET_DATA¶¼ÊÇÁÙÊ±µÄ£¬ÉÏ²ã²»¿ÉÒÔ»º´æÖ¸Õë£¬ÔÙ´Îµ÷ÓÃÕâ¸öÁ¬½ÓµÄRecvBizEx£¬ÕâÁ½¸öÖ¸ÕëÖ¸ÏòµÄÄÚÈÝ¾Í»á¸Ä±ä
-	* Èç¹ûÒª¿½±´£¬ÐèÒªµ÷ÓÃ½â°üÆ÷µÄGetPackBuf·½·¨£¬¶þ½øÖÆ¿½±´³öÈ¥£¬ÆäËûÏß³ÌÐèÒªÔÙ½â°ü£»
-	* LPRET_DATA¿½±´£¬¾ÍÐèÒª×ö½á¹¹Ìå¸´ÖÆ
+    * 接收业务数据
+    * @param hSend            发送句柄（SendBiz的成功返回值）
+    * @param lppUnPackerOrStr 如果返回值等于0，表示业务数据接收成功，并且业务操作成功，*lppUnPackerOrStr指向一个解包器，此时应首先将该指针转换为IF2UnPacker *。
+    *                         如果返回值等于1，表示业务数据接收成功，但业务操作失败了，*lppUnPackerOrStr指向一个解包器，此时应首先将该指针转换为IF2UnPacker *。
+    *                         如果返回值等于2，表示收到非业务错误信息，*lppUnPackerOrStr指向一个可读的字符串错误信息。
+    *                         如果返回值等于3，表示业务包解包失败。*lppUnPackerOrStr原先所指向的内容不会被改变。
+    * @param lpRetData 其他需要返回的应答内容，根据需要获取
+    * @param uiTimeout        超时时间，单位毫秒，0表示不等待。
+    * @param uiFlag           接收选项，0表示接收超时后仍可继续调用RecvBiz来接收，
+    *                         JustRemoveHandle表示当接收超时后，把hSend相关数据删除
+    * @return 小于0表示RecvBizEx操作本身失败，通过调用GetErrorMsg可以获取详细错误信息
+    * 注意！外部指针所指向的解包器的内存由SDK内部管理，外部切勿释放！
+	* 注意！外部指针所指向的LPRET_DATA的内存由SDK内部管理，外部切勿释放！
+	* 注意！lppUnPackerOrStr对应的解包器和LPRET_DATA都是临时的，上层不可以缓存指针，再次调用这个连接的RecvBizEx，这两个指针指向的内容就会改变
+	* 如果要拷贝，需要调用解包器的GetPackBuf方法，二进制拷贝出去，其他线程需要再解包；
+	* LPRET_DATA拷贝，就需要做结构体复制
     */
     virtual int FUNCTION_CALL_MODE RecvBizEx(int hSend, void **lppUnpackerOrStr, LPRET_DATA* lpRetData, unsigned uiTimeout = 1000, unsigned uiFlag = 0) = 0;
 
 
-	//20101228 xuxp ÐÂÔöCreateº¯Êý£¬À´±£Ö¤»Øµ÷ÓÃÐÂµÄOnReceivedBizExµÄ½Ó¿Ú
+	//20101228 xuxp 新增Create函数，来保证回调用新的OnReceivedBizEx的接口
 	/**
-	* ³õÊ¼»¯Á¬½Ó¶ÔÏó
-	* @param lpCallback »Øµ÷¶ÔÏó
-	* @return ·µ»Ø0±íÊ¾³É¹¦£¬·ñÔò±íÊ¾Ê§°Ü£¬Í¨¹ýµ÷ÓÃGetErrorMsg¿ÉÒÔ»ñÈ¡ÏêÏ¸´íÎóÐÅÏ¢
-    * Èç¹ûÓ¦ÓÃ²»ÐèÒªÈÎºÎ»Øµ÷·½·¨£¬Ôò¿ÉÏò¸Ã·½·¨´«µÝNULL£¬¶ø²»±Ø×Ô¶¨Òå»Øµ÷ÀàºÍ¶ÔÏó
+	* 初始化连接对象
+	* @param lpCallback 回调对象
+	* @return 返回0表示成功，否则表示失败，通过调用GetErrorMsg可以获取详细错误信息
+    * 如果应用不需要任何回调方法，则可向该方法传递NULL，而不必自定义回调类和对象
 	*/
 	virtual int FUNCTION_CALL_MODE CreateEx(CCallbackInterface *lpCallback) = 0;
 	
 	
-	//20120111 dongpf ÐÂÔöGetRealAddressº¯Êý£¬À´»ñÈ¡·þÎñ¶ËÉÏ×Ô¼ºµÄipµØÖ·ºÍ¶Ë¿Ú
+	//20120111 dongpf 新增GetRealAddress函数，来获取服务端上自己的ip地址和端口
 	/**
-	* »ñÈ¡ipµØÖ·ºÍ¶Ë¿Ú
-	* @return »ñÈ¡ipµØÖ·ºÍ¶Ë¿Ú£¬¸ñÊ½£ºipµØÖ·+¶Ë¿Ú
+	* 获取ip地址和端口
+	* @return 获取ip地址和端口，格式：ip地址+端口
 	*/
 	virtual const char* FUNCTION_CALL_MODE GetRealAddress() = 0;
 	
@@ -1262,42 +1367,42 @@ public:
 	virtual int FUNCTION_CALL_MODE Reserved8() = 0;
 	virtual int FUNCTION_CALL_MODE Reserved9() = 0;
 	
-	//20130527 xuxp ÐÂÔöGetSelfAddressº¯Êý£¬À´»ñÈ¡×Ô¼º±¾µØµÄIPºÍ¶Ë¿Ú
+	//20130527 xuxp 新增GetSelfAddress函数，来获取自己本地的IP和端口
 	/**
-	* »ñÈ¡ipµØÖ·ºÍ¶Ë¿Ú
-	* @return »ñÈ¡ipµØÖ·ºÍ¶Ë¿Ú£¬¸ñÊ½£ºipµØÖ·+¶Ë¿Ú
+	* 获取ip地址和端口
+	* @return 获取ip地址和端口，格式：ip地址+端口
 	*/
 	virtual const char* FUNCTION_CALL_MODE GetSelfAddress() = 0;
 
-	//20130529 xuxp ÐÂÔöGetSelfMacº¯Êý£¬À´»ñÈ¡×Ô¼º±¾µØÊ¹ÓÃµÄÍø¿¨MAC
+	//20130529 xuxp 新增GetSelfMac函数，来获取自己本地使用的网卡MAC
 	/**
-	* »ñÈ¡MACµØÖ·
-	* @return MACµÄµØÖ·×Ö·û´®¸ñÊ½£¬ÀàËÆ¡°D067E5556D83¡±,ÖÐ¼äÃ»ÓÐ·Ö¸ô·û
+	* 获取MAC地址
+	* @return MAC的地址字符串格式，类似“D067E5556D83”,中间没有分隔符
 	*/
 	virtual const char* FUNCTION_CALL_MODE GetSelfMac() = 0;
 	
-	//20130609 xuxp ÐÂÔö¶©ÔÄ·¢²¼½Ó¿Ú
-	///////////////////////////////////ÏÂÃæÔö¼Ó¶©ÔÄ·¢²¼µÄ½Ó¿Ú///////////////////////////////////////
+	//20130609 xuxp 新增订阅发布接口
+	///////////////////////////////////下面增加订阅发布的接口///////////////////////////////////////
 
 	/**
-    * ´´½¨Ò»¸ö¶©ÔÄÕß
-    * @param lpCallback »Øµ÷½Ó¿Ú
-    * @param SubScribeName ¶©ÔÄÕßÃû×Ö£¬¶à¶©ÔÄÕßµÄÃû×Ö±ØÐë²»Ò»Ñù£¬²»¿ÉÒÔÏàÍ¬.×î´ó³¤¶È32¸ö×Ö½Ú
-    * @param iTimeOut ³¬Ê±Ê±¼ä
-    * @param iInitRecvQLen ³õÊ¼»¯½ÓÊÕ¶ÓÁÐµÄ³¤¶È
-    * @param iStepRecvQLen ½ÓÊÜ¶ÓÁÐµÄÀ©Õ¹²½³¤
-    * @return ·µ»Ø¶©ÔÄ½Ó¿ÚÊµÀý£¬Ò»¸ö»á»°½Ó¿Ú¶ÔÓ¦Ò»¸ö»Øµ÷.
+    * 创建一个订阅者
+    * @param lpCallback 回调接口
+    * @param SubScribeName 订阅者名字，多订阅者的名字必须不一样，不可以相同.最大长度32个字节
+    * @param iTimeOut 超时时间
+    * @param iInitRecvQLen 初始化接收队列的长度
+    * @param iStepRecvQLen 接受队列的扩展步长
+    * @return 返回订阅接口实例，一个会话接口对应一个回调.
     */
     virtual CSubscribeInterface* FUNCTION_CALL_MODE NewSubscriber(CSubCallbackInterface *lpCallback,char* SubScribeName,int iTimeOut,
         int iInitRecvQLen=INIT_RECVQ_LEN,int iStepRecvQLen=STEP_RECVQ_LEN) = 0;
     
    /**
-    * »ñÈ¡·¢²¼Õß
-    * @param PublishName ·¢²¼ÕßÒµÎñÃû
-    * @param msgCount ±¾µØ»º´æÏûÏ¢µÄ¸öÊý
-	  * @param iTimeOut ³õÊ¼»¯µÄÊ±ºòµÄ³¬Ê±Ê±¼ä
-    * @param bResetNo ÊÇ·ñÖØÖÃÐò
-    * @return ·µ»Ø·¢ËÍ½Ó¿ÚÊµÀý£¬·µ»Ø¶ÔÓ¦µÄÖ¸Õë
+    * 获取发布者
+    * @param PublishName 发布者业务名
+    * @param msgCount 本地缓存消息的个数
+	  * @param iTimeOut 初始化的时候的超时时间
+    * @param bResetNo 是否重置序
+    * @return 返回发送接口实例，返回对应的指针
     */
     //virtual CPublishInterface* FUNCTION_CALL_MODE GetPublisher(int msgCount,int iTimeOut,bool bResetNo = false) = 0;
     virtual CPublishInterface* FUNCTION_CALL_MODE NewPublisher(char* PublishName,int msgCount,int iTimeOut,bool bResetNo = false) = 0;
@@ -1306,12 +1411,12 @@ public:
 
 
    /**
-    * »ñÈ¡·þÎñ¶ËµÄËùÓÐÖ÷ÌâÐÅÏ¢
-    * @param byForce ÊÇ·ñÇ¿ÖÆ´ÓºóÌ¨»ñÈ¡
-    * @param iTimeOut ³¬Ê±Ê±¼ä
-    * @return ³É¹¦¾Í·µ»ØËùÓÐÖ÷ÌâÐÅÏ¢
-    * @note ½â°üÆ÷ÍâÃæÐèÒªµ÷ÓÃrelease½Ó¿Ú½øÐÐÊÍ·Å.
-    * @note packer·µ»Ø×Ö¶Î
+    * 获取服务端的所有主题信息
+    * @param byForce 是否强制从后台获取
+    * @param iTimeOut 超时时间
+    * @return 成功就返回所有主题信息
+    * @note 解包器外面需要调用release接口进行释放.
+    * @note packer返回字段
     * - TopicName
     * - TopicNo
     * - ReliableLevel
@@ -1344,125 +1449,166 @@ public:
     virtual IF2UnPacker* FUNCTION_CALL_MODE GetTopic(bool byForce,int iTimeOut) = 0;
 	
 	/**
-	* »ñÈ¡¶©ÔÄ·¢²¼µÄ×îºó´íÎó
+	* 获取订阅发布的最后错误
 	*/
 	virtual const char* FUNCTION_CALL_MODE GetMCLastError() = 0;
 	////////////////////////////////////////////////////////////////////////////////
 
-	//20130624 xuxp Á¬½Ó½Ó¿ÚÔö¼ÓÏÂÃæÈý¸ö½Ó¿Ú£¬ÓÃÀ´×÷Îª·þÎñ¶ËµÄ½Ó¿Ú£¬¿Í»§¶Ë¿ª·¢Ò²ÍÆ¼öÊ¹ÓÃ
-	///////////////////////////////////ÐÂµÄÒ»Ì×²Ù×÷½Ó¿Ú///////////////////////////////////////
+	//20130624 xuxp 连接接口增加下面三个接口，用来作为服务端的接口，客户端开发也推荐使用
+	///////////////////////////////////新的一套操作接口///////////////////////////////////////
 	/**
-	* ³õÊ¼»¯Á¬½Ó¶ÔÏó
-	* @param lpCallback »Øµ÷¶ÔÏó
-	* @return ·µ»Ø0±íÊ¾³É¹¦£¬·ñÔò±íÊ¾Ê§°Ü£¬Í¨¹ýµ÷ÓÃGetErrorMsg¿ÉÒÔ»ñÈ¡ÏêÏ¸´íÎóÐÅÏ¢
-    * Èç¹ûÓ¦ÓÃ²»ÐèÒªÈÎºÎ»Øµ÷·½·¨£¬Ôò¿ÉÏò¸Ã·½·¨´«µÝNULL£¬¶ø²»±Ø×Ô¶¨Òå»Øµ÷ÀàºÍ¶ÔÏó
+	* 初始化连接对象
+	* @param lpCallback 回调对象
+	* @return 返回0表示成功，否则表示失败，通过调用GetErrorMsg可以获取详细错误信息
+    * 如果应用不需要任何回调方法，则可向该方法传递NULL，而不必自定义回调类和对象
 	*/
 	virtual int FUNCTION_CALL_MODE Create2BizMsg(CCallbackInterface *lpCallback) = 0;
 
 	/**
-    * ·¢ËÍÒµÎñÊý¾Ý
-    * @param lpMsg       ÒµÎñÏûÏ¢½Ó¿ÚÖ¸Õë
-    * @param nAsy        0±íÊ¾Í¬²½£¬·ñÔò±íÊ¾Òì²½¡£
-    * Í¬²½·¢ËÍµÄ°ü£¬Í¨¹ýµ÷ÓÃRecvBizMsgÀ´½ÓÊÕ£¬Òì²½·¢ËÍµÄ°ü£¬µ±ÊÕµ½Ó¦´ð°üºó£¬×Ô¶¯´¥·¢»Øµ÷º¯ÊýOnReceivedBizMsg¡£
-    * @return ·µ»Ø·¢ËÍ¾ä±ú£¨ÕýÊý£©£¬·ñÔò±íÊ¾Ê§°Ü£¬Í¨¹ýµ÷ÓÃGetErrorMsg¿ÉÒÔ»ñÈ¡ÏêÏ¸´íÎóÐÅÏ¢
+    * 发送业务数据
+    * @param lpMsg       业务消息接口指针
+    * @param nAsy        0表示同步，否则表示异步。
+    * 同步发送的包，通过调用RecvBizMsg来接收，异步发送的包，当收到应答包后，自动触发回调函数OnReceivedBizMsg。
+    * @return 返回发送句柄（正数），否则表示失败，通过调用GetErrorMsg可以获取详细错误信息
     */
 	virtual int FUNCTION_CALL_MODE SendBizMsg(IBizMessage* lpMsg,int nAsy = 0) = 0;
 	
 	/**
-	* ½ÓÊÕÊý¾Ý
-	* @param hSend     ·¢ËÍ¾ä±ú
-	* @param lpMsg	   ÊÕµ½ÒµÎñÏûÏ¢Ö¸ÕëµÄµØÖ·
-	* @param uiTimeout ³¬Ê±Ê±¼ä£¬µ¥Î»ºÁÃë£¬0±íÊ¾²»µÈ´ý
-	* @param uiFlag    ½ÓÊÕÑ¡Ïî£¬0±íÊ¾½ÓÊÕ³¬Ê±ºóÈÔ¿É¼ÌÐøµ÷ÓÃReceiveÀ´½ÓÊÕ£¬
-    *                  JustRemoveHandle±íÊ¾µ±½ÓÊÕ³¬Ê±Ê±£¬°Ñpacket_idÉ¾³ý£¨ÒÔºóÔÙÊÕµ½£¬Ôò»áÒÔÒì²½µÄ·½Ê½ÊÕµ½£©
-	* @return ·µ»Ø0±íÊ¾³É¹¦£¬·ñÔò±íÊ¾Ê§°Ü£¬Í¨¹ýµ÷ÓÃGetErrorMsg¿ÉÒÔ»ñÈ¡ÏêÏ¸´íÎóÐÅÏ¢
-	* ×¢Òâ£¡Íâ²¿Ö¸ÕëËùÖ¸ÏòµÄIBizMessageµÄÄÚ´æÓÉSDKÄÚ²¿¹ÜÀí£¬Íâ²¿ÇÐÎðÊÍ·Å£¡
-	* ×¢Òâ£¡lpMsg¶ÔÓ¦µÄÏûÏ¢Ö¸ÕëÊÇÁÙÊ±µÄ£¬ÉÏ²ã²»¿ÉÒÔ»º´æÖ¸Õë£¬ÔÙ´Îµ÷ÓÃÕâ¸öÁ¬½ÓµÄRecvBizMsg£¬Õâ¸öÖ¸ÕëÖ¸ÏòµÄÄÚÈÝ¾Í»á¸Ä±ä
-	* Èç¹ûÒª¿½±´£¬ÐèÒªµ÷ÓÃIBizMessageµÄGetBuff·½·¨£¬¶þ½øÖÆ¿½±´³öÈ¥£¬ÆäËûÏß³ÌÐèÒªÔÙµ÷ÓÃSetBuff£»
+	* 接收数据
+	* @param hSend     发送句柄
+	* @param lpMsg	   收到业务消息指针的地址
+	* @param uiTimeout 超时时间，单位毫秒，0表示不等待
+	* @param uiFlag    接收选项，0表示接收超时后仍可继续调用Receive来接收，
+    *                  JustRemoveHandle表示当接收超时时，把packet_id删除（以后再收到，则会以异步的方式收到）
+	* @return 返回0表示成功，否则表示失败，通过调用GetErrorMsg可以获取详细错误信息
+	* 注意！外部指针所指向的IBizMessage的内存由SDK内部管理，外部切勿释放！
+	* 注意！lpMsg对应的消息指针是临时的，上层不可以缓存指针，再次调用这个连接的RecvBizMsg，这个指针指向的内容就会改变
+	* 如果要拷贝，需要调用IBizMessage的GetBuff方法，二进制拷贝出去，其他线程需要再调用SetBuff；
 	*/
 	virtual int FUNCTION_CALL_MODE RecvBizMsg(int hSend, IBizMessage** lpMsg, unsigned uiTimeout = 1000, unsigned uiFlag = 0) = 0;
+	
+	//20141117 majc 增加文件更新目录过滤字段
+	/**
+    * 获取文件更新,一个连接里面只有一个文件更新，如果存在就返回之前的接口
+    * @param szTopicName 文件更新主题，来自于服务端消息中心文件更新主题 
+	* @param lpCallBack 回调接口
+	* @param szScanDir 扫描文件根目录
+    * @param szUpdateDir 文件更新存放根目录
+	* @param iTimeOut 超时时间
+	* @param szDirFilter 目录过滤条件，如果有多个目录用;号隔开
+    * @return 返回文件更新接口指针
+    */
+	virtual CFileUpdateInterface* FUNCTION_CALL_MODE NewFileUpdate(const char* szTopicName,CFileUpdateCallbackInterface* lpCallBack ,const char* szScanDir,const char* szUpdateDir,unsigned int uiTimeOut = 5000, const char * szDirFilter = NULL) = 0;
+
+	/**
+	* 获取文件更新的最后错误
+	*/
+	virtual const char* FUNCTION_CALL_MODE GetFileUpdateLastError() = 0;
+	
+	//20140618 majc 增加获取最后一个应答错误的详细信息接口
+	/**
+	* 取返回错误消息的详细信息
+	* @param bAsyError 0表示同步(默认)，否则表示异步。
+	* @return 返回详细错误信息
+	* @note 返回信息格式：packType:xxx;funtionId:xxx;branchNo:zxx;systemNo:xxx;subSystemNO:xxx;packId:xxx;routerInfo:xxx,xxx,xxx,xxx,xxx,xxx;sendPath:xxx,xxx,xxx,xxx,xxx,xxx;returnCode:xxx;errorNo:xxx;errorInfo:xxx
+	* packType-包类型
+	* funtionId-功能号
+	* branchNo-分支号
+	* systemNo-系统号
+	* subSystemNO-子系统号
+	* packId-包序号
+	* routerInfo-目标路由
+	* sendPath-发送者路由
+	* returnCode-返回错误码
+	* errorNo-错误号
+	* errorInfo-错误信息
+	* 调用说明：1：同步调用时，方法Receive返回的lppData解析ESBMessage后RetuenCode不为0时调用；方法RecvBiz、RecvBizEx是在返回值为1、2、3、4时调用；方法RecvBizMsg是在GetReturnCode()不为0时调用
+	*           2：异步调用时，回调OnReceived的lpData解析ESBMessage后RetuenCode不为0时调用；回调OnReceivedBiz、OnReceivedBizEx的nResult为1、2、3、4时调用；回调OnReceivedBizMsg的lpMsg在GetReturnCode()不为0时调用
+	*/
+	virtual const char * FUNCTION_CALL_MODE GetLastAnsError(bool bAsyError = 0) = 0;
 	////////////////////////////////////////////////////////////////////////////////
+	
 };
 
 extern "C"
 {
     /**
-	* »ñÈ¡T2_SDKµÄ°æ±¾ºÅ
-	* @return µ±Ç°T2_SDKµÄ°æ±¾ºÅ
-	* Æ©Èç£º°æ±¾Îª0x10000002±íÊ¾1.0.0.2
+	* 获取T2_SDK的版本号
+	* @return 当前T2_SDK的版本号
+	* 譬如：版本为0x10000002表示1.0.0.2
 	*/
     int FUNCTION_CALL_MODE GetVersionInfo();
 
     /**
-	* »ñÈ¡Ò»¸öÊµÏÖCConfigInterface½Ó¿ÚµÄÀàµÄÖ¸Õë
-	* @return ÊµÏÖCConfigInterface½Ó¿ÚµÄÀàµÄÖ¸Õë
+	* 获取一个实现CConfigInterface接口的类的指针
+	* @return 实现CConfigInterface接口的类的指针
 	*/
 CConfigInterface* FUNCTION_CALL_MODE NewConfig();
 
     /**
-	* »ñÈ¡Ò»¸öÊµÏÖCConnectionInterface½Ó¿ÚµÄÀàµÄÖ¸Õë
-	* @param CConfigInterface ÊµÏÖCConfigInterface½Ó¿ÚµÄÀàµÄÖ¸Õë
-	* @returnÊµÏÖCConnectionInterface½Ó¿ÚµÄÀàµÄÖ¸Õë
+	* 获取一个实现CConnectionInterface接口的类的指针
+	* @param CConfigInterface 实现CConfigInterface接口的类的指针
+	* @return实现CConnectionInterface接口的类的指针
 	*/
 CConnectionInterface* FUNCTION_CALL_MODE NewConnection(CConfigInterface *lpConfig);
 
 /**
-* @param int iVersion ÒµÎñ°ü¸ñÊ½°æ±¾(È¡Öµ:1 ×Ö´®°æ,ÆäËûÖµ 0x20°æ)
-* ÍÆ¼öÊ¹ÓÃ0x20°æ
-* @return IPacker * ´ò°üÆ÷½Ó¿ÚÖ¸Õë
+* @param int iVersion 业务包格式版本(取值:1 字串版,其他值 0x20版)
+* 推荐使用0x20版
+* @return IPacker * 打包器接口指针
 */
 IF2Packer * FUNCTION_CALL_MODE NewPacker(int iVersion);
 
 /**
-* @param void * lpBuffer Òª½â°üµÄÊý¾Ý£¨²»º¬ARÍ¨ÐÅ°üÍ·£©
-* @param unsigned int iLen Êý¾Ý³¤¶È
-* @return IUnPacker * °æ±¾2½á¹û¼¯²Ù×÷½Ó¿ÚÖ¸Õë
+* @param void * lpBuffer 要解包的数据（不含AR通信包头）
+* @param unsigned int iLen 数据长度
+* @return IUnPacker * 版本2结果集操作接口指针
 */
 IF2UnPacker * FUNCTION_CALL_MODE NewUnPacker(void * lpBuffer, unsigned int iLen);
 
 /**
-* @param void * lpBuffer Òª½â°üµÄÊý¾Ý£¨²»º¬ARÍ¨ÐÅ°üÍ·£©
-* @param unsigned int iLen Êý¾Ý³¤¶È
-* @return IUnPacker * °æ±¾1½á¹û¼¯²Ù×÷½Ó¿ÚÖ¸Õë
+* @param void * lpBuffer 要解包的数据（不含AR通信包头）
+* @param unsigned int iLen 数据长度
+* @return IUnPacker * 版本1结果集操作接口指针
 */
 IF2UnPacker * FUNCTION_CALL_MODE NewUnPackerV1(void * lpBuffer, unsigned int iLen);
 
 /**
-* @param void * lpBuffer Òª½â°üµÄÊý¾Ý£¨²»º¬ARÍ¨ÐÅ°üÍ·£©
-* @return 1±íÊ¾°æ±¾1µÄ½á¹û¼¯Êý¾Ý£¬0x21~0x2F °æ±¾2µÄ½á¹û¼¯Êý¾Ý
+* @param void * lpBuffer 要解包的数据（不含AR通信包头）
+* @return 1表示版本1的结果集数据，0x21~0x2F 版本2的结果集数据
 */
 int FUNCTION_CALL_MODE GetPackVersion(const void *lpBuffer);
 /**
-* @param char *EncodePass ´«³öµÄÉ¢ÁÐ½á¹û£¬×Ö·û´®£¬³¤¶È²»³¬¹ý16£¨°üÀ¨'\0'£©
-* @param const char* Password ´«ÈëµÄ´ýÉ¢ÁÐµÄÃÜÂë
-* @param int nReserve ±£Áô²ÎÊý£¬²ÉÓÃÄ¬ÈÏÖµ
-* @return char * ´«³öµÄÉ¢ÁÐ½á¹ûµØÖ·£¬Í¬EncodePass
+* @param char *EncodePass 传出的散列结果，字符串，长度不超过16（包括'\0'）
+* @param const char* Password 传入的待散列的密码
+* @param int nReserve 保留参数，采用默认值
+* @return char * 传出的散列结果地址，同EncodePass
 */
 char * FUNCTION_CALL_MODE Encode(char *EncodePass, const char* Password, int nReserve = 0 );
 
 
 /**
-*ÀûÓÃÒ»²¿Ìá¹©µÄ¼ÓÃÜº¯ÊýÀ´¶ÔÃÜÂë½øÐÐ¼ÓÃÜ
-* @param const char* pIn ´«ÈëµÄ´ý¼ÓÃÜµÄ×Ö·û´®
-* @param const char* pOut Êä³ö²ÎÊý£¬³¤¶ÈºÍ´«ÈëµÄ×Ö·û´®´óÐ¡Ò»Ñù£¬ÓÉÍâ²¿ÉêÇë
+*利用一部提供的加密函数来对密码进行加密
+* @param const char* pIn 传入的待加密的字符串
+* @param const char* pOut 输出参数，长度和传入的字符串大小一样，由外部申请
 * @return 
 */
 int FUNCTION_CALL_MODE EncodeEx(const char *pIn, char *pOut);
 
 
 /**
-* ¹¹ÔìÒ»¸ö¹ýÂËÆ÷½Ó¿ÚÖ¸Õë
-* @return ·µ»ØNULL±íÊ¾Ê§°Ü.
+* 构造一个过滤器接口指针
+* @return 返回NULL表示失败.
 */
 CFilterInterface* FUNCTION_CALL_MODE NewFilter();
     
 /**
-* ¹¹ÔìÒ»¸ö¶©ÔÄÊôÐÔ½Ó¿ÚÖ¸Õë
-* @return ·µ»ØNULL±íÊ¾Ê§°Ü.
+* 构造一个订阅属性接口指针
+* @return 返回NULL表示失败.
 */
 CSubscribeParamInterface* FUNCTION_CALL_MODE NewSubscribeParam();
 
-//20130625 xuxp ¹¹ÔìÒµÎñÏûÏ¢
+//20130625 xuxp 构造业务消息
 IBizMessage* FUNCTION_CALL_MODE NewBizMessage();
 
 }

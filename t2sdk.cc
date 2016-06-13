@@ -3,8 +3,8 @@
 #include <string.h>
 
 zend_class_entry *t2connection_ce;
-
 zend_object_handlers t2connection_object_handlers;
+char * lib_t2sdk_file;
 
 struct t2connection_object {
     zend_object std;
@@ -48,11 +48,7 @@ zend_object_value t2connection_create_handler(zend_class_entry *type TSRMLS_DC)
 
 PHP_METHOD(T2Connection, __construct)
 {
-	char *domain;
-    char *lib_t2sdk_file;
-    char *license_file;
-    char *send_queue_size;
-    char *auto_reconnect;
+	char *ini_file;
 	// long maxGear;
     T2Connection *t2connection = NULL;
     zval *object = getThis();
@@ -74,7 +70,6 @@ PHP_METHOD(T2Connection, __construct)
 
 	for(zend_hash_internal_pointer_reset_ex(arr_hash, &pointer); zend_hash_get_current_data_ex(arr_hash, (void**) &data, &pointer) == SUCCESS; zend_hash_move_forward_ex(arr_hash, &pointer)) 
 	{
-
 	    zval temp;
 	    char *key;
 	    uint key_len;
@@ -84,40 +79,35 @@ PHP_METHOD(T2Connection, __construct)
 	    {
 	    	temp = **data;
 	    	zval_copy_ctor(&temp);
-	    	if(strcmp(key, "domain") == 0)
+	    	if(strcmp(key, "ini_file") == 0)
 	    	{
 	    		convert_to_string(&temp);
-	    		domain = Z_STRVAL(temp);
+	    		ini_file = Z_STRVAL(temp);
 	    	}
-	    	else if(strcmp(key, "lib_t2sdk_file") == 0)
-	    	{
-	    		convert_to_string(&temp);
-	    		lib_t2sdk_file = Z_STRVAL(temp);
-	    	}
-	    	else if(strcmp(key, "license_file") == 0)
-	    	{
-	    		convert_to_string(&temp);
-	    		license_file = Z_STRVAL(temp);
-	    	}
-	    	else if(strcmp(key, "send_queue_size") == 0)
-	    	{
-	    		convert_to_string(&temp);
-	    		send_queue_size = Z_STRVAL(temp);
-	    	}
-	    	else if(strcmp(key, "auto_reconnect") == 0)
-	    	{
-	    		convert_to_string(&temp);
-	    		auto_reconnect = Z_STRVAL(temp);
-	    	}
+	    	// else if(strcmp(key, "lib_t2sdk_file") == 0)
+	    	// {
+	    	// 	convert_to_string(&temp);
+	    	// 	lib_t2sdk_file = Z_STRVAL(temp);
+	    	// }
+	    	// else if(strcmp(key, "license_file") == 0)
+	    	// {
+	    	// 	convert_to_string(&temp);
+	    	// 	license_file = Z_STRVAL(temp);
+	    	// }
+	    	// else if(strcmp(key, "send_queue_size") == 0)
+	    	// {
+	    	// 	convert_to_string(&temp);
+	    	// 	send_queue_size = Z_STRVAL(temp);
+	    	// }
+	    	// else if(strcmp(key, "auto_reconnect") == 0)
+	    	// {
+	    	// 	convert_to_string(&temp);
+	    	// 	auto_reconnect = Z_STRVAL(temp);
+	    	// }
 	    }
 	}
 
-	puts(domain);
-	puts(lib_t2sdk_file);
-	puts(license_file);
-	puts(send_queue_size);
-	puts(auto_reconnect);
-    t2connection = new T2Connection(domain, lib_t2sdk_file, license_file, send_queue_size, auto_reconnect);
+    t2connection = new T2Connection(ini_file);
     t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(object TSRMLS_CC);
     obj->t2connection = t2connection;
 }
@@ -154,6 +144,9 @@ PHP_MINIT_FUNCTION(t2sdk)
     memcpy(&t2connection_object_handlers,
         zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     t2connection_object_handlers.clone_obj = NULL;
+
+    lib_t2sdk_file = INI_STR('t2sdk.lib_t2sdk_file');
+
     return SUCCESS;
 }
 
