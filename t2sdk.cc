@@ -84,11 +84,11 @@ PHP_METHOD(T2Connection, __construct)
 	    		convert_to_string(&temp);
 	    		ini_file = Z_STRVAL(temp);
 	    	}
-	    	// else if(strcmp(key, "lib_t2sdk_file") == 0)
-	    	// {
-	    	// 	convert_to_string(&temp);
-	    	// 	lib_t2sdk_file = Z_STRVAL(temp);
-	    	// }
+	    	else if(strcmp(key, "lib_t2sdk_file") == 0)
+	    	{
+	    		convert_to_string(&temp);
+	    		lib_t2sdk_file = Z_STRVAL(temp);
+	    	}
 	    	// else if(strcmp(key, "license_file") == 0)
 	    	// {
 	    	// 	convert_to_string(&temp);
@@ -107,7 +107,7 @@ PHP_METHOD(T2Connection, __construct)
 	    }
 	}
 
-    t2connection = new T2Connection(ini_file);
+    t2connection = new T2Connection(lib_t2sdk_file, ini_file);
     t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(object TSRMLS_CC);
     obj->t2connection = t2connection;
 }
@@ -144,9 +144,6 @@ PHP_MINIT_FUNCTION(t2sdk)
     memcpy(&t2connection_object_handlers,
         zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     t2connection_object_handlers.clone_obj = NULL;
-
-    lib_t2sdk_file = INI_STR("t2sdk.lib_t2sdk_file");
-
     return SUCCESS;
 }
 

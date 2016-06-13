@@ -9,32 +9,32 @@ CConnectionInterface *g_pConnectionHq = NULL;
 
 CBusiness g_szBusiness;
 CBusiness g_szBusinessHq;
-
-extern char * lib_t2sdk_file;
-
-void *handle = dlopen(lib_t2sdk_file, RTLD_LAZY | RTLD_GLOBAL);
-char *error;
-if (!handle)  
-{  
-    error = dlerror();
-    puts(error);
-}  
-
 typedef CConfigInterface* (*config)(); 
 typedef CConnectionInterface* (*connection)(CConfigInterface*); 
 typedef IF2Packer* (*packer)(int); 
-config NewConfig = (config) dlsym(handle, "NewConfig");
-connection NewConnection = (connection) dlsym(handle, "NewConnection");
-packer NewPacker = (packer) dlsym(handle, "NewPacker");
+config NewConfig;
+connection NewConnection;
+packer NewPacker;
 
-T2Connection::T2Connection(char *ini_file)
+T2Connection::T2Connection(char* lib_t2sdk_file, char *ini_file)
 {
+    this->lib_t2sdk_file = lib_t2sdk_file;
     this->ini_file = ini_file;
 }
 
 void T2Connection::connect()
 {
+    void *handle = dlopen(this->lib_t2sdk_file, RTLD_LAZY | RTLD_GLOBAL);
+    char *error;
+    if (!handle)  
+    {  
+       error = dlerror();
+       puts(error);
+    }  
     
+    NewConfig = (config) dlsym(handle, "NewConfig");
+    NewConnection = (connection) dlsym(handle, "NewConnection");
+    NewPacker = (packer) dlsym(handle, "NewPacker");
 
     //通过T2SDK的引出函数，来获取一个新的CConfig对象
     //此对象在创建连接对象时被传递，用于配置所创建的连接对象的各种属性（比如服务器IP地址、安全模式等）
