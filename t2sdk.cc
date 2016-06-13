@@ -145,7 +145,7 @@ PHP_MINIT_FUNCTION(t2sdk)
         zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     t2connection_object_handlers.clone_obj = NULL;
 
-    lib_t2sdk_file = INI_STR('t2sdk.lib_t2sdk_file');
+    lib_t2sdk_file = INI_STR("t2sdk.lib_t2sdk_file");
 
     return SUCCESS;
 }
