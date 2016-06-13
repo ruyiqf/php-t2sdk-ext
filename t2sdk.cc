@@ -4,7 +4,7 @@
 
 zend_class_entry *t2connection_ce;
 zend_object_handlers t2connection_object_handlers;
-char * lib_t2sdk_file;
+extern char * lib_t2sdk_file;
 
 struct t2connection_object {
     zend_object std;

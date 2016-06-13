@@ -82,12 +82,12 @@ public:
     //int SecuRealtimeQry(int iSystemNo  = 2 );
 
 
-    int CBusiness::SecuStockQry(int iSystemNo  = 2 );
+    int SecuStockQry(int iSystemNo  = 2 );
 
-    int CBusiness::ClientFundAllQry(int iSystemNo = 2 );
+    int ClientFundAllQry(int iSystemNo = 2 );
 
 
-    int CBusiness::ClientStkacctQry(int iSystemNo = 2 );
+    int ClientStkacctQry(int iSystemNo = 2 );
 
     int funcSubscribePush(int nFUnctionNo, int nIssueType);
     
