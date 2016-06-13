@@ -10,6 +10,8 @@ CConnectionInterface *g_pConnectionHq = NULL;
 CBusiness g_szBusiness;
 CBusiness g_szBusinessHq;
 
+extern char * lib_t2sdk_file;
+
 void *handle = dlopen(lib_t2sdk_file, RTLD_LAZY | RTLD_GLOBAL);
 char *error;
 if (!handle)  
