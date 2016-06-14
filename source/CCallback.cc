@@ -94,7 +94,7 @@ int CBusiness::Login()
     int hSend = 0, iSystemNo = -1;
 
 
-    IBizMessage* lpBizMessage = NewBizMessage();
+    IBizMessage* lpBizMessage = T2NewBizMessage();
     lpBizMessage->AddRef();
 
 
@@ -112,7 +112,7 @@ int CBusiness::Login()
     lpBizMessage->SetSenderCompanyID(91000);
     
     ///获取版本为2类型的pack打包器
-    IF2Packer *pPacker = NewPacker(2);
+    IF2Packer *pPacker = T2NewPacker(2);
     if(!pPacker)
     {
         printf("取打包器失败!\r\n");
@@ -196,7 +196,7 @@ int CBusiness::Login()
             //接收包体       "包头|功能码|签名|包体";   例如“12|331100|XyIxtt..|username=sundsun,password=123456,”;
             const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
             //
-            IF2UnPacker * lpUnPacker = NewUnPacker((void *)lpBuffer,iLen);
+            IF2UnPacker * lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
             //设置系统号
             iSystemNo = lpUnPacker->GetInt("sysnode_id");
             printf("分支机构号："+iSystemNo);
@@ -357,7 +357,7 @@ int CBusiness::SecuEntrust(int iSystemNo)
                 puts("业务操作成功");
                 int iLen = 0;
                 const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
-                IF2UnPacker * lpUnPacker = NewUnPacker((void *)lpBuffer,iLen);
+                IF2UnPacker * lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
                 ShowPacket(0,lpUnPacker);
             }
     
@@ -492,7 +492,7 @@ int CBusiness::ClientStkacctQry(int iSystemNo)
                 puts("业务操作成功");
                 int iLen = 0;
                 const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
-                IF2UnPacker * lpUnPacker = NewUnPacker((void *)lpBuffer,iLen);
+                IF2UnPacker * lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
                 ShowPacket(0,lpUnPacker);
             }
     
@@ -523,7 +523,7 @@ int CBusiness::SecuStockQry(int iSystemNo /* = 2 */)
         printf("--------------------------->m_cUserToken[%s]\n",m_cUserToken);
         int hSend = 0;
     
-        IBizMessage* lpBizMessage = NewBizMessage();
+        IBizMessage* lpBizMessage = T2NewBizMessage();
         lpBizMessage->AddRef();
         
         
@@ -618,7 +618,7 @@ int CBusiness::SecuStockQry(int iSystemNo /* = 2 */)
                 puts("业务操作成功");
                 int iLen = 0;
                 const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
-                IF2UnPacker * lpUnPacker = NewUnPacker((void *)lpBuffer,iLen);
+                IF2UnPacker * lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
                 ShowPacket(0,lpUnPacker);
             }
     
@@ -645,7 +645,7 @@ int CBusiness::funcSubscribePush(int nFUnctionNo, int nIssueType){
         printf("--------------------------->m_cUserToken[%s]\n",m_cUserToken);
         int hSend = 0;
     
-        IBizMessage* lpBizMessage = NewBizMessage();
+        IBizMessage* lpBizMessage = T2NewBizMessage();
         lpBizMessage->AddRef();
         
         
@@ -664,7 +664,7 @@ int CBusiness::funcSubscribePush(int nFUnctionNo, int nIssueType){
         lpBizMessage->SetIssueType(nIssueType);
     
         ///获取版本为2类型的pack打包器
-        IF2Packer *pPacker = NewPacker(2);
+        IF2Packer *pPacker = T2NewPacker(2);
         if(!pPacker)
         {
             printf("取打包器失败!\r\n");
