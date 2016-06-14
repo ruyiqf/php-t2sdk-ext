@@ -49,9 +49,6 @@ extern zend_module_entry t2sdk_module_entry;
 #include "TSRM.h"
 #endif
 
-#include "source/t2connection.h"
-#include <string.h>
-
 PHP_MINIT_FUNCTION(t2sdk);
 PHP_MSHUTDOWN_FUNCTION(t2sdk);
 PHP_RINIT_FUNCTION(t2sdk);
@@ -63,14 +60,12 @@ PHP_FUNCTION(confirm_t2sdk_compiled); /* For testing, remove later. */
 /* 
     Declare any global variables you may need between the BEGIN
   and END macros here:     
+
+ZEND_BEGIN_MODULE_GLOBALS(t2sdk)
+  long  global_value;
+  char *global_string;
+ZEND_END_MODULE_GLOBALS(t2sdk)
 */
-// ZEND_BEGIN_MODULE_GLOBALS(t2sdk)
-
-// CConnectionInterface *g_pConnection;
-// CConnectionInterface *g_pConnectionHq;
-
-// ZEND_END_MODULE_GLOBALS(t2sdk)
-
 
 /* In every utility function you add that needs to use variables 
    in php_t2sdk_globals, call TSRMLS_FETCH(); after declaring other 
@@ -81,9 +76,6 @@ PHP_FUNCTION(confirm_t2sdk_compiled); /* For testing, remove later. */
    encouraged to rename these macros something shorter, see
    examples in any other php module directory.
 */
-
-//extern ZEND_DECLARE_MODULE_GLOBALS(t2sdk);
-
 
 #ifdef ZTS
 #define T2SDK_G(v) TSRMG(t2sdk_globals_id, zend_t2sdk_globals *, v)

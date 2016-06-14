@@ -1,8 +1,10 @@
 #include "php_t2sdk.h"
+#include "source/t2connection.h"
+#include <string.h>
 
-//ZEND_DECLARE_MODULE_GLOBALS(t2sdk);
 zend_class_entry *t2connection_ce;
 zend_object_handlers t2connection_object_handlers;
+char * lib_t2sdk_file;
 
 CConnectionInterface *g_pConnection = NULL;
 CConnectionInterface *g_pConnectionHq = NULL;
@@ -56,7 +58,6 @@ zend_object_value t2connection_create_handler(zend_class_entry *type TSRMLS_DC)
 PHP_METHOD(T2Connection, __construct)
 {
 	char *ini_file;
-	char *lib_t2sdk_file;
 	// long maxGear;
     T2Connection *t2connection = NULL;
     zval *object = getThis();
