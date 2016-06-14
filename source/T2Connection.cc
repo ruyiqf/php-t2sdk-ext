@@ -12,9 +12,9 @@ CBusiness g_szBusinessHq;
 typedef CConfigInterface* (*config)(); 
 typedef CConnectionInterface* (*connection)(CConfigInterface*); 
 typedef IF2Packer* (*packer)(int); 
-config NewConfig;
-connection NewConnection;
-packer NewPacker;
+config T2NewConfig;
+connection T2NewConnection;
+packer T2NewPacker;
 
 T2Connection::T2Connection(char* lib_t2sdk_file, char *ini_file)
 {
@@ -32,15 +32,15 @@ void T2Connection::connect()
        puts(error);
     }  
     
-    NewConfig = (config) dlsym(handle, "NewConfig");
-    NewConnection = (connection) dlsym(handle, "NewConnection");
-    NewPacker = (packer) dlsym(handle, "NewPacker");
+    T2NewConfig = (config) dlsym(handle, "NewConfig");
+    T2NewConnection = (connection) dlsym(handle, "NewConnection");
+    T2NewPacker = (packer) dlsym(handle, "NewPacker");
 
     //通过T2SDK的引出函数，来获取一个新的CConfig对象
     //此对象在创建连接对象时被传递，用于配置所创建的连接对象的各种属性（比如服务器IP地址、安全模式等）
     //值得注意的是，在向配置对象设置配置信息时，配置信息既可以从ini文件中载入，
     //也可以在程序代码中设定，或者是2者的混合，如果对同一个配置项设不同的值，则以最近一次设置为准
-    CConfigInterface * lpConfig = NewConfig();
+    CConfigInterface * lpConfig = T2NewConfig();
 
     //通过T2SDK的引出函数NewXXXX返回的对象，需要调用对象的Release方法释放，而不能直接用delete
     //因为t2sdk.dll和调用程序可能是由不同的编译器、编译模式生成，delete可能会导致异常
@@ -81,7 +81,7 @@ void T2Connection::connect()
 
     g_szBusiness.SetConfig(lpConfig);
   //通过T2SDK的引出函数，来获取一个新的CConnection对象指针
-    g_pConnection = NewConnection(lpConfig);
+    g_pConnection = T2NewConnection(lpConfig);
     
     g_pConnection->AddRef();
     

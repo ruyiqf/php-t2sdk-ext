@@ -532,7 +532,7 @@ int CBusiness::SecuStockQry(int iSystemNo /* = 2 */)
         
         
         ///获取版本为2类型的pack打包器
-        IF2Packer *pPacker = NewPacker(2);
+        IF2Packer *pPacker = T2NewPacker(2);
         if(!pPacker)
         {
             printf("取打包器失败!\r\n");
