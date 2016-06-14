@@ -248,7 +248,8 @@ bool T2Connection::connect(char * &error)
     {
         if(0 != iRet)
         {
-            error = (char *)g_pConnection->GetErrorMsg(iRet);
+            const char *error_msg = g_pConnection->GetErrorMsg(iRet);
+            strcpy(error, error_msg);
         }
         return false;
     }
