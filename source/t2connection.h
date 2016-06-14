@@ -26,6 +26,7 @@ private:
     CConfigInterface * lpConfig;
     int iSystemNo;
     CBusiness g_szBusiness;
+    CBusiness g_szBusinessHq;
 };
 
 #endif /* T2SDK_T2CONNECTION_H */
