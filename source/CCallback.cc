@@ -113,6 +113,7 @@ int CBusiness::Login()
     lpBizMessage->SetSenderCompanyID(91000);
     
     ///获取版本为2类型的pack打包器
+    puts("before new packer 2");
     IF2Packer *pPacker = T2NewPacker(2);
     puts("new packer 2");
 
