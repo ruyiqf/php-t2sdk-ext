@@ -50,7 +50,8 @@ extern zend_module_entry t2sdk_module_entry;
 #endif
 
 #include <Include/t2sdk_interface.h>
-#include <source/t2connection.h>
+#include "source/CCallback.h"
+#include "source/t2connection.h"
 #include <string.h>
 
 typedef CConfigInterface* (*config)(); 
