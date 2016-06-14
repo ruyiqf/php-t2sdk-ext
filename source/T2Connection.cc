@@ -1,17 +1,17 @@
 #include "t2connection.h"
 
 // 全局连接对象
-CConnectionInterface *g_pConnection = NULL;
-CConnectionInterface *g_pConnectionHq = NULL;
+extern CConnectionInterface *g_pConnection;
+extern CConnectionInterface *g_pConnectionHq;
 
-CBusiness g_szBusiness;
-CBusiness g_szBusinessHq;
+extern CBusiness g_szBusiness;
+extern CBusiness g_szBusinessHq;
 
-config T2NewConfig;
-connection T2NewConnection;
-packer T2NewPacker;
-unpacker T2NewUnPacker;
-biz_message T2NewBizMessage;
+extern config T2NewConfig;
+extern connection T2NewConnection;
+extern packer T2NewPacker;
+extern unpacker T2NewUnPacker;
+extern biz_message T2NewBizMessage;
 
 T2Connection::T2Connection(char* lib_t2sdk_file, char *ini_file)
 {

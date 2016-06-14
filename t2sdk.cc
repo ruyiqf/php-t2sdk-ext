@@ -6,6 +6,18 @@ zend_class_entry *t2connection_ce;
 zend_object_handlers t2connection_object_handlers;
 char * lib_t2sdk_file;
 
+CConnectionInterface *g_pConnection = NULL;
+CConnectionInterface *g_pConnectionHq = NULL;
+
+CBusiness g_szBusiness;
+CBusiness g_szBusinessHq;
+
+config T2NewConfig;
+connection T2NewConnection;
+packer T2NewPacker;
+unpacker T2NewUnPacker;
+biz_message T2NewBizMessage;
+
 struct t2connection_object {
     zend_object std;
     T2Connection *t2connection;
