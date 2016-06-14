@@ -265,9 +265,10 @@ void T2Connection::disconnect()
 
 void T2Connection::login()
 {
+    puts("login login");
     CConfigInterface* config = g_szBusiness->getConfig();
     const char * server = config->getString("t2sdk", "servers");
-    char * mm[20];
+    char * mm = new char[20];
     strcpy(mm, server);
     puts(mm);
 
