@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #ifndef _T2SDK_INTERFACE_H
-# define _T2SDK_INTERFACE_H
+#define _T2SDK_INTERFACE_H
 
 #ifdef _WIN32
 	#if !defined( FUNCTION_CALL_MODE )
