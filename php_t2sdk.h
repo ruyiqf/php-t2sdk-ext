@@ -50,7 +50,6 @@ extern zend_module_entry t2sdk_module_entry;
 #endif
 
 #include "source/t2connection.h"
-#include "source/CCa.h"
 #include <string.h>
 
 PHP_MINIT_FUNCTION(t2sdk);
