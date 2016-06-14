@@ -4,6 +4,9 @@
 extern CConnectionInterface *g_pConnection;
 extern CConnectionInterface *g_pConnectionHq;
 
+extern CBusiness g_szBusiness;
+extern CBusiness g_szBusinessHq;
+
 extern config T2NewConfig;
 extern connection T2NewConnection;
 extern packer T2NewPacker;
