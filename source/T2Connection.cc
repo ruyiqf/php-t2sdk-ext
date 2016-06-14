@@ -12,7 +12,7 @@ CBusiness g_szBusinessHq;
 typedef CConfigInterface* (*config)(); 
 typedef CConnectionInterface* (*connection)(CConfigInterface*); 
 typedef IF2Packer* (*packer)(int); 
-typedef IF2UnPacker* (*unpacker)(void *, unsigned int)
+typedef IF2UnPacker* (*unpacker)(void *, unsigned int);
 typedef IBizMessage* (*biz_message)();
 config T2NewConfig;
 connection T2NewConnection;
