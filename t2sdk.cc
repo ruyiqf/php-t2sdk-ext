@@ -161,7 +161,7 @@ PHP_METHOD(T2Connection, p_login)
 
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
-        ret = t2connection->login();
+        t2connection->login();
     }
 }
 
