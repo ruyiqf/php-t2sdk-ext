@@ -82,7 +82,7 @@ PHP_FUNCTION(confirm_t2sdk_compiled); /* For testing, remove later. */
    examples in any other php module directory.
 */
 
-extern ZEND_DECLARE_MODULE_GLOBALS(t2sdk);
+//extern ZEND_DECLARE_MODULE_GLOBALS(t2sdk);
 
 
 #ifdef ZTS
