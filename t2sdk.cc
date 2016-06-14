@@ -127,7 +127,7 @@ PHP_METHOD(T2Connection, p_connect)
     bool ret = false;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
-        ret = t2connection->connect(error);
+        ret = t2connection->connect(&error);
     }
 
     RETURN_BOOL(ret);

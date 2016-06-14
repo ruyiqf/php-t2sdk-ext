@@ -227,7 +227,7 @@ bool T2Connection::connect(char * &error)
     // 创建自定义类CCallback的对象（在初始化连接对象时需传递此对象，请看下面代码）
     CCallback szCallback;
     
-    int iRet = 0, iSystemNo = 0;
+    int iRet = 0;
     
     //初始化连接对象，返回0表示初始化成功，注意此时并没开始连接服务器
     if (/*(0 == (iRet = g_pConnection->CreateEx(&szCallback)))*/(0 == (iRet = g_pConnection->Create2BizMsg(&szCallback))))
