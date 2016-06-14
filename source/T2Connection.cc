@@ -264,7 +264,7 @@ void T2Connection::login()
 {
     puts("login login");
     CConfigInterface* config = g_szBusiness.GetConfig();
-    const char * server = config->GetString("t2sdk", "servers");
+    const char * server = config->GetString("t2sdk", "servers", "11");
     char * mm = new char[20];
     strcpy(mm, server);
     puts(mm);
