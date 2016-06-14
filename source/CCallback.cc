@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "CCallback.h"
+#include <typeinfo>
 ////////////////////////////////
 
 //int g_iSystemNo = -1;
