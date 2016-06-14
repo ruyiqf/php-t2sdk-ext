@@ -2,9 +2,9 @@
 #define T2SDK_T2CONNECTION_H
 
 #include <Include/t2sdk_interface.h>
+#include "php_t2sdk.h"
 #include "source/CCallback.h"
 #include "source/t2sdk_struck.h"
-#include "php_t2sdk.h"
 #include <dlfcn.h> 
 
 typedef CConfigInterface* (*config)(); 
@@ -26,6 +26,7 @@ private:
     char *lib_t2sdk_file;
     CConfigInterface * lpConfig;
     int iSystemNo;
+    CBusiness g_szBusiness;
 };
 
 #endif /* T2SDK_T2CONNECTION_H */
