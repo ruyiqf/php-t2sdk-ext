@@ -4159,7 +4159,6 @@ if test "$PHP_T2SDK" != "no"; then
   
       
                       
-
 	
   if test -z "$php_cxx_done"; then
     ac_ext=cpp
@@ -4568,7 +4567,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 	
   PHP_VAR_SUBST="$PHP_VAR_SUBST T2SDK_SHARED_LIBADD"
 
-    
+  
   
   case stdc++ in
   c|c_r|pthread*) ;;
@@ -4619,7 +4618,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
   old_IFS=$IFS
-  for ac_src in t2sdk.cc demo.cc; do
+  for ac_src in t2sdk.cc source/T2Connection.cc source/CCallback.cc; do
   
       IFS=.
       set $ac_src
@@ -4668,7 +4667,7 @@ EOF
 
 
   old_IFS=$IFS
-  for ac_src in t2sdk.cc demo.cc; do
+  for ac_src in t2sdk.cc source/T2Connection.cc source/CCallback.cc; do
   
       IFS=.
       set $ac_src
@@ -4798,7 +4797,7 @@ _ACEOF
 
 
   old_IFS=$IFS
-  for ac_src in t2sdk.cc demo.cc; do
+  for ac_src in t2sdk.cc source/T2Connection.cc source/CCallback.cc; do
   
       IFS=.
       set $ac_src
@@ -4844,7 +4843,7 @@ EOF
 
 
   old_IFS=$IFS
-  for ac_src in t2sdk.cc demo.cc; do
+  for ac_src in t2sdk.cc source/T2Connection.cc source/CCallback.cc; do
   
       IFS=.
       set $ac_src

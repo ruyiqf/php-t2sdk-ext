@@ -123,15 +123,53 @@ PHP_METHOD(T2Connection, p_connect)
     //     RETURN_NULL();
     // }
 
+    char *error;
+    bool ret = false;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
-        t2connection->connect();
+        ret = t2connection->connect(error);
+    }
+
+    RETURN_BOOL(ret);
+}
+
+PHP_METHOD(T2Connection, p_disconnect)
+{
+	T2Connection *t2connection;
+    t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
+        getThis() TSRMLS_CC);
+
+    // if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name) == FAILURE) {
+    //     RETURN_NULL();
+    // }
+
+    t2connection = obj->t2connection;
+    if (t2connection != NULL) {
+        t2connection->disconnect();
+    }
+}
+
+PHP_METHOD(T2Connection, p_login)
+{
+	T2Connection *t2connection;
+    t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
+        getThis() TSRMLS_CC);
+
+    // if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name) == FAILURE) {
+    //     RETURN_NULL();
+    // }
+
+    t2connection = obj->t2connection;
+    if (t2connection != NULL) {
+        ret = t2connection->login();
     }
 }
 
 zend_function_entry t2connection_methods[] = {
     PHP_ME(T2Connection,  __construct,     NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     PHP_ME(T2Connection,  p_connect,  NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(T2Connection,  p_disconnect,  NULL, ZEND_ACC_PUBLIC)
+
     {NULL, NULL, NULL}
 };
 

@@ -12,7 +12,7 @@ ZEND_EXT_TYPE = zend_extension
 RE2C = exit 0;
 AWK = awk
 T2SDK_SHARED_LIBADD = -lstdc++
-shared_objects_t2sdk = t2sdk.lo demo.lo
+shared_objects_t2sdk = t2sdk.lo source/T2Connection.lo source/CCallback.lo
 PHP_PECL_EXTENSION = t2sdk
 PHP_MODULES = $(phplibdir)/t2sdk.la
 PHP_ZEND_EX =
@@ -179,8 +179,10 @@ distclean: clean
 .NOEXPORT:
 t2sdk.lo: /Users/caizixin/source/php-t2sdk-ext/t2sdk.cc
 	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/Users/caizixin/source/php-t2sdk-ext $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /Users/caizixin/source/php-t2sdk-ext/t2sdk.cc -o t2sdk.lo 
-demo.lo: /Users/caizixin/source/php-t2sdk-ext/demo.cc
-	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/Users/caizixin/source/php-t2sdk-ext $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /Users/caizixin/source/php-t2sdk-ext/demo.cc -o demo.lo 
+source/T2Connection.lo: /Users/caizixin/source/php-t2sdk-ext/source/T2Connection.cc
+	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/Users/caizixin/source/php-t2sdk-ext $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /Users/caizixin/source/php-t2sdk-ext/source/T2Connection.cc -o source/T2Connection.lo 
+source/CCallback.lo: /Users/caizixin/source/php-t2sdk-ext/source/CCallback.cc
+	$(LIBTOOL) --mode=compile $(CXX)  -I. -I/Users/caizixin/source/php-t2sdk-ext $(COMMON_FLAGS) $(CXXFLAGS_CLEAN) $(EXTRA_CXXFLAGS)  -c /Users/caizixin/source/php-t2sdk-ext/source/CCallback.cc -o source/CCallback.lo 
 $(phplibdir)/t2sdk.la: ./t2sdk.la
 	$(LIBTOOL) --mode=install cp ./t2sdk.la $(phplibdir)
 
