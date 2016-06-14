@@ -46,6 +46,7 @@ zend_object_value t2connection_create_handler(zend_class_entry *type TSRMLS_DC)
 PHP_METHOD(T2Connection, __construct)
 {
 	char *ini_file;
+	char *lib_t2sdk_file;
 	// long maxGear;
     T2Connection *t2connection = NULL;
     zval *object = getThis();

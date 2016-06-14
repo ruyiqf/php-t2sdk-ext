@@ -66,8 +66,8 @@ PHP_FUNCTION(confirm_t2sdk_compiled); /* For testing, remove later. */
 */
 ZEND_BEGIN_MODULE_GLOBALS(t2sdk)
   
-  CConnectionInterface *g_pConnection = NULL;
-  CConnectionInterface *g_pConnectionHq = NULL;
+  CConnectionInterface *g_pConnection;
+  CConnectionInterface *g_pConnectionHq;
 
   config T2NewConfig;
   connection T2NewConnection;
