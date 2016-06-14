@@ -37,6 +37,11 @@ public:
         memset(m_fund_account, 0, USERTOKENLEN);
     }
 
+    CConfigInterface* getConfig()
+    {
+        return m_pConfig;
+    }
+
     int DealReceive();
     int Subscribe(int issue_type); ///发布类型
     int CancelSub(int issueType);
