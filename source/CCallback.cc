@@ -10,9 +10,13 @@
 typedef CConfigInterface* (*config)(); 
 typedef CConnectionInterface* (*connection)(CConfigInterface*); 
 typedef IF2Packer* (*packer)(int); 
+typedef IF2UnPacker* (*unpacker)(void *, unsigned int)
+typedef IBizMessage* (*biz_message)();
 extern config T2NewConfig;
 extern connection T2NewConnection;
 extern packer T2NewPacker;
+extern unpacker T2NewUnPacker;
+extern biz_message T2NewBizMessage;
 
 void ShowPacket(int iIssueType, IF2UnPacker *pUnPacker)
 {
@@ -239,7 +243,7 @@ int CBusiness::SecuEntrust(int iSystemNo)
 
         int hSend = 0;
     
-        IBizMessage* lpBizMessage = NewBizMessage();
+        IBizMessage* lpBizMessage = T2NewBizMessage();
         lpBizMessage->AddRef();
         
         
@@ -261,7 +265,7 @@ int CBusiness::SecuEntrust(int iSystemNo)
         
         
         ///获取版本为2类型的pack打包器
-        IF2Packer *pPacker = NewPacker(2);
+        IF2Packer *pPacker = T2NewPacker(2);
         if(!pPacker)
         {
             printf("取打包器失败!\r\n");
@@ -388,7 +392,7 @@ int CBusiness::ClientStkacctQry(int iSystemNo)
 
         int hSend = 0;
     
-        IBizMessage* lpBizMessage = NewBizMessage();
+        IBizMessage* lpBizMessage = T2NewBizMessage();
         lpBizMessage->AddRef();
         
         
@@ -409,7 +413,7 @@ int CBusiness::ClientStkacctQry(int iSystemNo)
         
         
         ///获取版本为2类型的pack打包器
-        IF2Packer *pPacker = NewPacker(2);
+        IF2Packer *pPacker = T2NewPacker(2);
         if(!pPacker)
         {
             printf("取打包器失败!\r\n");
