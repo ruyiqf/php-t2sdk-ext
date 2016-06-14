@@ -1,7 +1,4 @@
 #include "t2connection.h"
-#include <Include/t2sdk_interface.h>
-#include "source/CCallback.h"
-#include <dlfcn.h> 
 
 // 全局连接对象
 CConnectionInterface *g_pConnection = NULL;

@@ -1,6 +1,9 @@
 #ifndef T2SDK_T2CONNECTION_H
 #define T2SDK_T2CONNECTION_H
 
+#include <Include/t2sdk_interface.h>
+#include "source/CCallback.h"
+#include <dlfcn.h> 
 
 typedef CConfigInterface* (*config)(); 
 typedef CConnectionInterface* (*connection)(CConfigInterface*); 

@@ -1,6 +1,9 @@
 #ifndef T2SDK_CCALBACK_H
 #define T2SDK_CCALBACK_H
 #include <Include/t2sdk_interface.h>
+#include <stdio.h>
+#include "source/t2connection.h"
+#include <typeinfo>
 
 //宏
 #define SYNCSEND        0   ///同步发送

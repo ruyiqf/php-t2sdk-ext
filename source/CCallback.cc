@@ -1,7 +1,5 @@
-#include <stdio.h>
 #include "source/CCallback.h"
-#include "source/t2connection.h"
-#include <typeinfo>
+
 ////////////////////////////////
 
 //int g_iSystemNo = -1;
