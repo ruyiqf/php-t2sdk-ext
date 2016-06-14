@@ -159,8 +159,6 @@ void T2Connection::connect()
     g_pConnection->Close();
     g_pConnection->Release();
     lpConfig->Release();
-    
-    return 0;
 }
 
 // void T2Connection::connect()
