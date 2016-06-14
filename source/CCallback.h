@@ -14,9 +14,6 @@
 #define ISSUE_TYPE_REALTIME_SECU    12          ///证券成交类型
 
 //////////////////////////////////////////////////////////////
-// 全局变量
-extern CConnectionInterface *g_pConnection;
-extern CConnectionInterface *g_pConnectionHq;
 
 void ShowPacket(int iIssueType, IF2UnPacker *pUnPacker);
 
