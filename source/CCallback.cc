@@ -8,8 +8,8 @@
 //打印应答包
 //
 
-extern CConnectionInterface *g_pConnection;
-extern CConnectionInterface *g_pConnectionHq;
+// extern CConnectionInterface *T2SDK_G(g_pConnection);
+// extern CConnectionInterface *T2SDK_G(g_pConnection)Hq;
 
 extern config T2NewConfig;
 extern connection T2NewConnection;
@@ -158,10 +158,10 @@ int CBusiness::Login()
     lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
     
     ///同步发送登录请求，应答在RecvBizEx中处理。
-    /*(hSend = g_pConnection->SendBizEx(331100,pPacker,NULL,SYNCSEND,0,0,1,NULL)*/
-    if((hSend = g_pConnection->SendBizMsg(lpBizMessage,0)) < 0)
+    /*(hSend = T2SDK_G(g_pConnection)->SendBizEx(331100,pPacker,NULL,SYNCSEND,0,0,1,NULL)*/
+    if((hSend = T2SDK_G(g_pConnection)->SendBizMsg(lpBizMessage,0)) < 0)
     {
-        printf("发送功能331100失败, 错误号: %d, 原因: %s!\r\n", hSend, g_pConnection->GetErrorMsg(hSend));
+        printf("发送功能331100失败, 错误号: %d, 原因: %s!\r\n", hSend, T2SDK_G(g_pConnection)->GetErrorMsg(hSend));
         goto EXIT;
     }
 
@@ -169,16 +169,16 @@ int CBusiness::Login()
     
 
 
-    //iRet = g_pConnection->RecvBizEx(hSend, (void **)&pUnPacker, &pRetData, 1000);
+    //iRet = T2SDK_G(g_pConnection)->RecvBizEx(hSend, (void **)&pUnPacker, &pRetData, 1000);
     //int a;  int &ra=a;  //定义引用ra,它是变量a的引用，即别名
 
     puts("before RecvBizMsg");
-    hSend = g_pConnection->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
+    hSend = T2SDK_G(g_pConnection)->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
         puts("after RecvBizMsg");
 
     if(hSend != 0)
     {
-        printf("接收功能331100失败, 错误号: %d, 原因: %s!\r\n", hSend, g_pConnection->GetErrorMsg(hSend));
+        printf("接收功能331100失败, 错误号: %d, 原因: %s!\r\n", hSend, T2SDK_G(g_pConnection)->GetErrorMsg(hSend));
         goto EXIT;
     }else{
 
@@ -330,20 +330,20 @@ int CBusiness::SecuEntrust(int iSystemNo)
     
         
         ///同步发送资金查询请求，应答在RecvBizEx中处理。
-        if(/*(hSend = g_pConnection->SendBizEx(332255,pPacker,NULL,SYNCSEND,iSystemNo,0,1,NULL)) < 0*/(hSend = g_pConnection->SendBizMsg(lpBizMessage,0)) < 0)
+        if(/*(hSend = T2SDK_G(g_pConnection)->SendBizEx(332255,pPacker,NULL,SYNCSEND,iSystemNo,0,1,NULL)) < 0*/(hSend = T2SDK_G(g_pConnection)->SendBizMsg(lpBizMessage,0)) < 0)
         {
-            printf("发送功能333002失败, 错误号: %d, 原因: %s!\r\n", hSend, g_pConnection->GetErrorMsg(hSend));
+            printf("发送功能333002失败, 错误号: %d, 原因: %s!\r\n", hSend, T2SDK_G(g_pConnection)->GetErrorMsg(hSend));
             hSend=-2;
             goto EXIT;
         }
         
         printf("发送功能333002成功, 返回接收句柄: %d!\r\n", hSend);
         
-        //iRet = g_pConnection->RecvBizEx(hSend,(void **)&pUnPacker,&pRetData,1000);
-        hSend = g_pConnection->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
+        //iRet = T2SDK_G(g_pConnection)->RecvBizEx(hSend,(void **)&pUnPacker,&pRetData,1000);
+        hSend = T2SDK_G(g_pConnection)->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
         if(hSend != 0)
         {
-            printf("接收功能333002失败, 错误号: %d, 原因: %s!\r\n", hSend, g_pConnection->GetErrorMsg(hSend));
+            printf("接收功能333002失败, 错误号: %d, 原因: %s!\r\n", hSend, T2SDK_G(g_pConnection)->GetErrorMsg(hSend));
             goto EXIT;
         }else{
             int iReturnCode = lpBizMessageRecv->GetReturnCode();
@@ -465,20 +465,20 @@ int CBusiness::ClientStkacctQry(int iSystemNo)
     
         
         ///同步发送资金查询请求，应答在RecvBizEx中处理。
-        if(/*(hSend = g_pConnection->SendBizEx(332255,pPacker,NULL,SYNCSEND,iSystemNo,0,1,NULL)) < 0*/(hSend = g_pConnection->SendBizMsg(lpBizMessage,0)) < 0)
+        if(/*(hSend = T2SDK_G(g_pConnection)->SendBizEx(332255,pPacker,NULL,SYNCSEND,iSystemNo,0,1,NULL)) < 0*/(hSend = T2SDK_G(g_pConnection)->SendBizMsg(lpBizMessage,0)) < 0)
         {
-            printf("发送功能331300失败, 错误号: %d, 原因: %s!\r\n", hSend, g_pConnection->GetErrorMsg(hSend));
+            printf("发送功能331300失败, 错误号: %d, 原因: %s!\r\n", hSend, T2SDK_G(g_pConnection)->GetErrorMsg(hSend));
             hSend=-2;
             goto EXIT;
         }
         
         printf("发送功能333002成功, 返回接收句柄: %d!\r\n", hSend);
         
-        //iRet = g_pConnection->RecvBizEx(hSend,(void **)&pUnPacker,&pRetData,1000);
-        hSend = g_pConnection->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
+        //iRet = T2SDK_G(g_pConnection)->RecvBizEx(hSend,(void **)&pUnPacker,&pRetData,1000);
+        hSend = T2SDK_G(g_pConnection)->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
         if(hSend != 0)
         {
-            printf("接收功能331300失败, 错误号: %d, 原因: %s!\r\n", hSend, g_pConnection->GetErrorMsg(hSend));
+            printf("接收功能331300失败, 错误号: %d, 原因: %s!\r\n", hSend, T2SDK_G(g_pConnection)->GetErrorMsg(hSend));
             goto EXIT;
         }else{
             int iReturnCode = lpBizMessageRecv->GetReturnCode();
@@ -591,20 +591,20 @@ int CBusiness::SecuStockQry(int iSystemNo /* = 2 */)
     
         
         ///同步发送资金查询请求，应答在RecvBizEx中处理。
-        if(/*(hSend = g_pConnection->SendBizEx(332255,pPacker,NULL,SYNCSEND,iSystemNo,0,1,NULL)) < 0*/(hSend = g_pConnection->SendBizMsg(lpBizMessage,0)) < 0)
+        if(/*(hSend = T2SDK_G(g_pConnection)->SendBizEx(332255,pPacker,NULL,SYNCSEND,iSystemNo,0,1,NULL)) < 0*/(hSend = T2SDK_G(g_pConnection)->SendBizMsg(lpBizMessage,0)) < 0)
         {
-            printf("发送功能333104失败, 错误号: %d, 原因: %s!\r\n", hSend, g_pConnection->GetErrorMsg(hSend));
+            printf("发送功能333104失败, 错误号: %d, 原因: %s!\r\n", hSend, T2SDK_G(g_pConnection)->GetErrorMsg(hSend));
             hSend=-2;
             goto EXIT;
         }
         
         printf("发送功能333104成功, 返回接收句柄: %d!\r\n", hSend);
         
-        //iRet = g_pConnection->RecvBizEx(hSend,(void **)&pUnPacker,&pRetData,1000);
-        hSend = g_pConnection->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
+        //iRet = T2SDK_G(g_pConnection)->RecvBizEx(hSend,(void **)&pUnPacker,&pRetData,1000);
+        hSend = T2SDK_G(g_pConnection)->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
         if(hSend != 0)
         {
-            printf("接收功能333104失败, 错误号: %d, 原因: %s!\r\n", hSend, g_pConnection->GetErrorMsg(hSend));
+            printf("接收功能333104失败, 错误号: %d, 原因: %s!\r\n", hSend, T2SDK_G(g_pConnection)->GetErrorMsg(hSend));
             goto EXIT;
         }else{
             int iReturnCode = lpBizMessageRecv->GetReturnCode();
@@ -729,9 +729,9 @@ int CBusiness::funcSubscribePush(int nFUnctionNo, int nIssueType){
     
         
         ///同步发送资金查询请求，应答在RecvBizEx中处理。
-        if(/*(hSend = g_pConnection->SendBizEx(332255,pPacker,NULL,SYNCSEND,iSystemNo,0,1,NULL)) < 0*/(hSend = g_pConnection->SendBizMsg(lpBizMessage,1)) < 0)
+        if(/*(hSend = T2SDK_G(g_pConnection)->SendBizEx(332255,pPacker,NULL,SYNCSEND,iSystemNo,0,1,NULL)) < 0*/(hSend = T2SDK_G(g_pConnection)->SendBizMsg(lpBizMessage,1)) < 0)
         {
-            printf("发送功能%d 消息类型%d 失败, 错误号: %d, 原因: %s!\r\n", nFUnctionNo, nIssueType, hSend, g_pConnection->GetErrorMsg(hSend));
+            printf("发送功能%d 消息类型%d 失败, 错误号: %d, 原因: %s!\r\n", nFUnctionNo, nIssueType, hSend, T2SDK_G(g_pConnection)->GetErrorMsg(hSend));
             hSend=-2;
             goto EXIT;
 
@@ -739,11 +739,11 @@ int CBusiness::funcSubscribePush(int nFUnctionNo, int nIssueType){
         
         printf("发送功能%d 消息类型%d 成功, 返回接收句柄: %d!\r\n", nFUnctionNo, nIssueType, hSend);
         
-        //iRet = g_pConnection->RecvBizEx(hSend,(void **)&pUnPacker,&pRetData,1000);
-/*      hSend = g_pConnection->RecvBizMsg(hSend,&lpBizMessageRecv,5000);
+        //iRet = T2SDK_G(g_pConnection)->RecvBizEx(hSend,(void **)&pUnPacker,&pRetData,1000);
+/*      hSend = T2SDK_G(g_pConnection)->RecvBizMsg(hSend,&lpBizMessageRecv,5000);
         if(hSend != 0)
         {
-            printf("接收功能%d 消息类型%d 失败, 错误号: %d, 原因: %s!\r\n", nFUnctionNo, nIssueType,hSend, g_pConnection->GetErrorMsg(hSend));
+            printf("接收功能%d 消息类型%d 失败, 错误号: %d, 原因: %s!\r\n", nFUnctionNo, nIssueType,hSend, T2SDK_G(g_pConnection)->GetErrorMsg(hSend));
             goto EXIT;
         }else{
             int iReturnCode = lpBizMessageRecv->GetReturnCode();
@@ -859,20 +859,20 @@ int CBusiness::ClientFundAllQry(int iSystemNo /* = 2 */)
 
 
 ///同步发送资金查询请求，应答在RecvBizEx中处理。
-        if(/*(hSend = g_pConnection->SendBizEx(332255,pPacker,NULL,SYNCSEND,iSystemNo,0,1,NULL)) < 0*/(hSend = g_pConnection->SendBizMsg(lpBizMessage,0)) < 0)
+        if(/*(hSend = T2SDK_G(g_pConnection)->SendBizEx(332255,pPacker,NULL,SYNCSEND,iSystemNo,0,1,NULL)) < 0*/(hSend = T2SDK_G(g_pConnection)->SendBizMsg(lpBizMessage,0)) < 0)
         {
-            printf("发送功能332255失败, 错误号: %d, 原因: %s!\r\n", hSend, g_pConnection->GetErrorMsg(hSend));
+            printf("发送功能332255失败, 错误号: %d, 原因: %s!\r\n", hSend, T2SDK_G(g_pConnection)->GetErrorMsg(hSend));
             hSend=-2;
             goto EXIT;
         }
         
         printf("发送功能332255成功, 返回接收句柄: %d!\r\n", hSend);
         
-        //iRet = g_pConnection->RecvBizEx(hSend,(void **)&pUnPacker,&pRetData,1000);
-        hSend = g_pConnection->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
+        //iRet = T2SDK_G(g_pConnection)->RecvBizEx(hSend,(void **)&pUnPacker,&pRetData,1000);
+        hSend = T2SDK_G(g_pConnection)->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
         if(hSend != 0)
         {
-            printf("接收功能332255失败, 错误号: %d, 原因: %s!\r\n", hSend, g_pConnection->GetErrorMsg(hSend));
+            printf("接收功能332255失败, 错误号: %d, 原因: %s!\r\n", hSend, T2SDK_G(g_pConnection)->GetErrorMsg(hSend));
             goto EXIT;
         }else{
             int iReturnCode = lpBizMessageRecv->GetReturnCode();
@@ -920,9 +920,9 @@ int CBusiness::ClientFundAllQry(int iSystemNo /* = 2 */)
     
 /*  原始代码
 ///同步发送资金查询请求，应答在RecvBizEx中处理。
-    if((hSend = g_pConnection->SendBizMsg(lpBizMessage,1)) < 0)
+    if((hSend = T2SDK_G(g_pConnection)->SendBizMsg(lpBizMessage,1)) < 0)
     {
-        printf("发送功能332255失败, 错误号: %d, 原因: %s!\r\n", hSend, g_pConnection->GetErrorMsg(hSend));
+        printf("发送功能332255失败, 错误号: %d, 原因: %s!\r\n", hSend, T2SDK_G(g_pConnection)->GetErrorMsg(hSend));
         hSend=-2;
         goto EXIT;
     }
@@ -1112,8 +1112,8 @@ void CCallback::OnReceivedBizMsg(CConnectionInterface *lpConnection, int hSend, 
 ////////////////////////////////////////////////////////////////
 //main
 // 全局连接对象
-// CConnectionInterface *g_pConnection = NULL;
-// CConnectionInterface *g_pConnectionHq = NULL;
+// CConnectionInterface *T2SDK_G(g_pConnection) = NULL;
+// CConnectionInterface *T2SDK_G(g_pConnection)Hq = NULL;
 
 // CBusiness g_szBusiness;
 // CBusiness g_szBusinessHq;
@@ -1166,9 +1166,9 @@ void CCallback::OnReceivedBizMsg(CConnectionInterface *lpConnection, int hSend, 
 
 //     g_szBusiness.SetConfig(lpConfig);
 //   //通过T2SDK的引出函数，来获取一个新的CConnection对象指针
-//     g_pConnection = T2NewConnection(lpConfig);
+//     T2SDK_G(g_pConnection) = T2NewConnection(lpConfig);
     
-//     g_pConnection->AddRef();
+//     T2SDK_G(g_pConnection)->AddRef();
     
 //     // 创建自定义类CCallback的对象（在初始化连接对象时需传递此对象，请看下面代码）
 //     CCallback szCallback;
@@ -1176,13 +1176,13 @@ void CCallback::OnReceivedBizMsg(CConnectionInterface *lpConnection, int hSend, 
 //     int iRet = 0, iSystemNo = 0;
     
 //     //初始化连接对象，返回0表示初始化成功，注意此时并没开始连接服务器
-//     if (/*(0 == (iRet = g_pConnection->CreateEx(&szCallback)))*/(0 == (iRet = g_pConnection->Create2BizMsg(&szCallback))))
+//     if (/*(0 == (iRet = T2SDK_G(g_pConnection)->CreateEx(&szCallback)))*/(0 == (iRet = T2SDK_G(g_pConnection)->Create2BizMsg(&szCallback))))
 //     {
 //             // 开启断开重连线程，由于在非断开情况下，该线程处于Wait状态，故对应用性能影响甚微
 //         //正式开始连接，参数5000为超时参数，单位毫秒
-//         if (iRet = g_pConnection->Connect(5000))
+//         if (iRet = T2SDK_G(g_pConnection)->Connect(5000))
 //         {
-//                 printf("连接服务器失败, 错误号: %d, 原因: %s!\r\n", iRet, g_pConnection->GetErrorMsg(iRet));
+//                 printf("连接服务器失败, 错误号: %d, 原因: %s!\r\n", iRet, T2SDK_G(g_pConnection)->GetErrorMsg(iRet));
 //         }   
 //         else
 //         {
@@ -1234,15 +1234,15 @@ void CCallback::OnReceivedBizMsg(CConnectionInterface *lpConnection, int hSend, 
 //     else
 //     {
 //         if(0 != iRet)
-//           puts(g_pConnection->GetErrorMsg(iRet));
+//           puts(T2SDK_G(g_pConnection)->GetErrorMsg(iRet));
 //     }
     
 //     //通过getchar阻塞线程，等待服务端应答包到达
 //     printf("按任意键出退!\r\n");
 //     getchar();
     
-//     g_pConnection->Close();
-//     g_pConnection->Release();
+//     T2SDK_G(g_pConnection)->Close();
+//     T2SDK_G(g_pConnection)->Release();
 //     lpConfig->Release();
     
 //     return 0;

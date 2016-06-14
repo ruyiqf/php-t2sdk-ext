@@ -65,15 +65,10 @@ PHP_FUNCTION(confirm_t2sdk_compiled); /* For testing, remove later. */
   and END macros here:     
 */
 ZEND_BEGIN_MODULE_GLOBALS(t2sdk)
-  
-  CConnectionInterface *g_pConnection;
-  CConnectionInterface *g_pConnectionHq;
 
-  config T2NewConfig;
-  connection T2NewConnection;
-  packer T2NewPacker;
-  unpacker T2NewUnPacker;
-  biz_message T2NewBizMessage;
+CConnectionInterface *g_pConnection;
+CConnectionInterface *g_pConnectionHq;
+
 ZEND_END_MODULE_GLOBALS(t2sdk)
 
 
