@@ -6,6 +6,13 @@
 //bool g_bLogin = false;
 //char g_cUserToken[USERTOKENLEN] = {0};
 //打印应答包
+//
+typedef CConfigInterface* (*config)(); 
+typedef CConnectionInterface* (*connection)(CConfigInterface*); 
+typedef IF2Packer* (*packer)(int); 
+extern onfig T2NewConfig;
+extern connection T2NewConnection;
+extern packer T2NewPacker;
 
 void ShowPacket(int iIssueType, IF2UnPacker *pUnPacker)
 {
