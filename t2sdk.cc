@@ -9,6 +9,9 @@ char * lib_t2sdk_file;
 CConnectionInterface *g_pConnection = NULL;
 CConnectionInterface *g_pConnectionHq = NULL;
 
+CBusiness g_szBusiness;
+CBusiness g_szBusinessHq;
+
 config T2NewConfig;
 connection T2NewConnection;
 packer T2NewPacker;
