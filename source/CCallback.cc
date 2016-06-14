@@ -93,10 +93,11 @@ int CBusiness::Login()
 {
     int hSend = 0, iSystemNo = -1;
 
-
+    puts("begin login");
     IBizMessage* lpBizMessage = T2NewBizMessage();
     lpBizMessage->AddRef();
 
+    puts("new biz_message");
 
     IBizMessage* lpBizMessageRecv = NULL;
 
@@ -757,7 +758,7 @@ int CBusiness::funcSubscribePush(int nFUnctionNo, int nIssueType){
                 puts("业务操作成功");
                 int iLen = 0;
                 const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
-                IF2UnPacker * lpUnPacker = NewUnPacker((void *)lpBuffer,iLen);
+                IF2UnPacker * lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
                 ShowPacket(0,lpUnPacker);
             }
     
@@ -786,7 +787,7 @@ int CBusiness::ClientFundAllQry(int iSystemNo /* = 2 */)
     printf("--------------------------->m_cUserToken[%s]\n",m_cUserToken);
     int hSend = 0;
 
-    IBizMessage* lpBizMessage = NewBizMessage();
+    IBizMessage* lpBizMessage = T2NewBizMessage();
     lpBizMessage->AddRef();
     
     
@@ -808,7 +809,7 @@ int CBusiness::ClientFundAllQry(int iSystemNo /* = 2 */)
     
     
     ///获取版本为2类型的pack打包器
-    IF2Packer *pPacker = NewPacker(2);
+    IF2Packer *pPacker = T2NewPacker(2);
     if(!pPacker)
     {
         printf("取打包器失败!\r\n");
@@ -886,7 +887,7 @@ int CBusiness::ClientFundAllQry(int iSystemNo /* = 2 */)
                 puts("业务操作成功");
                 int iLen = 0;
                 const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
-                IF2UnPacker * lpUnPacker = NewUnPacker((void *)lpBuffer,iLen);
+                IF2UnPacker * lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
                 ShowPacket(0,lpUnPacker);
             }
     
@@ -1063,7 +1064,7 @@ void CCallback::OnReceivedBizMsg(CConnectionInterface *lpConnection, int hSend, 
              //puts("业务操作成功");
              int iLen = 0;
              const void * lpBuffer = lpMsg->GetKeyInfo(iLen);
-             IF2UnPacker * lpUnPacker = NewUnPacker((void *)lpBuffer,iLen);
+             IF2UnPacker * lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
             int iIssueType =lpMsg->GetIssueType();
              if(23 == iIssueType && 620003 == Func){
                 printf("------------委托回报----------\n");
@@ -1088,14 +1089,14 @@ void CCallback::OnReceivedBizMsg(CConnectionInterface *lpConnection, int hSend, 
              puts("业务操作成功");
              int iLen = 0;
              const void * lpBuffer = lpMsg->GetContent(iLen);
-             IF2UnPacker * lpUnPacker = NewUnPacker((void *)lpBuffer,iLen);
+             IF2UnPacker * lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
              ShowPacket(0,lpUnPacker);
             
              if (null != lpUnPacker)
                 ShowPacket(0,lpUnPacker);
              else {
-                //error happen within NewUnPacker;
-                 printf("error happen within NewUnpacker\n");
+                //error happen within T2NewUnPacker;
+                 printf("error happen within T2NewUnpacker\n");
              }
              */
             
@@ -1120,7 +1121,7 @@ void CCallback::OnReceivedBizMsg(CConnectionInterface *lpConnection, int hSend, 
 //     //此对象在创建连接对象时被传递，用于配置所创建的连接对象的各种属性（比如服务器IP地址、安全模式等）
 //     //值得注意的是，在向配置对象设置配置信息时，配置信息既可以从ini文件中载入，
 //     //也可以在程序代码中设定，或者是2者的混合，如果对同一个配置项设不同的值，则以最近一次设置为准
-//     CConfigInterface * lpConfig = NewConfig();
+//     CConfigInterface * lpConfig = T2NewConfig();
 
 //     //通过T2SDK的引出函数NewXXXX返回的对象，需要调用对象的Release方法释放，而不能直接用delete
 //     //因为t2sdk.dll和调用程序可能是由不同的编译器、编译模式生成，delete可能会导致异常
@@ -1161,7 +1162,7 @@ void CCallback::OnReceivedBizMsg(CConnectionInterface *lpConnection, int hSend, 
 
 //     g_szBusiness.SetConfig(lpConfig);
 //   //通过T2SDK的引出函数，来获取一个新的CConnection对象指针
-//     g_pConnection = NewConnection(lpConfig);
+//     g_pConnection = T2NewConnection(lpConfig);
     
 //     g_pConnection->AddRef();
     
