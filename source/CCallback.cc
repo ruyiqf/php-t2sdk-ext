@@ -7,6 +7,10 @@
 //char g_cUserToken[USERTOKENLEN] = {0};
 //打印应答包
 //
+
+extern CConnectionInterface *g_pConnection;
+extern CConnectionInterface *g_pConnectionHq;
+
 extern config T2NewConfig;
 extern connection T2NewConnection;
 extern packer T2NewPacker;
@@ -110,6 +114,9 @@ int CBusiness::Login()
     
     ///获取版本为2类型的pack打包器
     IF2Packer *pPacker = T2NewPacker(2);
+    puts("new packer 2");
+
+
     if(!pPacker)
     {
         printf("取打包器失败!\r\n");
