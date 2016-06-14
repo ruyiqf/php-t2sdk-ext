@@ -241,6 +241,7 @@ bool T2Connection::connect(char * &error)
         }   
         else
         {
+            iSystemNo = g_szBusiness.Login();
             return true;
         }   
     }
