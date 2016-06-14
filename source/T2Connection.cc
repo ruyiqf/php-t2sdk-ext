@@ -19,7 +19,7 @@ T2Connection::T2Connection(char* lib_t2sdk_file, char *ini_file)
     this->ini_file = ini_file;
 }
 
-void T2Connection::connect()
+void connect()
 {
     void *handle = dlopen(this->lib_t2sdk_file, RTLD_LAZY | RTLD_GLOBAL);
     char *error;

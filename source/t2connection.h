@@ -15,8 +15,8 @@ typedef IBizMessage* (*biz_message)();
 class T2Connection {
 public:
     T2Connection(char *lib_t2sdk_file, char *ini_file);
-    void connect();
-    bool connect(char *error);
+    //void connect();
+    bool connect(char * &error);
     void disconnect();
     void login();
 
