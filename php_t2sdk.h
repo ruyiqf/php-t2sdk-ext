@@ -60,6 +60,7 @@ PHP_MINFO_FUNCTION(t2sdk);
 
 PHP_FUNCTION(confirm_t2sdk_compiled); /* For testing, remove later. */
 
+extern ZEND_DECLARE_MODULE_GLOBALS(t2sdk);
 /* 
     Declare any global variables you may need between the BEGIN
   and END macros here:     
