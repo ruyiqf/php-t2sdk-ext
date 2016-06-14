@@ -172,7 +172,10 @@ int CBusiness::Login()
     //iRet = g_pConnection->RecvBizEx(hSend, (void **)&pUnPacker, &pRetData, 1000);
     //int a;  int &ra=a;  //定义引用ra,它是变量a的引用，即别名
 
+    puts("before RecvBizMsg");
     hSend = g_pConnection->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
+        puts("after RecvBizMsg");
+
     if(hSend != 0)
     {
         printf("接收功能331100失败, 错误号: %d, 原因: %s!\r\n", hSend, g_pConnection->GetErrorMsg(hSend));
