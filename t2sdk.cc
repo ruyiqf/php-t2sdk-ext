@@ -4,6 +4,12 @@ ZEND_DECLARE_MODULE_GLOBALS(t2sdk);
 zend_class_entry *t2connection_ce;
 zend_object_handlers t2connection_object_handlers;
 
+config T2NewConfig;
+connection T2NewConnection;
+packer T2NewPacker;
+unpacker T2NewUnPacker;
+biz_message T2NewBizMessage;
+
 struct t2connection_object {
     zend_object std;
     T2Connection *t2connection;

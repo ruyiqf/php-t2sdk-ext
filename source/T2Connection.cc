@@ -10,8 +10,6 @@ extern packer T2NewPacker;
 extern unpacker T2NewUnPacker;
 extern biz_message T2NewBizMessage;
 
-extern CBusiness g_szBusiness;
-
 
 T2Connection::T2Connection(char* lib_t2sdk_file, char *ini_file)
 {
