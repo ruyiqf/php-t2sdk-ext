@@ -3,7 +3,6 @@
 
 #include <Include/t2sdk_interface.h>
 #include "source/CCallback.h"
-#include "php_t2sdk.h"
 #include "source/t2sdk_struck.h"
 #include <dlfcn.h> 
 
