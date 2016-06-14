@@ -69,6 +69,8 @@ ZEND_BEGIN_MODULE_GLOBALS(t2sdk)
 CConnectionInterface *g_pConnection;
 CConnectionInterface *g_pConnectionHq;
 
+CBusiness g_szBusiness;
+
 ZEND_END_MODULE_GLOBALS(t2sdk)
 
 

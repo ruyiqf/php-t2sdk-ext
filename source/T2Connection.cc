@@ -75,7 +75,7 @@ T2Connection::T2Connection(char* lib_t2sdk_file, char *ini_file)
 //     lpConfig->SetString("safe", "cert_pwd", "111111");
 //     */
 
-//     g_szBusiness.SetConfig(lpConfig);
+//     T2SDK_G(g_szBusiness).SetConfig(lpConfig);
 //   //通过T2SDK的引出函数，来获取一个新的CConnection对象指针
 //     T2SDK_G(g_pConnection) = T2NewConnection(lpConfig);
     
@@ -100,7 +100,7 @@ T2Connection::T2Connection(char* lib_t2sdk_file, char *ini_file)
 //             printf("连接服务器成功!\r\n");
 //             ////////////////////////////证券测试//////////////////////////////////////
 //             //Subscribe(12, 8113, "811300000008");      //发送订阅请求:成交主推 12
-//             iSystemNo = g_szBusiness.Login();
+//             iSystemNo = T2SDK_G(g_szBusiness).Login();
 //             if(iSystemNo >= 0)
 //             {
 //                 int chose = 0;
@@ -113,19 +113,19 @@ T2Connection::T2Connection(char* lib_t2sdk_file, char *ini_file)
 //                     switch (chose)
 //                     {
 
-//                         case 1: g_szBusiness.SecuEntrust(iSystemNo);
+//                         case 1: T2SDK_G(g_szBusiness).SecuEntrust(iSystemNo);
 //                                 printf("请按任意键显示主菜单!:\n");
 //                             break;
-//                         case 2: g_szBusiness.SecuStockQry(iSystemNo);
+//                         case 2: T2SDK_G(g_szBusiness).SecuStockQry(iSystemNo);
 //                                 printf("请按任意键显示主菜单!:\n");
 //                             break;
-//                         case 3: g_szBusiness.ClientFundAllQry(iSystemNo);
+//                         case 3: T2SDK_G(g_szBusiness).ClientFundAllQry(iSystemNo);
 //                                 printf("请按任意键显示主菜单!:\n");
 //                             break;
-//                         case 4: g_szBusiness.ClientStkacctQry(iSystemNo);
+//                         case 4: T2SDK_G(g_szBusiness).ClientStkacctQry(iSystemNo);
 //                                 printf("请按任意键显示主菜单!:\n");
 //                             break;
-//                         case 5:g_szBusiness.funcSubscribePush(620001, 23);
+//                         case 5:T2SDK_G(g_szBusiness).funcSubscribePush(620001, 23);
 //                                 printf("请按任意键显示主菜单!:\n");
 //                             break;
 //                         default:printf("您输入的操作不正确,请输入正确的操作!\n");
@@ -215,7 +215,7 @@ bool T2Connection::connect(char * &error)
     lpConfig->SetString("safe", "cert_pwd", "111111");
     */
 
-    g_szBusiness.SetConfig(lpConfig);
+    T2SDK_G(g_szBusiness).SetConfig(lpConfig);
   //通过T2SDK的引出函数，来获取一个新的CConnection对象指针
     T2SDK_G(g_pConnection) = T2NewConnection(lpConfig);
     
@@ -238,7 +238,7 @@ bool T2Connection::connect(char * &error)
         }   
         else
         {
-            iSystemNo = g_szBusiness.Login();
+            iSystemNo = T2SDK_G(g_szBusiness).Login();
             return true;
         }   
     }
@@ -263,13 +263,13 @@ void T2Connection::disconnect()
 void T2Connection::login()
 {
     puts("login login");
-    CConfigInterface* config = g_szBusiness.GetConfig();
+    CConfigInterface* config = T2SDK_G(g_szBusiness).GetConfig();
     const char * server = config->GetString("t2sdk", "servers", "11");
     char * mm = new char[20];
     strcpy(mm, server);
     puts(mm);
 
-    iSystemNo = g_szBusiness.Login();
+    iSystemNo = T2SDK_G(g_szBusiness).Login();
 }
 
 // void T2Connection::connect()
