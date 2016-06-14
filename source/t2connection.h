@@ -6,6 +6,8 @@
 #include "source/t2sdk_struck.h"
 #include <dlfcn.h> 
 
+CBusiness g_szBusiness;
+
 class T2Connection {
 public:
     T2Connection(char *lib_t2sdk_file, char *ini_file);
@@ -19,7 +21,6 @@ private:
     char *lib_t2sdk_file;
     CConfigInterface * lpConfig;
     int iSystemNo;
-    CBusiness g_szBusiness;
 };
 
 #endif /* T2SDK_T2CONNECTION_H */
