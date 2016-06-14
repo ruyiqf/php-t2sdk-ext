@@ -1,15 +1,14 @@
 #include "t2connection.h"
 
 // 全局连接对象
-// extern CConnectionInterface *T2SDK_G(g_pConnection);
-// extern CConnectionInterface *T2SDK_G(g_pConnection)Hq;
+extern CConnectionInterface *g_pConnection;
+extern CConnectionInterface *g_pConnectionHq;
 
 extern config T2NewConfig;
 extern connection T2NewConnection;
 extern packer T2NewPacker;
 extern unpacker T2NewUnPacker;
 extern biz_message T2NewBizMessage;
-
 
 T2Connection::T2Connection(char* lib_t2sdk_file, char *ini_file)
 {
@@ -78,9 +77,9 @@ T2Connection::T2Connection(char* lib_t2sdk_file, char *ini_file)
 
 //     g_szBusiness.SetConfig(lpConfig);
 //   //通过T2SDK的引出函数，来获取一个新的CConnection对象指针
-//     T2SDK_G(g_pConnection) = T2NewConnection(lpConfig);
+//     g_pConnection = T2NewConnection(lpConfig);
     
-//     T2SDK_G(g_pConnection)->AddRef();
+//     g_pConnection->AddRef();
     
 //     // 创建自定义类CCallback的对象（在初始化连接对象时需传递此对象，请看下面代码）
 //     CCallback szCallback;
@@ -88,13 +87,13 @@ T2Connection::T2Connection(char* lib_t2sdk_file, char *ini_file)
 //     int iRet = 0, iSystemNo = 0;
     
 //     //初始化连接对象，返回0表示初始化成功，注意此时并没开始连接服务器
-//     if (/*(0 == (iRet = T2SDK_G(g_pConnection)->CreateEx(&szCallback)))*/(0 == (iRet = T2SDK_G(g_pConnection)->Create2BizMsg(&szCallback))))
+//     if (/*(0 == (iRet = g_pConnection->CreateEx(&szCallback)))*/(0 == (iRet = g_pConnection->Create2BizMsg(&szCallback))))
 //     {
 //             // 开启断开重连线程，由于在非断开情况下，该线程处于Wait状态，故对应用性能影响甚微
 //         //正式开始连接，参数5000为超时参数，单位毫秒
-//         if (iRet = T2SDK_G(g_pConnection)->Connect(5000))
+//         if (iRet = g_pConnection->Connect(5000))
 //         {
-//                 printf("连接服务器失败, 错误号: %d, 原因: %s!\r\n", iRet, T2SDK_G(g_pConnection)->GetErrorMsg(iRet));
+//                 printf("连接服务器失败, 错误号: %d, 原因: %s!\r\n", iRet, g_pConnection->GetErrorMsg(iRet));
 //         }   
 //         else
 //         {
@@ -146,15 +145,15 @@ T2Connection::T2Connection(char* lib_t2sdk_file, char *ini_file)
 //     else
 //     {
 //         if(0 != iRet)
-//           puts(T2SDK_G(g_pConnection)->GetErrorMsg(iRet));
+//           puts(g_pConnection->GetErrorMsg(iRet));
 //     }
     
 //     //通过getchar阻塞线程，等待服务端应答包到达
 //     printf("按任意键出退!\r\n");
 //     getchar();
     
-//     T2SDK_G(g_pConnection)->Close();
-//     T2SDK_G(g_pConnection)->Release();
+//     g_pConnection->Close();
+//     g_pConnection->Release();
 //     lpConfig->Release();
 // }
 
@@ -218,9 +217,9 @@ bool T2Connection::connect(char * &error)
 
     g_szBusiness.SetConfig(lpConfig);
   //通过T2SDK的引出函数，来获取一个新的CConnection对象指针
-    T2SDK_G(g_pConnection) = T2NewConnection(lpConfig);
+    g_pConnection = T2NewConnection(lpConfig);
     
-    T2SDK_G(g_pConnection)->AddRef();
+    g_pConnection->AddRef();
     
     // 创建自定义类CCallback的对象（在初始化连接对象时需传递此对象，请看下面代码）
     CCallback szCallback;
@@ -228,13 +227,13 @@ bool T2Connection::connect(char * &error)
     int iRet = 0;
     
     //初始化连接对象，返回0表示初始化成功，注意此时并没开始连接服务器
-    if (/*(0 == (iRet = T2SDK_G(g_pConnection)->CreateEx(&szCallback)))*/(0 == (iRet = T2SDK_G(g_pConnection)->Create2BizMsg(&szCallback))))
+    if (/*(0 == (iRet = g_pConnection->CreateEx(&szCallback)))*/(0 == (iRet = g_pConnection->Create2BizMsg(&szCallback))))
     {
             // 开启断开重连线程，由于在非断开情况下，该线程处于Wait状态，故对应用性能影响甚微
         //正式开始连接，参数5000为超时参数，单位毫秒
-        if (iRet = T2SDK_G(g_pConnection)->Connect(5000))
+        if (iRet = g_pConnection->Connect(5000))
         {
-            sprintf(error, "连接服务器失败, 错误号: %d, 原因: %s!\r\n", iRet, T2SDK_G(g_pConnection)->GetErrorMsg(iRet));
+            sprintf(error, "连接服务器失败, 错误号: %d, 原因: %s!\r\n", iRet, g_pConnection->GetErrorMsg(iRet));
             return false;
         }   
         else
@@ -247,7 +246,7 @@ bool T2Connection::connect(char * &error)
     {
         if(0 != iRet)
         {
-            const char *error_msg = T2SDK_G(g_pConnection)->GetErrorMsg(iRet);
+            const char *error_msg = g_pConnection->GetErrorMsg(iRet);
             strcpy(error, error_msg);
         }
         return false;
@@ -256,8 +255,8 @@ bool T2Connection::connect(char * &error)
 
 void T2Connection::disconnect()
 {
-    T2SDK_G(g_pConnection)->Close();
-    T2SDK_G(g_pConnection)->Release();
+    g_pConnection->Close();
+    g_pConnection->Release();
     lpConfig->Release();
 }
 
