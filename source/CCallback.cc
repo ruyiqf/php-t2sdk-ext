@@ -101,16 +101,29 @@ int CBusiness::Login()
 
     IBizMessage* lpBizMessageRecv = NULL;
 
+    puts("new lpBizMessageRecv");
+
     //功能号
     lpBizMessage->SetFunction(331100);
+
+        puts("new biz_message SetFunction");
+
     //请求类型
     lpBizMessage->SetPacketType(REQUEST_PACKET);
+        puts("new biz_message SetPacketType");
+
     //设置营业部号
     lpBizMessage->SetBranchNo(1);
+        puts("new biz_message SetBranchNo");
+
     //设置company_id
     lpBizMessage->SetCompanyID(91000);
+        puts("new biz_message SetCompanyID");
+
     //设置SenderCompanyID
     lpBizMessage->SetSenderCompanyID(91000);
+        puts("new biz_message SetSenderCompanyID");
+
     
     ///获取版本为2类型的pack打包器
     puts("before new packer 2");
