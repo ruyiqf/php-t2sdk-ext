@@ -169,6 +169,7 @@ zend_function_entry t2connection_methods[] = {
     PHP_ME(T2Connection,  __construct,     NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     PHP_ME(T2Connection,  p_connect,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_disconnect,  NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(T2Connection,  p_login,  NULL, ZEND_ACC_PUBLIC)
 
     {NULL, NULL, NULL}
 };
