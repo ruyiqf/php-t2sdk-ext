@@ -1,8 +1,8 @@
 #ifndef T2SDK_CCALBACK_H
 #define T2SDK_CCALBACK_H
 #include <Include/t2sdk_interface.h>
-#include "php_t2sdk.h"
 #include <stdio.h>
+#include "source/t2connection.h"
 #include <typeinfo>
 
 //宏
@@ -14,6 +14,9 @@
 #define ISSUE_TYPE_REALTIME_SECU    12          ///证券成交类型
 
 //////////////////////////////////////////////////////////////
+// 全局变量
+extern CConnectionInterface *g_pConnection;
+extern CConnectionInterface *g_pConnectionHq;
 
 void ShowPacket(int iIssueType, IF2UnPacker *pUnPacker);
 

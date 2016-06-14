@@ -1,4 +1,4 @@
-#ifndef T2SDK_STRUCK_H
+#ifndef sT2SDK_STRUCK_H
 #define T2SDK_STRUCT_H
 
 struct LoginInfo

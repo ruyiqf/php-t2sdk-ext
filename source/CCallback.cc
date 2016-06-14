@@ -174,7 +174,7 @@ int CBusiness::Login()
 
     puts("before RecvBizMsg");
     hSend = g_pConnection->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
-        puts("after RecvBizMsg");
+        puts("before RecvBizMsg");
 
     if(hSend != 0)
     {
