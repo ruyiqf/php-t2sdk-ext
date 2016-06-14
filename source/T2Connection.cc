@@ -248,7 +248,7 @@ bool T2Connection::connect(char * &error)
     {
         if(0 != iRet)
         {
-            error = g_pConnection->GetErrorMsg(iRet);
+            error = (char *)g_pConnection->GetErrorMsg(iRet);
         }
         return false;
     }
