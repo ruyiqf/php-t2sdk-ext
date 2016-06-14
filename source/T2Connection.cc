@@ -13,8 +13,6 @@ packer T2NewPacker;
 unpacker T2NewUnPacker;
 biz_message T2NewBizMessage;
 
-
-
 T2Connection::T2Connection(char* lib_t2sdk_file, char *ini_file)
 {
     this->lib_t2sdk_file = lib_t2sdk_file;
@@ -34,6 +32,8 @@ void T2Connection::connect()
     T2NewConfig = (config) dlsym(handle, "NewConfig");
     T2NewConnection = (connection) dlsym(handle, "NewConnection");
     T2NewPacker = (packer) dlsym(handle, "NewPacker");
+    T2NewUnPacker = (unpacker) dlsym(handle, "NewUnPacker");
+    T2NewBizMessage = (biz_message) dlsym(handle, "NewBizMessage");
 
     //通过T2SDK的引出函数，来获取一个新的CConfig对象
     //此对象在创建连接对象时被传递，用于配置所创建的连接对象的各种属性（比如服务器IP地址、安全模式等）

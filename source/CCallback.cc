@@ -89,9 +89,6 @@ int CBusiness::Login()
     int hSend = 0, iSystemNo = -1;
 
     puts("begin login");
-    char * ss;
-    sprintf(ss, "%s", typeid(T2NewBizMessage).name());
-    puts(ss);
 
     IBizMessage* lpBizMessage = T2NewBizMessage();
     lpBizMessage->AddRef();
