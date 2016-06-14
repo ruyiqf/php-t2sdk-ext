@@ -37,7 +37,7 @@ public:
         memset(m_fund_account, 0, USERTOKENLEN);
     }
 
-    CConfigInterface* getConfig()
+    CConfigInterface* GetConfig()
     {
         return m_pConfig;
     }
