@@ -10,7 +10,7 @@
 typedef CConfigInterface* (*config)(); 
 typedef CConnectionInterface* (*connection)(CConfigInterface*); 
 typedef IF2Packer* (*packer)(int); 
-extern onfig T2NewConfig;
+extern config T2NewConfig;
 extern connection T2NewConnection;
 extern packer T2NewPacker;
 
