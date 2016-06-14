@@ -49,7 +49,7 @@ extern zend_module_entry t2sdk_module_entry;
 #include "TSRM.h"
 #endif
 
-#include "source/t2connection.h"
+#include <Include/t2sdk_interface.h>
 #include <string.h>
 
 typedef CConfigInterface* (*config)(); 
