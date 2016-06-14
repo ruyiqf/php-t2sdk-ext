@@ -2,8 +2,8 @@
 #define T2SDK_T2CONNECTION_H
 
 #include <Include/t2sdk_interface.h>
-#include "php_t2sdk.h"
 #include "source/CCallback.h"
+#include "php_t2sdk.h"
 #include "source/t2sdk_struck.h"
 #include <dlfcn.h> 
 
