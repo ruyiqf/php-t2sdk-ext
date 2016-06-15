@@ -67,6 +67,8 @@ ZEND_BEGIN_MODULE_GLOBALS(t2sdk)
   CConnectionInterface *g_pConnection;
 ZEND_END_MODULE_GLOBALS(t2sdk)
 
+extern ZEND_DECLARE_MODULE_GLOBALS(t2sdk);
+
 
 /* In every utility function you add that needs to use variables 
    in php_t2sdk_globals, call TSRMLS_FETCH(); after declaring other 
