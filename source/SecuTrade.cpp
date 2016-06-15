@@ -351,45 +351,26 @@ int SecuRequestMode::Login()
     pPacker->BeginPack();
     
     ///加入字段名
-    // pPacker->AddField("op_branch_no", 'I', 5);//操作分支机构
-    // pPacker->AddField("op_entrust_way", 'C', 1);//委托方式 
-    // pPacker->AddField("op_station", 'S', 255);//站点地址
-    // pPacker->AddField("branch_no", 'I', 5);     
-    // pPacker->AddField("input_content", 'C'); 
-    // pPacker->AddField("account_content", 'S', 30);
-    // pPacker->AddField("content_type", 'S', 6);  
-    // pPacker->AddField("password", 'S', 10);      
-    // pPacker->AddField("password_type", 'C');   
-   
-    // ///加入对应的字段值
-    // pPacker->AddInt(0);         //op_branch_no          
-    // pPacker->AddChar('7');      //  op_entrust_way  
-    // pPacker->AddStr("hs");  //      op_station  
-    // pPacker->AddInt(1);     //  branch_no
-    // pPacker->AddChar('1');      //input_content         
-    // pPacker->AddStr("7000172");    //account_content       
-    // pPacker->AddStr("0");   //content_type
-    // pPacker->AddStr("111111");      //password  
-    // pPacker->AddChar('1');  //password_type
-
+    pPacker->AddField("op_branch_no", 'I', 5);//操作分支机构
     pPacker->AddField("op_entrust_way", 'C', 1);//委托方式 
-	pPacker->AddField("op_station", 'S', 255);//站点地址
-	pPacker->AddField("branch_no", 'I', 5);     
-	pPacker->AddField("input_content", 'C'); 
-	pPacker->AddField("account_content", 'S', 30);
-	pPacker->AddField("content_type", 'S', 6);  
-	pPacker->AddField("password", 'S', 10);      
-	pPacker->AddField("password_type", 'C');   
-	///加入对应的字段值
-	//pPacker->AddInt( );						
-	pPacker->AddChar(m_EntrustWay);				
-	pPacker->AddStr(m_opStation.c_str());				
-	pPacker->AddInt(1);			
-	pPacker->AddChar('1');					
-	pPacker->AddStr(m_AccountName);			
-	pPacker->AddStr("0");	
-	pPacker->AddStr(m_Password);			
-	pPacker->AddChar(/*'2'*/'2');	
+    pPacker->AddField("op_station", 'S', 255);//站点地址
+    pPacker->AddField("branch_no", 'I', 5);     
+    pPacker->AddField("input_content", 'C'); 
+    pPacker->AddField("account_content", 'S', 30);
+    pPacker->AddField("content_type", 'S', 6);  
+    pPacker->AddField("password", 'S', 10);      
+    pPacker->AddField("password_type", 'C');   
+   
+    ///加入对应的字段值
+    pPacker->AddInt(0);         //op_branch_no          
+    pPacker->AddChar('7');      //  op_entrust_way  
+    pPacker->AddStr("hs");  //      op_station  
+    pPacker->AddInt(1);     //  branch_no
+    pPacker->AddChar('1');      //input_content         
+    pPacker->AddStr("7000172");    //account_content       
+    pPacker->AddStr("0");   //content_type
+    pPacker->AddStr("111111");      //password  
+    pPacker->AddChar('1');  //password_type
     
     ///结束打包
     pPacker->EndPack();
