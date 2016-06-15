@@ -59,7 +59,7 @@ zval* T2Connection::login()
 
     zval *result;
     ALLOC_INIT_ZVAL(result);
-    array_init(return_value);
+    array_init(result);
     
     int i = 0, t = 0, j = 0, k = 0;
 
@@ -76,7 +76,7 @@ zval* T2Connection::login()
             array_init(arr);
             for (k = 0; k < pUnPacker->GetColCount(); ++k)
             {
-                char *col_name = pUnPacker->getColName(k);
+                char *col_name = pUnPacker->GetColName(k);
             
                 switch (pUnPacker->GetColType(k))
                 {
