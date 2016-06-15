@@ -8,7 +8,6 @@
 #include <process.h>
 #endif
 
-#ifdef LINUX 
 #include <time.h>
 #include <sys/socket.h>
 #include <sys/time.h>
@@ -43,7 +42,6 @@
 struct hostent *gethostbyname(const char *name);
 
 #define  Sleep(x) usleep((x)*1000)
-#endif
 
 #include <iostream>
 #include <string>
