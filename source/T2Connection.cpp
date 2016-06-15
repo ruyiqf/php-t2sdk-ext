@@ -83,6 +83,7 @@ zval* T2Connection::login()
 
                 int ivalue;
                 char cvalue;
+                char *ccvalue;
                 char *svalue;
                 const char * csvalue;
                 float fvalue;
@@ -98,7 +99,8 @@ zval* T2Connection::login()
                 case 'C':
                     //printf("%20c", pUnPacker->GetCharByIndex(k));
                     cvalue = pUnPacker->GetCharByIndex(k);
-                    add_assoc_string(arr, col_name, (char *)cvalue, 1);
+                    sprintf(ccvalue, "%c", cvalue);
+                    add_assoc_string(arr, col_name, (char *)ccvalue, 1);
                     break;
                     
                 case 'S':
@@ -125,7 +127,7 @@ zval* T2Connection::login()
                     break;
                 }
             }   
-            fputs("add One");
+            puts("add One");
             char index[8];
             sprintf(index, "%d", j);  
             add_assoc_zval(result, index, arr);    
