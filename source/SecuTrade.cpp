@@ -68,22 +68,27 @@ void ShowPacket(int iIssueType, IF2UnPacker *pUnPacker)
 
 SecuRequestMode::SecuRequestMode()
 {
-		lpConfig = NULL;
-		lpConnection = NULL;
-		//callback.SetRequestMode(this);
+	puts("begin SecuRequestMode");
+	lpConfig = NULL;
+	lpConnection = NULL;
+	//callback.SetRequestMode(this);
 
-		lpConfig = T2NewConfig();
-		lpConfig->AddRef();
-		m_opUserToken="0";
-	    m_BranchNo=0;
-	    memset(m_client_id,0,sizeof(m_client_id));
-	    iSystemNo=0;
-		m_op_branch_no=0;
-		memset(m_AccountName,0,sizeof(m_AccountName));
-	    memset(m_Password,0,sizeof(m_Password));
-	    m_EntrustWay='\0';
-	    m_FuturesAccount="0";
-	    m_opStation="0";
+	lpConfig = T2NewConfig();
+	lpConfig->AddRef();
+
+	puts("after T2NewConfig");
+	m_opUserToken="0";
+	m_BranchNo=0;
+	memset(m_client_id,0,sizeof(m_client_id));
+	iSystemNo=0;
+	m_op_branch_no=0;
+	memset(m_AccountName,0,sizeof(m_AccountName));
+	memset(m_Password,0,sizeof(m_Password));
+	m_EntrustWay='\0';
+	m_FuturesAccount="0";
+	m_opStation="0";
+
+	puts("finish SecuRequestMode");
 };
 
 unsigned long CTradeCallback::QueryInterface(const char *iid, IKnown **ppv)
