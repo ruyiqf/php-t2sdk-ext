@@ -15,7 +15,6 @@ biz_message T2NewBizMessage;
 static void php_t2sdk_init_globals(zend_t2sdk_globals *t2sdk_globals)
 {
 
-  
 }
 
 struct t2connection_object {
@@ -62,6 +61,8 @@ PHP_METHOD(T2Connection, __construct)
 {
 	char *ini_file;
 	char *lib_t2sdk_file;
+	char *fund_account;
+	char *password;
 
 	// long maxGear;
     T2Connection *t2connection = NULL;
@@ -103,16 +104,16 @@ PHP_METHOD(T2Connection, __construct)
 	    		convert_to_string(&temp);
 	    		lib_t2sdk_file = Z_STRVAL(temp);
 	    	}
-	    	// else if(strcmp(key, "license_file") == 0)
-	    	// {
-	    	// 	convert_to_string(&temp);
-	    	// 	license_file = Z_STRVAL(temp);
-	    	// }
-	    	// else if(strcmp(key, "send_queue_size") == 0)
-	    	// {
-	    	// 	convert_to_string(&temp);
-	    	// 	send_queue_size = Z_STRVAL(temp);
-	    	// }
+	    	else if(strcmp(key, "fund_account") == 0)
+	    	{
+	    		convert_to_string(&temp);
+	    		fund_account = Z_STRVAL(temp);
+	    	}
+	    	else if(strcmp(key, "password") == 0)
+	    	{
+	    		convert_to_string(&temp);
+	    		password = Z_STRVAL(temp);
+	    	}
 	    	// else if(strcmp(key, "auto_reconnect") == 0)
 	    	// {
 	    	// 	convert_to_string(&temp);
@@ -121,7 +122,7 @@ PHP_METHOD(T2Connection, __construct)
 	    }
 	}
 
-    t2connection = new T2Connection(lib_t2sdk_file, ini_file);
+    t2connection = new T2Connection(lib_t2sdk_file, ini_file, fund_account, password);
     t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(object TSRMLS_CC);
     obj->t2connection = t2connection;
 }
