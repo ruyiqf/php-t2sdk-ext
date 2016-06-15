@@ -42,7 +42,7 @@ private:
 class SecuRequestMode
 {
 public:
-
+	SecuRequestMode();
 	~SecuRequestMode()
 	{
 		lpConnection->Release();
