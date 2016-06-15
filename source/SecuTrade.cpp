@@ -335,11 +335,11 @@ int SecuRequestMode::Login()
                         //lpBizMessageRecv->SetBuff(lpMsgBuffer,iMsgLen);
                         //没有错误信息
             puts("业务操作成功");
-            // int iLen = 0;
-            // //接收包体       "包头|功能码|签名|包体";   例如“12|331100|XyIxtt..|username=sundsun,password=123456,”;
-            // const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
-            // //
-            // IF2UnPacker * lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
+            int iLen = 0;
+            //接收包体       "包头|功能码|签名|包体";   例如“12|331100|XyIxtt..|username=sundsun,password=123456,”;
+            const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
+            //
+            IF2UnPacker * lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
             // //设置系统号
             // iSystemNo = lpUnPacker->GetInt("sysnode_id");
             // printf("分支机构号："+iSystemNo);
