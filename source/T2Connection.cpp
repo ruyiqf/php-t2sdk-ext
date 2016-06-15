@@ -76,8 +76,7 @@ zval* T2Connection::login()
             array_init(arr);
             for (k = 0; k < pUnPacker->GetColCount(); ++k)
             {
-                char col_name = new char[20];
-                memcpy(col_name, pUnPacker->GetColName(k));
+                const char *col_name = pUnPacker->GetColName(k);
             
                 switch (pUnPacker->GetColType(k))
                 {
