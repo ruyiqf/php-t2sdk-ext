@@ -32,9 +32,7 @@ int T2Connection::connect(char * &error)
        puts(error);
     }  
     
-    puts("beofre t2newconfig");
     T2NewConfig = (config) dlsym(handle, "NewConfig");
-        puts("beofre NewConnection");
 
     T2NewConnection = (connection) dlsym(handle, "NewConnection");
     T2NewPacker = (packer) dlsym(handle, "NewPacker");

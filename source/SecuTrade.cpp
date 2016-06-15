@@ -68,15 +68,13 @@ void ShowPacket(int iIssueType, IF2UnPacker *pUnPacker)
 
 SecuRequestMode::SecuRequestMode()
 {
-	puts("begin SecuRequestMode");
 	lpConfig = NULL;
 	lpConnection = NULL;
-	//callback.SetRequestMode(this);
+	callback.SetRequestMode(this);
 
 	lpConfig = T2NewConfig();
 	lpConfig->AddRef();
 
-	puts("after T2NewConfig");
 	m_opUserToken="0";
 	m_BranchNo=0;
 	memset(m_client_id,0,sizeof(m_client_id));
@@ -294,7 +292,7 @@ int SecuRequestMode::InitConn(char *ini_file, char *fund_account, char *password
 		cerr<<"初始化失败.iRet="<<iRet<<" msg:"<<lpConnection->GetErrorMsg(iRet)<<endl; 
 		return -1;
 	}
-	if (0 != (iRet = lpConnection->Connect(0)))
+	if (0 != (iRet = lpConnection->Connect(5000)))
 	{
 		cerr<<"连接.iRet="<<iRet<<" msg:"<<lpConnection->GetErrorMsg(iRet)<<endl; 
 		return -1;
@@ -312,7 +310,6 @@ unsigned long SecuRequestMode::Release()
 
 int SecuRequestMode::Login()
 {
-	puts("begin Login");
     int hSend = 0, iSystemNo = -1;
 
     IBizMessage* lpBizMessage = T2NewBizMessage();
@@ -378,7 +375,6 @@ int SecuRequestMode::Login()
     ///结束打包
     pPacker->EndPack();
 
-    puts("before sendContent");
     lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
     
     ///同步发送登录请求，应答在RecvBizEx中处理。
