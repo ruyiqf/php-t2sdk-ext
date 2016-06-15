@@ -245,10 +245,10 @@ int SecuRequestMode::Login()
     lpBizMessage->SetBranchNo(1);
 
     //设置company_id
-    lpBizMessage->SetCompanyID(91000);
+    //lpBizMessage->SetCompanyID(91000);
 
     //设置SenderCompanyID
-    lpBizMessage->SetSenderCompanyID(91000);
+    //lpBizMessage->SetSenderCompanyID(91000);
     
     ///获取版本为2类型的pack打包器
     IF2Packer *pPacker = T2NewPacker(2);
@@ -335,33 +335,33 @@ int SecuRequestMode::Login()
                         //lpBizMessageRecv->SetBuff(lpMsgBuffer,iMsgLen);
                         //没有错误信息
             puts("业务操作成功");
-            int iLen = 0;
-            //接收包体       "包头|功能码|签名|包体";   例如“12|331100|XyIxtt..|username=sundsun,password=123456,”;
-            const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
-            //
-            IF2UnPacker * lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
-            //设置系统号
-            iSystemNo = lpUnPacker->GetInt("sysnode_id");
-            printf("分支机构号："+iSystemNo);
-            //分支机构
-            m_branch_no = lpUnPacker->GetInt("branch_no");
-            const char *pUserToken = lpUnPacker->GetStr("user_token");
-            if(pUserToken){
-                strcpy(m_cUserToken, pUserToken);
-                //printf("\r\nuser_token[%s]\r\n",m_cUserToken);
-            }
-            //客户编号
-            pUserToken = lpUnPacker->GetStr("client_id");
-            if(pUserToken){
-                strcpy(m_client_id, pUserToken);
-                //printf("\r\nclient_id[%s]\r\n",m_client_id);
-            }
-            //资产账户
-            pUserToken = lpUnPacker->GetStr("fund_account");
-            if(pUserToken){
-                strcpy(m_fund_account, pUserToken);
-                //printf("\r\nfund_account[%s]\r\n",m_fund_account);
-            }
+            // int iLen = 0;
+            // //接收包体       "包头|功能码|签名|包体";   例如“12|331100|XyIxtt..|username=sundsun,password=123456,”;
+            // const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
+            // //
+            // IF2UnPacker * lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
+            // //设置系统号
+            // iSystemNo = lpUnPacker->GetInt("sysnode_id");
+            // printf("分支机构号："+iSystemNo);
+            // //分支机构
+            // m_branch_no = lpUnPacker->GetInt("branch_no");
+            // const char *pUserToken = lpUnPacker->GetStr("user_token");
+            // if(pUserToken){
+            //     strcpy(m_cUserToken, pUserToken);
+            //     //printf("\r\nuser_token[%s]\r\n",m_cUserToken);
+            // }
+            // //客户编号
+            // pUserToken = lpUnPacker->GetStr("client_id");
+            // if(pUserToken){
+            //     strcpy(m_client_id, pUserToken);
+            //     //printf("\r\nclient_id[%s]\r\n",m_client_id);
+            // }
+            // //资产账户
+            // pUserToken = lpUnPacker->GetStr("fund_account");
+            // if(pUserToken){
+            //     strcpy(m_fund_account, pUserToken);
+            //     //printf("\r\nfund_account[%s]\r\n",m_fund_account);
+            // }
             ShowPacket(0,lpUnPacker);
         }
     }
