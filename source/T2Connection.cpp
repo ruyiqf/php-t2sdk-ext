@@ -97,7 +97,9 @@ zval* T2Connection::login()
                 case 'S':
                     {
                     //printf("%20s", pUnPacker->GetStrByIndex(k));
-                    const char *svalue = pUnPacker->GetStrByIndex(k);
+                    const char *csvalue = pUnPacker->GetStrByIndex(k);
+                    char *svalue = char[20];
+                    strcpy(svalue, csvalue);
                     add_assoc_string(arr, col_name, svalue, 1);
                     break;
                     }
@@ -117,8 +119,9 @@ zval* T2Connection::login()
                     printf("未知数据类型。\n");
                     break;
                 }
-
-                add_assoc_zval(result, j, arr);
+                char index[8];
+                itoa(j, index, 10);
+                add_assoc_zval(result, index, arr);
             }       
             pUnPacker->Next();
         }
