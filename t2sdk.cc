@@ -1,10 +1,12 @@
 #include "php_t2sdk.h"
+#include "source/t2connection.h"
+#include <string.h>
+
+ZEND_DECLARE_MODULE_GLOBALS(t2sdk);
 
 zend_class_entry *t2connection_ce;
 zend_object_handlers t2connection_object_handlers;
 
-CConnectionInterface *g_pConnection = NULL;
-CConnectionInterface *g_pConnectionHq = NULL;
 
 CBusiness g_szBusiness;
 CBusiness g_szBusinessHq;
@@ -14,6 +16,12 @@ connection T2NewConnection;
 packer T2NewPacker;
 unpacker T2NewUnPacker;
 biz_message T2NewBizMessage;
+
+static void php_t2sdk_init_globals(zend_t2sdk_globals *t2sdk_globals)
+{
+
+  
+}
 
 struct t2connection_object {
     zend_object std;
@@ -187,6 +195,8 @@ zend_function_entry t2connection_methods[] = {
 
 PHP_MINIT_FUNCTION(t2sdk)
 {
+	ZEND_INIT_MODULE_GLOBALS(t2sdk, php_t2sdk_init_globals,NULL);
+
     zend_class_entry ce;
     INIT_CLASS_ENTRY(ce, "T2Connection", t2connection_methods);
     t2connection_ce = zend_register_internal_class(&ce TSRMLS_CC);
@@ -197,6 +207,13 @@ PHP_MINIT_FUNCTION(t2sdk)
     return SUCCESS;
 }
 
+PHP_RINIT_FUNCTION(t2sdk)
+{
+	T2SDK_G(g_pConnection) = NULL;
+	return SUCCESS;
+}
+
+
 zend_module_entry t2sdk_module_entry = {
 #if ZEND_MODULE_API_NO >= 20010901
     STANDARD_MODULE_HEADER,
@@ -205,7 +222,7 @@ zend_module_entry t2sdk_module_entry = {
     NULL,        /* Functions */
     PHP_MINIT(t2sdk),        /* MINIT */
     NULL,        /* MSHUTDOWN */
-    NULL,        /* RINIT */
+    PHP_RINIT(t2sdk),        /* RINIT */
     NULL,        /* RSHUTDOWN */
     NULL,        /* MINFO */
 #if ZEND_MODULE_API_NO >= 20010901

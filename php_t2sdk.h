@@ -50,8 +50,6 @@ extern zend_module_entry t2sdk_module_entry;
 #endif
 
 #include "Include/t2sdk_interface.h"
-#include "source/t2connection.h"
-#include <string.h>
 
 PHP_MINIT_FUNCTION(t2sdk);
 PHP_MSHUTDOWN_FUNCTION(t2sdk);
@@ -67,7 +65,6 @@ PHP_FUNCTION(confirm_t2sdk_compiled); /* For testing, remove later. */
 */
 ZEND_BEGIN_MODULE_GLOBALS(t2sdk)
   CConnectionInterface *g_pConnection;
-  CConnectionInterface *g_pConnectionHq;
 ZEND_END_MODULE_GLOBALS(t2sdk)
 
 
