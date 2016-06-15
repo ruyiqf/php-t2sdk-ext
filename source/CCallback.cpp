@@ -185,6 +185,7 @@ int CBusiness::Login()
     }else{
 
         int iReturnCode = lpBizMessageRecv->GetReturnCode();
+        puts(iReturnCode);
         if(iReturnCode!=0) //错误
         {
             printf("接收功能331100失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetErrorNo(),lpBizMessageRecv->GetErrorInfo());
