@@ -367,7 +367,7 @@ int SecuRequestMode::Login()
     pPacker->AddStr("hs");  //      op_station  
     pPacker->AddInt(1);     //  branch_no
     pPacker->AddChar('1');      //input_content         
-    pPacker->AddStr("70001172");    //account_content       
+    pPacker->AddStr("70000172");    //account_content       
     pPacker->AddStr("0");   //content_type
     pPacker->AddStr("111111");      //password  
     pPacker->AddChar('1');  //password_type
