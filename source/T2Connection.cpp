@@ -77,7 +77,7 @@ zval* T2Connection::login()
             {
                 const char *col_name = pUnPacker->GetColName(k);
                 
-                    char *col = new char[20];
+                    char *col = new char[100];
                     strcpy(col, col_name);
                     puts(col);
 
@@ -106,7 +106,7 @@ zval* T2Connection::login()
                 case 'S':
                     //printf("%20s", pUnPacker->GetStrByIndex(k));
                     csvalue = pUnPacker->GetStrByIndex(k);
-                    svalue = new char[20];
+                    svalue = new char[100];
                     strcpy(svalue, csvalue);
                     add_assoc_string(arr, col_name, svalue, 1);
                     break;
