@@ -1,5 +1,6 @@
 #include "SecuMD.h"
 #include "php_t2sdk.h"
+#include "source/connection.h"
 
 extern connection T2NewConnection;
 extern packer T2NewPacker;
