@@ -61,6 +61,8 @@ zval* T2Connection::login()
     ALLOC_INIT_ZVAL(result);
     array_init(return_value);
     
+    int i = 0, t = 0, j = 0, k = 0;
+
     for (i = 0; i < pUnPacker->GetDatasetCount(); ++i)
     {
         // 设置当前结果集
