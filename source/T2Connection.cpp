@@ -100,7 +100,7 @@ zval* T2Connection::login()
                     //printf("%20c", pUnPacker->GetCharByIndex(k));
                     cvalue = pUnPacker->GetCharByIndex(k);
                     sprintf(ccvalue, "%s", cvalue);
-                    add_assoc_string(arr, col_name, (char *)ccvalue, 1);
+                    add_assoc_string(arr, col_name, ccvalue, 1);
                     break;
                     
                 case 'S':
