@@ -1,7 +1,7 @@
 #ifndef T2SDK_SECUTRADE_H
 #define T2SDK_SECUTRADE_H
 #include "Common/tool.h"
-#include "source/2connection.h"
+#include "source/t2connection.h"
 
 extern config T2NewConfig;
 
