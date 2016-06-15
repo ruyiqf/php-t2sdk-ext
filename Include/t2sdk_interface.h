@@ -1,8 +1,16 @@
+/** @file
+* T2_SDK头文件
+* @author  T2小组
+* @author  恒生电子股份有限公司
+* @version 1.0.0.2
+* @date    20090327
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
 #ifndef _T2SDK_INTERFACE_H
-#define _T2SDK_INTERFACE_H
+# define _T2SDK_INTERFACE_H
 
 #ifdef _WIN32
 	#if !defined( FUNCTION_CALL_MODE )
@@ -12,8 +20,6 @@
 	#define FUNCTION_CALL_MODE
 #endif
 
-#ifndef HS_IKNOWN_SDK
-#define HS_IKNOWN_SDK
 struct IKnown
 {
     virtual unsigned long  FUNCTION_CALL_MODE QueryInterface(const char *iid, IKnown **ppv) = 0;
@@ -21,10 +27,8 @@ struct IKnown
     virtual unsigned long  FUNCTION_CALL_MODE AddRef() = 0;
 
     virtual unsigned long  FUNCTION_CALL_MODE Release() =  0;
-    
-    ~IKnown(){}
 };
-#endif
+
 
 #include <string.h>
 
@@ -54,20 +58,9 @@ typedef uint32_t			uint32;
 #define SVR_NAME_LENGTH	256
 //	进程实例名最大长度.定义时使用char sName[PLUGINID_NAME_LENGTH+1]
 #define SVRINSTANCE_NAME_LENGTH	(SVR_NAME_LENGTH+ID_LENGTH+1)
-
-//文件更新列表字段
-/** 文件更新：以下宏为API库中文件更新功能与界面间交互的打包器中的字段 */
-#define PACKER_INT_FILE_LIST            "file_list"     /**< 文件列表 */
-#define PACKER_INT_FILE_ID              "file_id"       /**< 文件id */
-#define PACKER_INT_FILE_SIZE            "file_size"     /**< 文件大小 */
-#define PACKER_INT_TIME                 "time"          /**< 文件时间 */
-#define PACKER_STRING_FILE_NAME         "file_name"     /**< 文件名 */
-#define PACKER_STRING_FILE_PATH         "file_path"     /**< 文件路径 */
-#define PACKER_STRING_LOCAL_PATH        "local_path"    /**< 本地文件路径 */
-#define PACKER_STRING_MD5_CODE          "md5_code"      /**< 文件md5值 */
-#define PACKER_STRING_FILE_FLAG         "file_flag"     /**< 文件标识 */
-
 //业务消息类型
+
+
 //请求
 #define REQUEST_PACKET 0 
 //应答
@@ -100,8 +93,6 @@ typedef struct tagRequestData
 	int fileHeadLen;
 	int packetType;//20100111 xuxp 新加的包类型
 	Route_Info routeInfo;//20110302 xuxp 请求里面增加路由信息
-	int iSubSystemNo;//20130508 xuxp 参数中增加子系统号传入
-	int iCompanyID;//20140114 xuxp 增加公司编号
 }REQ_DATA, *LPREQ_DATA;
 typedef struct tagRespondData
 {
@@ -300,9 +291,9 @@ struct IF2Packer : public IKnown
 	 *有执行次序要求:在 NewDataset()或Reset(),SetBuffer()之后,逐个字段按顺序添加;
 	 *
 	 *@param szFieldName：字段名
-	 *@param cFieldType ：字段类型:I整数，D浮点数，C字符，S字符串，R任意二进制数据
+	 *@param cFieldType ：字段类型:I整数，F浮点数，C字符，S字符串，R任意二进制数据
 	 *@param iFieldWidth ：字段宽度（所占最大字节数）
-	 *@param iFieldScale ：字段精度,即cFieldType='D'时的小数位数(缺省为4位小数)
+	 *@param iFieldScale ：字段精度,即cFieldType='F'时的小数位数(缺省为4位小数)
 	 *@return 负数表示失败，否则为目前包的长度
 	 */
 	virtual int FUNCTION_CALL_MODE AddField(const char *szFieldName,char cFieldType ='S',int iFieldWidth=255,int iFieldScale=4)=0;
@@ -429,14 +420,14 @@ struct IF2UnPacker : public IF2ResultSet
     ///设置当前结果集(0x20以上版本支持)
     /**
 	 *@param  int nIndex				结果集编号
-	 *@return int						非0 表示成功，否则为失败
+	 *@return int						0表示成功，否则为失败
 	 */
     virtual int FUNCTION_CALL_MODE SetCurrentDatasetByIndex(int nIndex)=0;
 
     ///设置当前结果集 (0x20以上版本支持)
     /**
 	 *@param  const char *szDatasetName	结果集名称
-	 *@return int						非0 表示成功，否则为失败
+	 *@return int						0 表示成功，否则为失败
 	 */
     virtual int FUNCTION_CALL_MODE SetCurrentDataset(const char *szDatasetName)=0;
 
@@ -454,40 +445,6 @@ struct IF2UnPacker : public IF2ResultSet
      *@return 记录条数
 	 */
 	virtual unsigned int FUNCTION_CALL_MODE GetRowCount(void) = 0;
-	
-	///结果集行记录游标接口：取结果集的首条记录
-    virtual void FUNCTION_CALL_MODE First() = 0;
-
-    ///结果集行记录游标接口：取结果集的最后一条记录
-    virtual void FUNCTION_CALL_MODE Last() = 0;
-
-    ///结果集行记录游标接口：取结果集的第n条记录，取值范围[1, GetRowCount()]
-    virtual void FUNCTION_CALL_MODE Go(int nRow) = 0;
-	
-	///获取当前结果集名字的接口,没有名字返回""
-	virtual const char* FUNCTION_CALL_MODE GetDatasetName() = 0;
-	
-	virtual int FUNCTION_CALL_MODE OpenAndCopy(void * lpBuffer,unsigned int iLen) = 0;
-	
-	//20140623 majc 增加根据名字获取字段类型，字段精度，字段最大长度
-	//取字段数据类型
-    /** @param columnName:字段名
-      * @return:见上面常量定义;列名不存在 默认返回'S'
-      */
-    virtual char FUNCTION_CALL_MODE GetColTypeByName(const char * columnName)=0;
-
-
-   ///取数字型字段小数位数
-   /** @param columnName:字段名
-     * @return int 返回字段数据小数位数 列名不存在 返回0 
-     */
-   virtual int FUNCTION_CALL_MODE GetColScaleByName(const char * columnName)=0;
-  
-   //取字段允许存放数据的最大宽度.
-   /** @param columnName:字段名
-     * @return int 返回字段宽度 列名不存在 返回1
-     */
-   virtual int FUNCTION_CALL_MODE GetColWidthByName(const char * columnName) = 0;
 };
 
 ///连接对象 CConnectionInterface 的参数配置对象CConfigInterface
@@ -565,7 +522,7 @@ typedef struct tagBizRouteInfo
 }BIZROUTE_INFO;
 
 
-struct IBizMessage : public IKnown
+struct IBizMessage : IKnown
 {
 	//设置功能号
 	virtual void FUNCTION_CALL_MODE SetFunction(const int nFUnctionNo) = 0;
@@ -660,19 +617,6 @@ struct IBizMessage : public IKnown
 	virtual void* FUNCTION_CALL_MODE GetBuff(int& nBuffLen) = 0;
 	//解析二进制
 	virtual int	FUNCTION_CALL_MODE SetBuff(const void* lpBuff,int nBuffLen) = 0;
-
-	//清除消息内的字段，可以下次复用。
-	virtual void FUNCTION_CALL_MODE ReSet() = 0;
-	
-	//设置公司编号
-	virtual void FUNCTION_CALL_MODE SetCompanyID(const int nCompanyID) = 0;
-	//获取公司编号
-	virtual int FUNCTION_CALL_MODE GetCompanyID() = 0;
-	
-	//设置发送者公司编号
-	virtual void FUNCTION_CALL_MODE SetSenderCompanyID(const int nSenderCompanyID) = 0;
-	//获取发送者公司编号
-	virtual int FUNCTION_CALL_MODE GetSenderCompanyID() = 0;
 };
 
 #define IDENTITY_NAME_LENGTH    32  /**< 客户端名字长度 */
@@ -963,8 +907,17 @@ public:
         - ReturnFileds
         - isReplace
         - isFromNow
+        - Stutas
+        - QueueCount
     */
     virtual void FUNCTION_CALL_MODE GetSubcribeTopic(IF2Packer* lpPack)=0;
+
+   /**
+    * 取服务器地址
+    * @param lpPort 输出的服务器端口，可以为NULL
+    * @return 返回服务器地址
+    */
+    virtual const char * FUNCTION_CALL_MODE GetServerAddress(int *lpPort) = 0;
 };
 
 /**
@@ -1026,66 +979,7 @@ public:
     */
     virtual const char * FUNCTION_CALL_MODE GetServerAddress(int *lpPort) = 0;
 };
-/**
- * 文件更新回调接口
- */
-class CFileUpdateCallbackInterface: public IKnown
-{
-public:
 
-   /**
-    * 收到更新文件列表的回调
-    * @param lpData 返回二进制指针
-    * @param nLength 二进制数据的长度，如果为负数则为错误码
-	* @param lpErrorInfo 如果不为NULL则为错误信息，发生错误，应该先去看错误信息，如果没有再去拿错误码信息
-    * @return 无
-    */
-    virtual void FUNCTION_CALL_MODE OnRecvFileList(const void *lpData, int nLength, const char * lpErrorInfo) = 0;
-
-   /**
-    * 收到通知文件更新进度
-    * @param iOneFileProcessBar 当前文件进度
-    * @param iTotalProcessBar 总进度
-	* @param lpErrorInfo 如果不为NULL则为错误信息，发生错误，应该先去看错误信息，如果没有再去拿错误码信息
-    * @return 无
-    */
-    virtual void FUNCTION_CALL_MODE OnShowProcessBar(int iOneFileProcessBar, int iTotalProcessBar, const char * lpErrorInfo) = 0;
-	
-	/**
-    * 收到成功取消文件更新
-    * @return 无
-    */
-    virtual void FUNCTION_CALL_MODE OnCancel() = 0;
-
-
-};
-/**
- * 文件更新接口
- */
-class CFileUpdateInterface: public IKnown
-{
-public:
-
-   /**
-    * 根据前面回调显示的文件列表，由用户选择后下发需要更新的文件列表
-    * @param lpPack 更新文件列表指针
-    * @return 返回0表示成功，其他值表示失败.
-    */
-    virtual int FUNCTION_CALL_MODE UpdateFile(IF2Packer* lpPack) = 0;
-
-   /**
-    * 界面取消正在更新中的更新动作
-    * @return 返回0表示成功，其他值表示失败
-    */
-    virtual int FUNCTION_CALL_MODE CancelUpdateFile() = 0;
-
-   /**
-    * 获取更新文件列表
-    * @return 文件列表解包器，不允许外部操作，只能读，不能释放
-	* @note 解包器里面的字段见该文件define字段,注意：在OnRecvFileList回调以后该方法有效
-    */
-    virtual IF2UnPacker* FUNCTION_CALL_MODE GetFileUpdateList() = 0;
-};
 class CConnectionInterface;
 
 ///连接对象 CConnectionInterface 需要的回调对象接口定义
@@ -1154,7 +1048,6 @@ public:
     * 如果nResult等于1，表示业务数据接收成功，但业务操作失败了，lpUnPackerOrStr指向一个解包器，此时应首先将该指针转换为IF2UnPacker *。
     * 如果nResult等于2，表示收到非业务错误信息，lpUnPackerOrStr指向一个可读的字符串错误信息。
     * 如果nResult等于3，表示业务包解包失败。lpUnPackerOrStr指向NULL。
-    * 如果nResult等于4，表示业务包为空。lpUnpackerOrStr指向NULL。lpRetData这部分结果还会存在
     */
     virtual void FUNCTION_CALL_MODE OnReceivedBiz(CConnectionInterface *lpConnection, int hSend, const void *lpUnPackerOrStr, int nResult) = 0;
 
@@ -1169,7 +1062,6 @@ public:
     * 如果nResult等于1，表示业务数据接收成功，但业务操作失败了，lpUnpackerOrStr指向一个解包器，此时应首先将该指针转换为IF2UnPacker *。
     * 如果nResult等于2，表示收到非业务错误信息，lpUnpackerOrStr指向一个可读的字符串错误信息。
     * 如果nResult等于3，表示业务包解包失败。lpUnpackerOrStr指向NULL。
-    * 如果nResult等于4，表示业务包为空。lpUnpackerOrStr指向NULL。lpRetData这部分结果还会存在
     */
     virtual void FUNCTION_CALL_MODE OnReceivedBizEx(CConnectionInterface *lpConnection, int hSend, LPRET_DATA lpRetData, const void *lpUnpackerOrStr, int nResult) = 0;
 	//20130624 xuxp 回调增加BizMessage接口
@@ -1187,7 +1079,6 @@ public:
 
 ///T2_SDK连接对象接口
 /**
-* 连接的对象是线程不安全，同时一个连接最好是归于一个线程所用，不要多线程使用！！！
 * 包括连接、断开、发送、接收等
 */
 class CConnectionInterface: public IKnown
@@ -1303,8 +1194,6 @@ public:
     *                         JustRemoveHandle表示当接收超时后，把hSend相关数据删除
     * @return 小于0表示RecvBiz操作本身失败，通过调用GetErrorMsg可以获取详细错误信息
     * 注意！外部指针所指向的解包器的内存由SDK内部管理，外部切勿释放！
-	* 注意！lppUnPackerOrStr对应的解包器是临时的，上层不可以缓存指针，再次调用这个连接的RecvBiz，指针指向的内容就会改变
-	* 如果要拷贝，需要调用解包器的GetPackBuf方法，二进制拷贝出去，其他线程需要再解包
     */
     virtual int FUNCTION_CALL_MODE RecvBiz(int hSend, void **lppUnPackerOrStr, unsigned uiTimeout = 1000, unsigned uiFlag = 0) = 0;
     
@@ -1318,7 +1207,7 @@ public:
     * @param iSystemNo   如果iSystemNo > 0则设置系统号
     * @param nCompressID 对业务包体进行压缩的压缩算法ID，目前只支持ID = 1的压缩算法。
     * ID = 0表示不压缩。注意，压缩只是向SDK提出建议，是否真正压缩还取决于包的实际大小。
-    * 同步发送的包，通过调用RecvBizEx来接收，异步发送的包，当收到应答包后，自动触发回调函数OnReceivedBizEx。
+    * 同步发送的包，通过调用RecvBiz来接收，异步发送的包，当收到应答包后，自动触发回调函数OnReceivedBiz。
     * @param branchNo  营业部号。
     * @param lpRequest  请求里面的其他内容，根据结构体定义赋值。
     * @return 返回发送句柄（正数），否则表示失败，通过调用GetErrorMsg可以获取详细错误信息
@@ -1336,12 +1225,9 @@ public:
     * @param uiTimeout        超时时间，单位毫秒，0表示不等待。
     * @param uiFlag           接收选项，0表示接收超时后仍可继续调用RecvBiz来接收，
     *                         JustRemoveHandle表示当接收超时后，把hSend相关数据删除
-    * @return 小于0表示RecvBizEx操作本身失败，通过调用GetErrorMsg可以获取详细错误信息
+    * @return 小于0表示RecvBiz操作本身失败，通过调用GetErrorMsg可以获取详细错误信息
     * 注意！外部指针所指向的解包器的内存由SDK内部管理，外部切勿释放！
 	* 注意！外部指针所指向的LPRET_DATA的内存由SDK内部管理，外部切勿释放！
-	* 注意！lppUnPackerOrStr对应的解包器和LPRET_DATA都是临时的，上层不可以缓存指针，再次调用这个连接的RecvBizEx，这两个指针指向的内容就会改变
-	* 如果要拷贝，需要调用解包器的GetPackBuf方法，二进制拷贝出去，其他线程需要再解包；
-	* LPRET_DATA拷贝，就需要做结构体复制
     */
     virtual int FUNCTION_CALL_MODE RecvBizEx(int hSend, void **lppUnpackerOrStr, LPRET_DATA* lpRetData, unsigned uiTimeout = 1000, unsigned uiFlag = 0) = 0;
 
@@ -1398,14 +1284,12 @@ public:
     
    /**
     * 获取发布者
-    * @param PublishName 发布者业务名
     * @param msgCount 本地缓存消息的个数
-	  * @param iTimeOut 初始化的时候的超时时间
+	* @param iTimeOut 第一次初始化的时候的超时时间
     * @param bResetNo 是否重置序
-    * @return 返回发送接口实例，返回对应的指针
+    * @return 返回发送接口实例，这是一个单例，如果已经new了，就直接返回对应的指针
     */
-    //virtual CPublishInterface* FUNCTION_CALL_MODE GetPublisher(int msgCount,int iTimeOut,bool bResetNo = false) = 0;
-    virtual CPublishInterface* FUNCTION_CALL_MODE NewPublisher(char* PublishName,int msgCount,int iTimeOut,bool bResetNo = false) = 0;
+    virtual CPublishInterface* FUNCTION_CALL_MODE GetPublisher(int msgCount,int iTimeOut,bool bResetNo = false) = 0;
     
   
 
@@ -1432,19 +1316,8 @@ public:
     * - FilterField4 
     * - FilterField5 
     * - FilterField6
-	* - FilterField7 
-	* - FilterField8 
-	* - FilterField9 
-	* - FilterField10 
-	* - FilterField11 
-	* - FilterField12
-	* - FilterField13 
-	* - FilterField14 
-	* - FilterField15 
-	* - FilterField16
     * - SubscribeStr 
     * - PublishStr
-	
     */
     virtual IF2UnPacker* FUNCTION_CALL_MODE GetTopic(bool byForce,int iTimeOut) = 0;
 	
@@ -1481,61 +1354,16 @@ public:
 	* @param uiFlag    接收选项，0表示接收超时后仍可继续调用Receive来接收，
     *                  JustRemoveHandle表示当接收超时时，把packet_id删除（以后再收到，则会以异步的方式收到）
 	* @return 返回0表示成功，否则表示失败，通过调用GetErrorMsg可以获取详细错误信息
-	* 注意！外部指针所指向的IBizMessage的内存由SDK内部管理，外部切勿释放！
-	* 注意！lpMsg对应的消息指针是临时的，上层不可以缓存指针，再次调用这个连接的RecvBizMsg，这个指针指向的内容就会改变
-	* 如果要拷贝，需要调用IBizMessage的GetBuff方法，二进制拷贝出去，其他线程需要再调用SetBuff；
 	*/
 	virtual int FUNCTION_CALL_MODE RecvBizMsg(int hSend, IBizMessage** lpMsg, unsigned uiTimeout = 1000, unsigned uiFlag = 0) = 0;
-	
-	//20141117 majc 增加文件更新目录过滤字段
-	/**
-    * 获取文件更新,一个连接里面只有一个文件更新，如果存在就返回之前的接口
-    * @param szTopicName 文件更新主题，来自于服务端消息中心文件更新主题 
-	* @param lpCallBack 回调接口
-	* @param szScanDir 扫描文件根目录
-    * @param szUpdateDir 文件更新存放根目录
-	* @param iTimeOut 超时时间
-	* @param szDirFilter 目录过滤条件，如果有多个目录用;号隔开
-    * @return 返回文件更新接口指针
-    */
-	virtual CFileUpdateInterface* FUNCTION_CALL_MODE NewFileUpdate(const char* szTopicName,CFileUpdateCallbackInterface* lpCallBack ,const char* szScanDir,const char* szUpdateDir,unsigned int uiTimeOut = 5000, const char * szDirFilter = NULL) = 0;
-
-	/**
-	* 获取文件更新的最后错误
-	*/
-	virtual const char* FUNCTION_CALL_MODE GetFileUpdateLastError() = 0;
-	
-	//20140618 majc 增加获取最后一个应答错误的详细信息接口
-	/**
-	* 取返回错误消息的详细信息
-	* @param bAsyError 0表示同步(默认)，否则表示异步。
-	* @return 返回详细错误信息
-	* @note 返回信息格式：packType:xxx;funtionId:xxx;branchNo:zxx;systemNo:xxx;subSystemNO:xxx;packId:xxx;routerInfo:xxx,xxx,xxx,xxx,xxx,xxx;sendPath:xxx,xxx,xxx,xxx,xxx,xxx;returnCode:xxx;errorNo:xxx;errorInfo:xxx
-	* packType-包类型
-	* funtionId-功能号
-	* branchNo-分支号
-	* systemNo-系统号
-	* subSystemNO-子系统号
-	* packId-包序号
-	* routerInfo-目标路由
-	* sendPath-发送者路由
-	* returnCode-返回错误码
-	* errorNo-错误号
-	* errorInfo-错误信息
-	* 调用说明：1：同步调用时，方法Receive返回的lppData解析ESBMessage后RetuenCode不为0时调用；方法RecvBiz、RecvBizEx是在返回值为1、2、3、4时调用；方法RecvBizMsg是在GetReturnCode()不为0时调用
-	*           2：异步调用时，回调OnReceived的lpData解析ESBMessage后RetuenCode不为0时调用；回调OnReceivedBiz、OnReceivedBizEx的nResult为1、2、3、4时调用；回调OnReceivedBizMsg的lpMsg在GetReturnCode()不为0时调用
-	*/
-	virtual const char * FUNCTION_CALL_MODE GetLastAnsError(bool bAsyError = 0) = 0;
 	////////////////////////////////////////////////////////////////////////////////
-	
 };
 
 extern "C"
 {
     /**
 	* 获取T2_SDK的版本号
-	* @return 当前T2_SDK的版本号
-	* 譬如：版本为0x10000002表示1.0.0.2
+	* @return 当前T2_SDK的版本号，目前版本为0x01000002，表示1.0.0.2
 	*/
     int FUNCTION_CALL_MODE GetVersionInfo();
 
@@ -1562,22 +1390,10 @@ IF2Packer * FUNCTION_CALL_MODE NewPacker(int iVersion);
 /**
 * @param void * lpBuffer 要解包的数据（不含AR通信包头）
 * @param unsigned int iLen 数据长度
-* @return IUnPacker * 版本2结果集操作接口指针
+* @return IUnPacker * 结果集操作接口指针
 */
 IF2UnPacker * FUNCTION_CALL_MODE NewUnPacker(void * lpBuffer, unsigned int iLen);
 
-/**
-* @param void * lpBuffer 要解包的数据（不含AR通信包头）
-* @param unsigned int iLen 数据长度
-* @return IUnPacker * 版本1结果集操作接口指针
-*/
-IF2UnPacker * FUNCTION_CALL_MODE NewUnPackerV1(void * lpBuffer, unsigned int iLen);
-
-/**
-* @param void * lpBuffer 要解包的数据（不含AR通信包头）
-* @return 1表示版本1的结果集数据，0x21~0x2F 版本2的结果集数据
-*/
-int FUNCTION_CALL_MODE GetPackVersion(const void *lpBuffer);
 /**
 * @param char *EncodePass 传出的散列结果，字符串，长度不超过16（包括'\0'）
 * @param const char* Password 传入的待散列的密码
