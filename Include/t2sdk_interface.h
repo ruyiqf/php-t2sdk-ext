@@ -617,6 +617,16 @@ struct IBizMessage : IKnown
 	virtual void* FUNCTION_CALL_MODE GetBuff(int& nBuffLen) = 0;
 	//解析二进制
 	virtual int	FUNCTION_CALL_MODE SetBuff(const void* lpBuff,int nBuffLen) = 0;
+
+	//设置公司编号
+	virtual void FUNCTION_CALL_MODE SetCompanyID(const int nCompanyID) = 0;
+	//获取公司编号
+	virtual int FUNCTION_CALL_MODE GetCompanyID() = 0;
+	
+	//设置发送者公司编号
+	virtual void FUNCTION_CALL_MODE SetSenderCompanyID(const int nSenderCompanyID) = 0;
+	//获取发送者公司编号
+	virtual int FUNCTION_CALL_MODE GetSenderCompanyID() = 0;
 };
 
 #define IDENTITY_NAME_LENGTH    32  /**< 客户端名字长度 */

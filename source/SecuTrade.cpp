@@ -303,10 +303,10 @@ int SecuRequestMode::Login()
     lpBizMessage->SetBranchNo(1);
 
     //设置company_id
-    //lpBizMessage->SetCompanyID(91000);
+    lpBizMessage->SetCompanyID(91000);
 
     //设置SenderCompanyID
-    //lpBizMessage->SetSenderCompanyID(91000);
+    lpBizMessage->SetSenderCompanyID(91000);
     
     ///获取版本为2类型的pack打包器
     IF2Packer *pPacker = T2NewPacker(2);
