@@ -4,8 +4,8 @@
 // extern CConnectionInterface *T2SDK_G(g_pConnection);
 // extern CConnectionInterface *T2SDK_G(g_pConnection)Hq;
 
-extern CBusiness g_szBusiness;
-extern CBusiness g_szBusinessHq;
+// extern CBusiness g_szBusiness;
+// extern CBusiness g_szBusinessHq;
 
 extern config T2NewConfig;
 extern connection T2NewConnection;

@@ -7,11 +7,7 @@ ZEND_DECLARE_MODULE_GLOBALS(t2sdk);
 zend_class_entry *t2connection_ce;
 zend_object_handlers t2connection_object_handlers;
 
-
-CBusiness g_szBusiness;
-CBusiness g_szBusinessHq;
-
-config T2NewConfig;
+onfig T2NewConfig;
 connection T2NewConnection;
 packer T2NewPacker;
 unpacker T2NewUnPacker;
