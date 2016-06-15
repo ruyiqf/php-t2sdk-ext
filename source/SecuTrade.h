@@ -1,9 +1,6 @@
 #ifndef T2SDK_SECUTRADE_H
 #define T2SDK_SECUTRADE_H
 #include "Common/tool.h"
-#include "source/t2connection.h"
-
-extern config T2NewConfig;
 
 class SecuRequestMode;
 // 自定义类CCallback，通过继承（实现）CCallbackInterface，来自定义各种事件（包括连接成功、
@@ -45,25 +42,6 @@ private:
 class SecuRequestMode
 {
 public:
-	SecuRequestMode()
-	{
-		lpConfig = NULL;
-		lpConnection = NULL;
-		//callback.SetRequestMode(this);
-
-		lpConfig = T2NewConfig();
-		lpConfig->AddRef();
-		m_opUserToken="0";
-	    m_BranchNo=0;
-	    memset(m_client_id,0,sizeof(m_client_id));
-	    iSystemNo=0;
-		m_op_branch_no=0;
-		memset(m_AccountName,0,sizeof(m_AccountName));
-	    memset(m_Password,0,sizeof(m_Password));
-	    m_EntrustWay='\0';
-	    m_FuturesAccount="0";
-	    m_opStation="0";
-	};
 
 	~SecuRequestMode()
 	{
