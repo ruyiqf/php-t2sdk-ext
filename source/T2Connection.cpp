@@ -79,7 +79,10 @@ zval* T2Connection::login()
             for (k = 0; k < pUnPacker->GetColCount(); ++k)
             {
                 const char *col_name = pUnPacker->GetColName(k);
-            
+                
+                    char *col = new char[20];
+                    strcpy(col, col_name);
+                    puts(col);
                 switch (pUnPacker->GetColType(k))
                 {
                 case 'I':
