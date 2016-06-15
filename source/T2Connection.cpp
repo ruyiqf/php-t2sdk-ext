@@ -84,7 +84,7 @@ zval* T2Connection::login()
                     strcpy(col, col_name);
                     puts(col);
 
-                int value;
+                int ivalue;
                 char cvalue;
                 char *svalue;
                 const char * csvalue;
