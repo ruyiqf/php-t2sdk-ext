@@ -72,6 +72,7 @@ zval* T2Connection::login()
         // 打印所有记录
         for (j = 0; j < (int)pUnPacker->GetRowCount(); ++j)
         {
+            puts("111");
             zval* arr;
             ALLOC_INIT_ZVAL(arr);
             array_init(arr);
