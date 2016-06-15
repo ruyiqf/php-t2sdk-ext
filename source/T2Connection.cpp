@@ -56,7 +56,6 @@ zval* T2Connection::login()
     IF2UnPacker *pUnPacker;
     iSystemNo = lp_SecuRequestMode->Login(pUnPacker);
 
-    puts("iSystemNo");
     zval *result;
     ALLOC_INIT_ZVAL(result);
     array_init(result);
@@ -65,14 +64,12 @@ zval* T2Connection::login()
 
     for (i = 0; i < pUnPacker->GetDatasetCount(); ++i)
     {
-        puts("nihao");
         // 设置当前结果集
         pUnPacker->SetCurrentDatasetByIndex(i);
         
         // 打印所有记录
         for (j = 0; j < (int)pUnPacker->GetRowCount(); ++j)
         {
-            puts("111");
             zval* arr;
             ALLOC_INIT_ZVAL(arr);
             array_init(arr);
@@ -128,6 +125,7 @@ zval* T2Connection::login()
                     break;
                 }
             }   
+            fputs("add One");
             char index[8];
             sprintf(index, "%d", j);  
             add_assoc_zval(result, index, arr);    
