@@ -122,6 +122,11 @@ PHP_METHOD(T2Connection, __construct)
 	    }
 	}
 
+puts(lib_t2sdk_file);
+puts(ini_file);
+puts(fund_account);
+puts(password);
+
     t2connection = new T2Connection(lib_t2sdk_file, ini_file, fund_account, password);
     t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(object TSRMLS_CC);
     obj->t2connection = t2connection;

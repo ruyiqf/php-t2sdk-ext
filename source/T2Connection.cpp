@@ -13,7 +13,7 @@ extern packer T2NewPacker;
 extern unpacker T2NewUnPacker;
 extern biz_message T2NewBizMessage;
 
-T2Connection::T2Connection(char* lib_t2sdk_file, char *ini_file, char *fund_account, char *password)
+T2Connection::T2Connection(char *lib_t2sdk_file, char *ini_file, char *fund_account, char *password)
 {
     this->lib_t2sdk_file = lib_t2sdk_file;
     this->ini_file = ini_file;
