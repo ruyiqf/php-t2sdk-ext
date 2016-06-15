@@ -76,16 +76,18 @@ zval* T2Connection::login()
             array_init(arr);
             for (k = 0; k < pUnPacker->GetColCount(); ++k)
             {
-                char *col_name = pUnPacker->GetColName(k);
+                char col_name = new char[20];
+                memcpy(col_name, pUnPacker->GetColName(k));
             
                 switch (pUnPacker->GetColType(k))
                 {
                 case 'I':
+                    {
                     //printf("%20d", pUnPacker->GetIntByIndex(k););
                     int ivalue = pUnPacker->GetIntByIndex(k);
                     add_assoc_long(arr, col_name, ivalue);
                     break;
-                    
+                    }
                 case 'C':
                     //printf("%20c", pUnPacker->GetCharByIndex(k));
                     char cvalue = pUnPacker->GetIntByIndex(k);
