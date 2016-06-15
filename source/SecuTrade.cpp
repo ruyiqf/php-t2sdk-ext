@@ -226,6 +226,161 @@ unsigned long SecuRequestMode::Release()
 	return 0;
 };
 
+int SecuRequestMode::Login()
+{
+    int hSend = 0, iSystemNo = -1;
+
+    IBizMessage* lpBizMessage = T2NewBizMessage();
+    lpBizMessage->AddRef();
+
+    IBizMessage* lpBizMessageRecv = NULL;
+
+    //功能号
+    lpBizMessage->SetFunction(331100);
+
+    //请求类型
+    lpBizMessage->SetPacketType(REQUEST_PACKET);
+
+    //设置营业部号
+    lpBizMessage->SetBranchNo(1);
+
+    //设置company_id
+    lpBizMessage->SetCompanyID(91000);
+
+    //设置SenderCompanyID
+    lpBizMessage->SetSenderCompanyID(91000);
+    
+    ///获取版本为2类型的pack打包器
+    IF2Packer *pPacker = T2NewPacker(2);
+
+    if(!pPacker)
+    {
+        printf("取打包器失败!\r\n");
+        return -1;
+    }
+    pPacker->AddRef();
+
+    ///定义解包器
+    //IF2UnPacker *pUnPacker = NULL;
+
+    ///其他的应答信息
+    //LPRET_DATA pRetData = NULL;
+    ///开始打包
+    pPacker->BeginPack();
+    
+    ///加入字段名
+    pPacker->AddField("op_branch_no", 'I', 5);//操作分支机构
+    pPacker->AddField("op_entrust_way", 'C', 1);//委托方式 
+    pPacker->AddField("op_station", 'S', 255);//站点地址
+    pPacker->AddField("branch_no", 'I', 5);     
+    pPacker->AddField("input_content", 'C'); 
+    pPacker->AddField("account_content", 'S', 30);
+    pPacker->AddField("content_type", 'S', 6);  
+    pPacker->AddField("password", 'S', 10);      
+    pPacker->AddField("password_type", 'C');   
+   
+    ///加入对应的字段值
+    pPacker->AddInt(0);         //op_branch_no          
+    pPacker->AddChar('7');      //  op_entrust_way  
+    pPacker->AddStr("hs");  //      op_station  
+    pPacker->AddInt(1);     //  branch_no
+    pPacker->AddChar('1');      //input_content         
+    pPacker->AddStr("70001172");    //account_content       
+    pPacker->AddStr("0");   //content_type
+    pPacker->AddStr("111111");      //password  
+    pPacker->AddChar('1');  //password_type
+    
+    ///结束打包
+    pPacker->EndPack();
+
+    lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
+    
+    ///同步发送登录请求，应答在RecvBizEx中处理。
+    /*(hSend = lpConnection->SendBizEx(331100,pPacker,NULL,SYNCSEND,0,0,1,NULL)*/
+    if((hSend = lpConnection->SendBizMsg(lpBizMessage,0)) < 0)
+    {
+        printf("发送功能331100失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
+        goto EXIT;
+    }
+
+    printf("发送功能331100成功, 返回接收句柄: %d!\r\n", hSend);
+    
+
+
+    //iRet = lpConnection->RecvBizEx(hSend, (void **)&pUnPacker, &pRetData, 1000);
+    //int a;  int &ra=a;  //定义引用ra,它是变量a的引用，即别名
+
+    puts("before RecvBizMsg");
+    hSend = lpConnection->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
+    puts("after RecvBizMsg");
+
+    if(hSend != 0)
+    {
+        printf("接收功能331100失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
+        goto EXIT;
+    }else{
+
+        int iReturnCode = lpBizMessageRecv->GetReturnCode();
+        if(iReturnCode!=0) //错误
+        {
+            printf("接收功能331100失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetErrorNo(),lpBizMessageRecv->GetErrorInfo());
+                            
+        }
+        else if(iReturnCode==0) // 正确
+        {
+                        //如果要把消息放到其他线程处理，必须自行拷贝，操作如下：
+                        //int iMsgLen = 0;
+                        //void * lpMsgBuffer = lpBizMessageRecv->GetBuff(iMsgLen);
+                        //将lpMsgBuffer拷贝走，然后在其他线程中恢复成消息可进行如下操作：
+                        //lpBizMessageRecv->SetBuff(lpMsgBuffer,iMsgLen);
+                        //没有错误信息
+            puts("业务操作成功");
+            int iLen = 0;
+            //接收包体       "包头|功能码|签名|包体";   例如“12|331100|XyIxtt..|username=sundsun,password=123456,”;
+            const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
+            //
+            IF2UnPacker * lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
+            //设置系统号
+            iSystemNo = lpUnPacker->GetInt("sysnode_id");
+            printf("分支机构号："+iSystemNo);
+            //分支机构
+            m_branch_no = lpUnPacker->GetInt("branch_no");
+            const char *pUserToken = lpUnPacker->GetStr("user_token");
+            if(pUserToken){
+                strcpy(m_cUserToken, pUserToken);
+                //printf("\r\nuser_token[%s]\r\n",m_cUserToken);
+            }
+            //客户编号
+            pUserToken = lpUnPacker->GetStr("client_id");
+            if(pUserToken){
+                strcpy(m_client_id, pUserToken);
+                //printf("\r\nclient_id[%s]\r\n",m_client_id);
+            }
+            //资产账户
+            pUserToken = lpUnPacker->GetStr("fund_account");
+            if(pUserToken){
+                strcpy(m_fund_account, pUserToken);
+                //printf("\r\nfund_account[%s]\r\n",m_fund_account);
+            }
+            ShowPacket(0,lpUnPacker);
+        }
+    }
+
+EXIT:
+    ///释放pack中申请的内存，如果不释放就直接release可能会内存泄漏
+    if(pPacker)
+    {
+        pPacker->FreeMem(pPacker->GetPackBuf());
+        ///释放申请的pack
+        pPacker->Release();
+    }
+    if(lpBizMessage){
+        lpBizMessage->Release();
+    }
+    return iSystemNo;
+}
+
+
 //331100证券客户登陆
 int SecuRequestMode::ReqFunction331100()
 {

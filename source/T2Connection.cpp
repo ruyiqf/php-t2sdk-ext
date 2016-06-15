@@ -41,7 +41,7 @@ int T2Connection::connect(char * &error)
     //lp_SecuRequestMode->InitConn("demo", "license.dat", "218.108.19.190:18002");
     int ret = lp_SecuRequestMode->InitConn(this->ini_file, this->fund_account, this->password, error);
     
-    lp_SecuRequestMode->ReqFunction331100();
+    lp_SecuRequestMode->Login();
 
     return ret;
 }
