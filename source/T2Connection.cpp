@@ -119,4 +119,5 @@ zval* T2Connection::login()
             pUnPacker->Next();
         }
         return result;
+    }
 }
