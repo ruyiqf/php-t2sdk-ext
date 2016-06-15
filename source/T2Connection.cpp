@@ -10,10 +10,12 @@
 // extern CBusiness g_szBusinessHq;
 
 
-T2Connection::T2Connection(char* lib_t2sdk_file, char *ini_file)
+T2Connection::T2Connection(char* lib_t2sdk_file, char *ini_file, char *fund_account, char *password)
 {
     this->lib_t2sdk_file = lib_t2sdk_file;
     this->ini_file = ini_file;
+    this->fund_account = fund_account;
+    this->password = password;
 }
 
 
@@ -34,7 +36,7 @@ int T2Connection::connect(char * &error)
 
     lp_SecuRequestMode = new SecuRequestMode();
     //lp_SecuRequestMode->InitConn("demo", "license.dat", "218.108.19.190:18002");
-    int ret = lp_SecuRequestMode->InitConn(this->ini_file, "70000172", "111111", error);
+    int ret = lp_SecuRequestMode->InitConn(this->ini_file, this->fund_account, this->password, error);
     
     return ret;
 }

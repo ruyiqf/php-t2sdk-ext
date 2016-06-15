@@ -1,4 +1,4 @@
-#include "tool.h"
+#include "Common/tool.h"
 
 #define  MSGCENTER_FUNC_HEART		 620000                                           //消息中心心跳功能号
 #define  MSGCENTER_FUNC_REG			 620001                                           //消息中心订阅功能号

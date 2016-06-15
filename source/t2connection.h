@@ -24,6 +24,8 @@ public:
 private:
     char *ini_file;
     char *lib_t2sdk_file;
+    char *fund_account;
+    char *password;
     SecuRequestMode* lp_SecuRequestMode
 };
 
