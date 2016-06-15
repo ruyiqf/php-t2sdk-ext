@@ -1,4 +1,7 @@
+#ifndef T2SDK_SECUTRADE_H
+#define T2SDK_SECUTRADE_H
 #include "Common/tool.h"
+
 
 class SecuRequestMode;
 // 自定义类CCallback，通过继承（实现）CCallbackInterface，来自定义各种事件（包括连接成功、
@@ -100,3 +103,5 @@ private:
 	string m_opStation;
 	
 };
+
+#endif /* T2SDK_SECUTRADE_H */
