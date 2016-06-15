@@ -280,7 +280,7 @@ int SecuRequestMode::InitConn(char *ini_file, char *fund_account, char *password
 	}
 	
 	lpConnection = T2NewConnection(lpConfig);
-	//cout<<"Connected successfully"<<endl;
+	cerr<<"Connected successfully"<<endl;
 	lpConnection->AddRef();
 
 	
@@ -307,6 +307,7 @@ unsigned long SecuRequestMode::Release()
 
 int SecuRequestMode::Login()
 {
+	puts("begin Login");
     int hSend = 0, iSystemNo = -1;
 
     IBizMessage* lpBizMessage = T2NewBizMessage();
@@ -372,6 +373,7 @@ int SecuRequestMode::Login()
     ///结束打包
     pPacker->EndPack();
 
+    puts("before sendContent");
     lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
     
     ///同步发送登录请求，应答在RecvBizEx中处理。
