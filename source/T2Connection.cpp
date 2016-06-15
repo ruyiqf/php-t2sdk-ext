@@ -90,21 +90,21 @@ zval* T2Connection::login()
                 case 'C':
                     {
                     //printf("%20c", pUnPacker->GetCharByIndex(k));
-                    char cvalue = pUnPacker->GetIntByIndex(k);
+                    char cvalue = pUnPacker->GetCharByIndex(k);
                     add_assoc_string(arr, col_name, (char *)cvalue, 1);
                     break;
                     }
                 case 'S':
                     {
                     //printf("%20s", pUnPacker->GetStrByIndex(k));
-                    char * svalue = pUnPacker->GetIntByIndex(k);
+                    char * svalue = pUnPacker->GetStrByIndex(k);
                     add_assoc_string(arr, col_name, svalue, 1);
                     break;
                     }
                 case 'F':
                     {
                     //printf("%20f", pUnPacker->GetDoubleByIndex(k));
-                    float fvalue = pUnPacker->GetIntByIndex(k);
+                    float fvalue = pUnPacker->GetDoubleByIndex(k);
                     add_assoc_double(arr, col_name, svalue);
                     break;
                     }
