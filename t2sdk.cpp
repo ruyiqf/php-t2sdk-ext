@@ -144,13 +144,13 @@ PHP_METHOD(T2Connection, p_connect)
     // }
 
     char *error;
-    bool ret = false;
+    int ret = -2;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
         ret = t2connection->connect(error);
     }
 
-    RETURN_BOOL(ret);
+    RETURN_LONG(ret);
 }
 
 PHP_METHOD(T2Connection, p_disconnect)
