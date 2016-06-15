@@ -8,7 +8,10 @@
 
 // extern CBusiness g_szBusiness;
 // extern CBusiness g_szBusinessHq;
-
+extern connection T2NewConnection;
+extern packer T2NewPacker;
+extern unpacker T2NewUnPacker;
+extern biz_message T2NewBizMessage;
 
 T2Connection::T2Connection(char* lib_t2sdk_file, char *ini_file, char *fund_account, char *password)
 {
@@ -28,7 +31,7 @@ int T2Connection::connect(char * &error)
        puts(error);
     }  
     
-    T2NewConfig = (config) dlsym(handle, "NewConfig");
+    // T2NewConfig = (config) dlsym(handle, "NewConfig");
     T2NewConnection = (connection) dlsym(handle, "NewConnection");
     T2NewPacker = (packer) dlsym(handle, "NewPacker");
     T2NewUnPacker = (unpacker) dlsym(handle, "NewUnPacker");
