@@ -1,6 +1,6 @@
 #include "t2connection.h"
 #include "php_t2sdk.h"
-
+#include <stdlib.h>
 
 // 全局连接对象
 // extern CConnectionInterface *T2SDK_G(g_pConnection);
@@ -98,7 +98,7 @@ zval* T2Connection::login()
                     {
                     //printf("%20s", pUnPacker->GetStrByIndex(k));
                     const char *csvalue = pUnPacker->GetStrByIndex(k);
-                    char *svalue = char[20];
+                    char *svalue = new char[20];
                     strcpy(svalue, csvalue);
                     add_assoc_string(arr, col_name, svalue, 1);
                     break;
