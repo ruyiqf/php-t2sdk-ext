@@ -70,7 +70,7 @@ zval* T2Connection::login()
         // 打印所有记录
         for (j = 0; j < (int)pUnPacker->GetRowCount(); ++j)
         {
-            zval* arr;
+            zval *arr;
             ALLOC_INIT_ZVAL(arr);
             array_init(arr);
             for (k = 0; k < pUnPacker->GetColCount(); ++k)
@@ -133,6 +133,6 @@ zval* T2Connection::login()
             add_assoc_zval(result, index, arr);    
             pUnPacker->Next();
         }
-        return result;
     }
+    return result;
 }
