@@ -65,7 +65,7 @@ zval* T2Connection::login()
 
     for (i = 0; i < pUnPacker->GetDatasetCount(); ++i)
     {
-        puts("nihao" + i);
+        puts("nihao");
         // 设置当前结果集
         pUnPacker->SetCurrentDatasetByIndex(i);
         
