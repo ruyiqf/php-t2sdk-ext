@@ -137,7 +137,6 @@ public:
 };
 #endif
 
-#ifdef LINUX
 class ManualLock
 {
 	pthread_mutex_t lock;
@@ -159,7 +158,6 @@ public:
 		pthread_mutex_destroy(&lock);
 	}
 };
-#endif
 
 ////////////////////////////////////////////////OperateSystem////////////////////////////////////////////////
 class OperateSystem
