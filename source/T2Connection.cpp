@@ -1,7 +1,5 @@
 #include "t2connection.h"
 #include "php_t2sdk.h"
-#include <stdlib.h>
-#include <stdio.h>
 
 // 全局连接对象
 // extern CConnectionInterface *T2SDK_G(g_pConnection);
@@ -121,7 +119,7 @@ zval* T2Connection::login()
                     break;
                 }
                 char index[8];
-                itoa(j, index, 10);
+                sprintf(index, "%d", j);  
                 add_assoc_zval(result, index, arr);
             }       
             pUnPacker->Next();
