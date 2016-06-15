@@ -1,6 +1,7 @@
 #include "t2connection.h"
 #include "php_t2sdk.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 // 全局连接对象
 // extern CConnectionInterface *T2SDK_G(g_pConnection);
