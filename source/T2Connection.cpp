@@ -93,35 +93,31 @@ zval* T2Connection::login()
                 switch (pUnPacker->GetColType(k))
                 {
                 case 'I':
-                    {
                     //printf("%20d", pUnPacker->GetIntByIndex(k););
                     ivalue = pUnPacker->GetIntByIndex(k);
                     add_assoc_long(arr, col_name, ivalue);
                     break;
-                    }
+                    
                 case 'C':
-                    {
                     //printf("%20c", pUnPacker->GetCharByIndex(k));
                     cvalue = pUnPacker->GetCharByIndex(k);
                     add_assoc_string(arr, col_name, (char *)cvalue, 1);
                     break;
-                    }
+                    
                 case 'S':
-                    {
                     //printf("%20s", pUnPacker->GetStrByIndex(k));
                     csvalue = pUnPacker->GetStrByIndex(k);
                     svalue = new char[20];
                     strcpy(svalue, csvalue);
                     add_assoc_string(arr, col_name, svalue, 1);
                     break;
-                    }
+                    
                 case 'F':
-                    {
                     //printf("%20f", pUnPacker->GetDoubleByIndex(k));
                     fvalue = pUnPacker->GetDoubleByIndex(k);
                     add_assoc_double(arr, col_name, fvalue);
                     break;
-                    }
+                    
                 case 'R':
                     {
                         break;
