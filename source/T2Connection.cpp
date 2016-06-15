@@ -90,11 +90,6 @@ zval* T2Connection::login()
                 const char * csvalue;
                 float fvalue;
 
-                char type = pUnPacker->GetColType(k);
-                char *stype;
-                sprintf(stype, "%c", type);
-                puts(stype);
-
                 switch (pUnPacker->GetColType(k))
                 {
                 case 'I':
@@ -132,10 +127,10 @@ zval* T2Connection::login()
                     printf("未知数据类型。\n");
                     break;
                 }
-                char index[8];
-                sprintf(index, "%d", j);  
-                add_assoc_zval(result, index, arr);
-            }       
+            }   
+            char index[8];
+            sprintf(index, "%d", j);  
+            add_assoc_zval(result, index, arr);    
             pUnPacker->Next();
         }
         return result;
