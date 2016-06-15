@@ -1,3 +1,6 @@
+#ifndef T2SDK_SECUMD_H
+#define T2SDK_SECUMD_H
+
 #include "Common/tool.h"
 
 #define  MSGCENTER_FUNC_HEART		 620000                                           //消息中心心跳功能号
@@ -104,3 +107,4 @@ private:
 	
 	int m_SubSystemNo;
 };
+#endif /* T2SDK_SECUMD_H */
