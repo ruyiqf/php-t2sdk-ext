@@ -308,7 +308,7 @@ unsigned long SecuRequestMode::Release()
 	return 0;
 };
 
-int SecuRequestMode::Login()
+int SecuRequestMode::Login(IF2UnPacker * &lpUnPacker)
 {
     int hSend = 0, iSystemNo = -1;
 
@@ -419,7 +419,7 @@ int SecuRequestMode::Login()
             //接收包体       "包头|功能码|签名|包体";   例如“12|331100|XyIxtt..|username=sundsun,password=123456,”;
             const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
             //
-            IF2UnPacker * lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
+            lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
             // //设置系统号
             // iSystemNo = lpUnPacker->GetInt("sysnode_id");
             // printf("分支机构号："+iSystemNo);

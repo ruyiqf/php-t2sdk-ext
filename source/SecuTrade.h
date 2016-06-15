@@ -58,7 +58,7 @@ public:
 	int iSystemNo;
 	int m_op_branch_no;
 
-	int Login();
+	int Login(IF2UnPacker * &lpUnPacker);
 	//331100 登入
 	int ReqFunction331100();
 	//400 证券行情查询

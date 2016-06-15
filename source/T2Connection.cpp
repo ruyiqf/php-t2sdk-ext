@@ -52,7 +52,69 @@ void T2Connection::disconnect()
     delete lp_SecuRequestMode;
 }
 
-void T2Connection::login()
+zval* T2Connection::login()
 {
-    lp_SecuRequestMode->Login();
+    IF2UnPacker *pUnPacker;
+    iSystemNo = lp_SecuRequestMode->Login(pUnPacker);
+
+    zval *result;
+    ALLOC_INIT_ZVAL(result);
+    array_init(return_value);
+    
+    for (i = 0; i < pUnPacker->GetDatasetCount(); ++i)
+    {
+        // 设置当前结果集
+        pUnPacker->SetCurrentDatasetByIndex(i);
+        
+        // 打印所有记录
+        for (j = 0; j < (int)pUnPacker->GetRowCount(); ++j)
+        {
+            zval* arr;
+            ALLOC_INIT_ZVAL(arr);
+            array_init(arr);
+            for (k = 0; k < pUnPacker->GetColCount(); ++k)
+            {
+                char *col_name = pUnPacker->getColName(k);
+            
+                switch (pUnPacker->GetColType(k))
+                {
+                case 'I':
+                    //printf("%20d", pUnPacker->GetIntByIndex(k););
+                    int ivalue = pUnPacker->GetIntByIndex(k);
+                    add_assoc_long(arr, col_name, ivalue);
+                    break;
+                    
+                case 'C':
+                    //printf("%20c", pUnPacker->GetCharByIndex(k));
+                    char cvalue = pUnPacker->GetIntByIndex(k);
+                    add_assoc_string(arr, col_name, (char *)cvalue, 1);
+                    break;
+                    
+                case 'S':
+                    //printf("%20s", pUnPacker->GetStrByIndex(k));
+                    char * svalue = pUnPacker->GetIntByIndex(k);
+                    add_assoc_string(arr, col_name, svalue, 1);
+                    break;
+                    
+                case 'F':
+                    //printf("%20f", pUnPacker->GetDoubleByIndex(k));
+                    float fvalue = pUnPacker->GetIntByIndex(k);
+                    add_assoc_double(arr, col_name, svalue);
+                    break;
+                    
+                case 'R':
+                    {
+                        break;
+                    }               
+                default:
+                    // 未知数据类型
+                    printf("未知数据类型。\n");
+                    break;
+                }
+
+                add_assoc_zval(result, j, arr);
+            }       
+            pUnPacker->Next();
+        }
+        return result;
 }

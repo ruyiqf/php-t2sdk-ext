@@ -3,6 +3,7 @@
 
 #include <Include/t2sdk_interface.h>
 #include "source/t2sdk_struck.h"
+#include "php_t2sdk.h"
 #include <dlfcn.h> 
 #include "SecuTrade.h"
 #include "SecuMD.h"
@@ -19,13 +20,14 @@ public:
     //void connect();
     int connect(char * &error);
     void disconnect();
-    void login();
+    zval* login();
 
 private:
     char *ini_file;
     char *lib_t2sdk_file;
     char *fund_account;
     char *password;
+    int iSystemNo;
     SecuRequestMode* lp_SecuRequestMode;
 };
 

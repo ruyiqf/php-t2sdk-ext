@@ -174,11 +174,13 @@ PHP_METHOD(T2Connection, p_login)
     // if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name) == FAILURE) {
     //     RETURN_NULL();
     // }
-
+    zval * result;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
-        t2connection->login();
+        result = t2connection->login();
     }
+
+    RETURN_ZVAL(result, 1, 0);
 }
 
 zend_function_entry t2connection_methods[] = {
