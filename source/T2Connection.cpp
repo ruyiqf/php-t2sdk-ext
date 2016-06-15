@@ -83,28 +83,34 @@ zval* T2Connection::login()
                     char *col = new char[20];
                     strcpy(col, col_name);
                     puts(col);
+
+                int value;
+                char cvalue;
+                char *svalue;
+                const char * csvalue;
+                float fvalue;
                     
                 switch (pUnPacker->GetColType(k))
                 {
                 case 'I':
                     {
                     //printf("%20d", pUnPacker->GetIntByIndex(k););
-                    int ivalue = pUnPacker->GetIntByIndex(k);
+                    ivalue = pUnPacker->GetIntByIndex(k);
                     add_assoc_long(arr, col_name, ivalue);
                     break;
                     }
                 case 'C':
                     {
                     //printf("%20c", pUnPacker->GetCharByIndex(k));
-                    char cvalue = pUnPacker->GetCharByIndex(k);
+                    cvalue = pUnPacker->GetCharByIndex(k);
                     add_assoc_string(arr, col_name, (char *)cvalue, 1);
                     break;
                     }
                 case 'S':
                     {
                     //printf("%20s", pUnPacker->GetStrByIndex(k));
-                    const char *csvalue = pUnPacker->GetStrByIndex(k);
-                    char *svalue = new char[20];
+                    csvalue = pUnPacker->GetStrByIndex(k);
+                    svalue = new char[20];
                     strcpy(svalue, csvalue);
                     add_assoc_string(arr, col_name, svalue, 1);
                     break;
@@ -112,7 +118,7 @@ zval* T2Connection::login()
                 case 'F':
                     {
                     //printf("%20f", pUnPacker->GetDoubleByIndex(k));
-                    float fvalue = pUnPacker->GetDoubleByIndex(k);
+                    fvalue = pUnPacker->GetDoubleByIndex(k);
                     add_assoc_double(arr, col_name, fvalue);
                     break;
                     }
