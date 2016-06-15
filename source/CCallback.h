@@ -3,6 +3,7 @@
 #include <Include/t2sdk_interface.h>
 #include <stdio.h>
 #include "source/t2connection.h"
+#include "php_t2sdk.h"
 #include <typeinfo>
 
 //宏
@@ -37,7 +38,7 @@ public:
         memset(m_fund_account, 0, USERTOKENLEN);
     }
 
-    CConfigInterface* GetConfig()
+    CConfigInterface* G etConfig()
     {
         return m_pConfig;
     }
