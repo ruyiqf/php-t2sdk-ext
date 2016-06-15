@@ -31,7 +31,7 @@ int T2Connection::connect(char * &error)
        puts(error);
     }  
     
-    // T2NewConfig = (config) dlsym(handle, "NewConfig");
+    T2NewConfig = (config) dlsym(handle, "NewConfig");
     T2NewConnection = (connection) dlsym(handle, "NewConnection");
     T2NewPacker = (packer) dlsym(handle, "NewPacker");
     T2NewUnPacker = (unpacker) dlsym(handle, "NewUnPacker");

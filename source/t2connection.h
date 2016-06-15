@@ -7,7 +7,7 @@
 #include "SecuTrade.h"
 #include "SecuMD.h"
 
-// typedef CConfigInterface* (*config)(); 
+typedef CConfigInterface* (*config)(); 
 typedef CConnectionInterface* (*connection)(CConfigInterface*); 
 typedef IF2Packer* (*packer)(int); 
 typedef IF2UnPacker* (*unpacker)(void *, unsigned int);
