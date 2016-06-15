@@ -1,4 +1,6 @@
 #include "source/CCallback.h"
+#include "php_t2sdk.h"
+#include "source/t2connection.h"
 
 ////////////////////////////////
 
