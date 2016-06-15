@@ -91,8 +91,10 @@ zval* T2Connection::login()
                 float fvalue;
 
                 char type = pUnPacker->GetColType(k);
-                puts((char *)type);
-                    
+                char *stype;
+                sprintf(stype, "%c", type);
+                puts(stype);
+
                 switch (pUnPacker->GetColType(k))
                 {
                 case 'I':
