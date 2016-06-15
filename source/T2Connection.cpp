@@ -1,7 +1,6 @@
 #include "t2connection.h"
 #include "php_t2sdk.h"
-#include "SecuTrade.h"
-#include "SecuMD.h"
+
 
 // 全局连接对象
 // extern CConnectionInterface *T2SDK_G(g_pConnection);
@@ -33,7 +32,7 @@ int T2Connection::connect(char * &error)
     T2NewUnPacker = (unpacker) dlsym(handle, "NewUnPacker");
     T2NewBizMessage = (biz_message) dlsym(handle, "NewBizMessage");
 
-    SecuRequestMode* lp_SecuRequestMode = new SecuRequestMode();
+    lp_SecuRequestMode = new SecuRequestMode();
     //lp_SecuRequestMode->InitConn("demo", "license.dat", "218.108.19.190:18002");
     int ret = lp_SecuRequestMode->InitConn(this->ini_file, "70000172", "111111", error);
     

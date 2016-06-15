@@ -4,6 +4,8 @@
 #include <Include/t2sdk_interface.h>
 #include "source/t2sdk_struck.h"
 #include <dlfcn.h> 
+#include "SecuTrade.h"
+#include "SecuMD.h"
 
 typedef CConfigInterface* (*config)(); 
 typedef CConnectionInterface* (*connection)(CConfigInterface*); 
@@ -22,7 +24,7 @@ public:
 private:
     char *ini_file;
     char *lib_t2sdk_file;
-    int iSystemNo;
+    SecuRequestMode* lp_SecuRequestMode
 };
 
 #endif /* T2SDK_T2CONNECTION_H */
