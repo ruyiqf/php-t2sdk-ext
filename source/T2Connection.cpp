@@ -83,7 +83,8 @@ zval* T2Connection::login()
                     char *col = new char[20];
                     strcpy(col, col_name);
                     puts(col);
-                    puts((char *)pUnPacker->GetColType(k));
+                    char type = pUnPacker->GetColType(k)
+                    puts((char *)type);
                 switch (pUnPacker->GetColType(k))
                 {
                 case 'I':
