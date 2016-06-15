@@ -56,7 +56,7 @@ zval* T2Connection::login()
     IF2UnPacker *pUnPacker;
     iSystemNo = lp_SecuRequestMode->Login(pUnPacker);
 
-    puts(iSystemNo);
+    puts("iSystemNo");
     zval *result;
     ALLOC_INIT_ZVAL(result);
     array_init(result);
