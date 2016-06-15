@@ -91,7 +91,7 @@ zval* T2Connection::login()
                 float fvalue;
 
                 char type = pUnPacker->GetColType(k);
-                fputs((char *)type);
+                puts((char *)type);
                     
                 switch (pUnPacker->GetColType(k))
                 {
