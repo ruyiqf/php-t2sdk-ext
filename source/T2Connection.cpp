@@ -84,7 +84,7 @@ zval* T2Connection::login()
                 int ivalue;
                 char cvalue;
                 char *ccvalue;
-                char *svalue;
+                char *svalue = new char[100];
                 const char * csvalue;
                 float fvalue;
 
@@ -106,7 +106,6 @@ zval* T2Connection::login()
                 case 'S':
                     //printf("%20s", pUnPacker->GetStrByIndex(k));
                     csvalue = pUnPacker->GetStrByIndex(k);
-                    svalue = new char[100];
                     strcpy(svalue, csvalue);
                     add_assoc_string(arr, col_name, svalue, 1);
                     break;
