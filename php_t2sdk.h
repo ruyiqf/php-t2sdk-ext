@@ -49,6 +49,9 @@ extern zend_module_entry t2sdk_module_entry;
 #include "TSRM.h"
 #endif
 
+#include "source/t2connection.h"
+#include <string.h>
+
 PHP_MINIT_FUNCTION(t2sdk);
 PHP_MSHUTDOWN_FUNCTION(t2sdk);
 PHP_RINIT_FUNCTION(t2sdk);
