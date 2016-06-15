@@ -8,6 +8,7 @@
 
 // extern CBusiness g_szBusiness;
 // extern CBusiness g_szBusinessHq;
+extern config T2NewConfig;
 extern connection T2NewConnection;
 extern packer T2NewPacker;
 extern unpacker T2NewUnPacker;
