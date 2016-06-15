@@ -26,7 +26,7 @@ private:
     char *lib_t2sdk_file;
     char *fund_account;
     char *password;
-    SecuRequestMode* lp_SecuRequestMode
+    SecuRequestMode* lp_SecuRequestMode;
 };
 
 #endif /* T2SDK_T2CONNECTION_H */
