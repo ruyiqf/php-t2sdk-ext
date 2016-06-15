@@ -97,7 +97,7 @@ zval* T2Connection::login()
                 case 'S':
                     {
                     //printf("%20s", pUnPacker->GetStrByIndex(k));
-                    char * svalue = pUnPacker->GetStrByIndex(k);
+                    const char *svalue = pUnPacker->GetStrByIndex(k);
                     add_assoc_string(arr, col_name, svalue, 1);
                     break;
                     }
@@ -105,7 +105,7 @@ zval* T2Connection::login()
                     {
                     //printf("%20f", pUnPacker->GetDoubleByIndex(k));
                     float fvalue = pUnPacker->GetDoubleByIndex(k);
-                    add_assoc_double(arr, col_name, svalue);
+                    add_assoc_double(arr, col_name, fvalue);
                     break;
                     }
                 case 'R':
