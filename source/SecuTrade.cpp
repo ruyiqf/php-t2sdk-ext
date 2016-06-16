@@ -495,17 +495,24 @@ int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPac
 
     }
 
+    puts("finish");
+
     EXIT:
         ///释放pack中申请的内存，如果不释放就直接release可能会内存泄漏
     if(lpPacker)
     {
     	lpPacker->FreeMem(lpPacker->GetPackBuf());
+    	        puts("1");
+
             ///释放申请的pack
     	lpPacker->Release();
     }
+        puts("2");
+
     if(lpBizMessage){
     	lpBizMessage->Release();
     }
+    puts("3");
 
     return hSend;
 }
