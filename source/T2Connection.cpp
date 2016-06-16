@@ -195,8 +195,9 @@ zval* T2Connection::req330300()
     
     
     ///加入对应的字段值
-    pPacker->AddInt(lp_SecuRequestMode->m_op_branch_no);                        
-    pPacker->AddChar(lp_SecuRequestMode->GetEntrustWay()); 
+    pPacker->AddInt(lp_SecuRequestMode->m_op_branch_no);
+    char entrust_way = lp_SecuRequestMode->GetEntrustWay();                        
+    pPacker->AddChar(entrust_way); 
     string opStation = lp_SecuRequestMode->GetOpStation();            
     pPacker->AddStr(opStation.c_str());               
     pPacker->AddChar('0');
