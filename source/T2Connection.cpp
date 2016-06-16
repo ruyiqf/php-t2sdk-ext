@@ -191,6 +191,7 @@ zval* T2Connection::req330300()
     pPacker->AddField("stock_type",'S');
     pPacker->AddField("stcok_code",'S');
     pPacker->AddField("position_str",'S');
+    pPacker->AddField("request_num",'I', 5);
     
     
     ///加入对应的字段值
@@ -203,6 +204,7 @@ zval* T2Connection::req330300()
     pPacker->AddStr("");
     pPacker->AddStr("600570");
     pPacker->AddStr(" ");  
+    pPacker->AddStr(1)；
     ///加入对应的字段值
     
     ///结束打包
