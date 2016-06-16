@@ -502,17 +502,14 @@ int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPac
     if(lpPacker)
     {
     	lpPacker->FreeMem(lpPacker->GetPackBuf());
-    	        puts("1");
 
             ///释放申请的pack
     	lpPacker->Release();
     }
-        puts("2");
 
     if(lpBizMessage){
     	lpBizMessage->Release();
     }
-    puts("3");
 
     return hSend;
 }

@@ -30,8 +30,6 @@ zval * packToZval(IF2UnPacker *pUnPacker)
     zval *result;
     ALLOC_INIT_ZVAL(result);
     array_init(result);
-
-    return result;
     
     int i = 0, t = 0, j = 0, k = 0;
     int ivalue;
