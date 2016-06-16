@@ -13,6 +13,18 @@ extern packer T2NewPacker;
 extern unpacker T2NewUnPacker;
 extern biz_message T2NewBizMessage;
 
+zval * errorToZval(int errorNo, char *errorMsg)
+{
+    zval *result;
+    ALLOC_INIT_ZVAL(result);
+    array_init(result);
+
+    add_assoc_long(result, "errorNo", errorNo);
+    add_assoc_string(result, "errorMsg", errorMsg);
+
+    return result;
+}
+
 zval * packToZval(IF2UnPacker *pUnPacker)
 {
     zval *result;
@@ -161,8 +173,7 @@ zval* T2Connection::req330300()
     IF2Packer *pPacker = T2NewPacker(2);
     if(!pPacker)
     {
-        printf("取打包器失败!\r\n");
-        return -1;
+        return errorToZval(-1, "取打包器失败!\r\n");
     }
     pPacker->AddRef();
 
@@ -187,7 +198,7 @@ zval* T2Connection::req330300()
     pPacker->AddChar('1');                  
     pPacker->AddStr(lp_SecuRequestMode->GetAccountName());         
     pPacker->AddStr("0");   
-    pPacker->AddStr(lp_SecuRequestMode->getPassword());            
+    pPacker->AddStr(lp_SecuRequestMode->GetPassword());            
     pPacker->AddChar(/*'2'*/'2');   
     
     ///结束打包
