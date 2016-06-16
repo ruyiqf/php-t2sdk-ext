@@ -210,7 +210,7 @@ zval* T2Connection::req330300()
 
     // lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
 
-    // IF2UnPacker *pUnPacker;
+     IF2UnPacker *pUnPacker;
 
     int send = lp_SecuRequestMode->SendRequest(iSystemNo, pUnPacker);
 
