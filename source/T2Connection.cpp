@@ -20,7 +20,7 @@ zval * errorToZval(int errorNo, char *errorMsg)
     array_init(result);
 
     add_assoc_long(result, "errorNo", errorNo);
-    add_assoc_string(result, "errorMsg", errorMsg);
+    add_assoc_string(result, "errorMsg", errorMsg, 1);
 
     return result;
 }
@@ -192,7 +192,7 @@ zval* T2Connection::req330300()
     ///加入对应的字段值
     //pPacker->AddInt( );                       
     pPacker->AddChar(lp_SecuRequestMode->GetEntrustWay()); 
-    char *opStation = lp_SecuRequestMode->GetOpStation();            
+    string opStation = lp_SecuRequestMode->GetOpStation();            
     pPacker->AddStr(opStation.c_str());               
     pPacker->AddInt(1);         
     pPacker->AddChar('1');                  
