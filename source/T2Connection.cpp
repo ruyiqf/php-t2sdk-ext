@@ -32,6 +32,12 @@ zval * packToZval(IF2UnPacker *pUnPacker)
     array_init(result);
     
     int i = 0, t = 0, j = 0, k = 0;
+    int ivalue;
+    char cvalue;
+    char *ccvalue = new char[10];
+    char *svalue = new char[100];
+    const char * csvalue;
+    float fvalue;
 
     for (i = 0; i < pUnPacker->GetDatasetCount(); ++i)
     {
@@ -47,13 +53,6 @@ zval * packToZval(IF2UnPacker *pUnPacker)
             for (k = 0; k < pUnPacker->GetColCount(); ++k)
             {
                 const char *col_name = pUnPacker->GetColName(k);
-
-                int ivalue;
-                char cvalue;
-                char *ccvalue = new char[10];
-                char *svalue = new char[100];
-                const char * csvalue;
-                float fvalue;
 
                 switch (pUnPacker->GetColType(k))
                 {
@@ -116,23 +115,23 @@ int T2Connection::connect(char * &error)
     void *handle = dlopen(this->lib_t2sdk_file, RTLD_LAZY | RTLD_GLOBAL);
     if (!handle)  
     {  
-       error = dlerror();
-       puts(error);
-   }  
+     error = dlerror();
+     puts(error);
+ }  
 
-   T2NewConfig = (config) dlsym(handle, "NewConfig");
+ T2NewConfig = (config) dlsym(handle, "NewConfig");
 
-   T2NewConnection = (connection) dlsym(handle, "NewConnection");
-   T2NewPacker = (packer) dlsym(handle, "NewPacker");
-   T2NewUnPacker = (unpacker) dlsym(handle, "NewUnPacker");
-   T2NewBizMessage = (biz_message) dlsym(handle, "NewBizMessage");
+ T2NewConnection = (connection) dlsym(handle, "NewConnection");
+ T2NewPacker = (packer) dlsym(handle, "NewPacker");
+ T2NewUnPacker = (unpacker) dlsym(handle, "NewUnPacker");
+ T2NewBizMessage = (biz_message) dlsym(handle, "NewBizMessage");
 
-   lp_SecuRequestMode = new SecuRequestMode();
+ lp_SecuRequestMode = new SecuRequestMode();
     //lp_SecuRequestMode->InitConn("demo", "license.dat", "218.108.19.190:18002");
-   int ret = lp_SecuRequestMode->InitConn(this->ini_file, this->fund_account, this->password, error);
+ int ret = lp_SecuRequestMode->InitConn(this->ini_file, this->fund_account, this->password, error);
 
 
-   return ret;
+ return ret;
 }
 
 void T2Connection::disconnect()
