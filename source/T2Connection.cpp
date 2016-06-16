@@ -102,7 +102,7 @@ zval* T2Connection::login()
                     puts("1");
                     cvalue = pUnPacker->GetCharByIndex(k);
                     puts("2");
-                    sprintf(ccvalue, "%s", cvalue);
+                    sprintf(ccvalue, "%20c", cvalue);
                     puts("3");
                     add_assoc_string(arr, col_name, ccvalue, 1);
                     puts("4");
