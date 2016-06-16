@@ -38,6 +38,7 @@ zval * packToZval(IF2UnPacker *pUnPacker)
     char *svalue = new char[100];
     const char * csvalue;
     float fvalue;
+    char index[8];
 
     for (i = 0; i < pUnPacker->GetDatasetCount(); ++i)
     {
@@ -92,7 +93,6 @@ zval * packToZval(IF2UnPacker *pUnPacker)
                     break;
                 }
             }   
-            char index[8];
             sprintf(index, "%d", j);  
             add_assoc_zval(result, index, arr);    
             pUnPacker->Next();
