@@ -10,60 +10,60 @@ extern biz_message T2NewBizMessage;
 
 void ShowPacket(int iIssueType, IF2UnPacker *pUnPacker)
 {
-    int i = 0, t = 0, j = 0, k = 0;
-    
-    for (i = 0; i < pUnPacker->GetDatasetCount(); ++i)
-    {
+	int i = 0, t = 0, j = 0, k = 0;
+
+	for (i = 0; i < pUnPacker->GetDatasetCount(); ++i)
+	{
         // 设置当前结果集
-        pUnPacker->SetCurrentDatasetByIndex(i);
-        
+		pUnPacker->SetCurrentDatasetByIndex(i);
+
         // 打印字段
-        for (t = 0; t < pUnPacker->GetColCount(); ++t)
-        {
-            printf("%20s", pUnPacker->GetColName(t));
-        }
-        
-        putchar('\n');
-        
+		for (t = 0; t < pUnPacker->GetColCount(); ++t)
+		{
+			printf("%20s", pUnPacker->GetColName(t));
+		}
+
+		putchar('\n');
+
         // 打印所有记录
-        for (j = 0; j < (int)pUnPacker->GetRowCount(); ++j)
-        {
+		for (j = 0; j < (int)pUnPacker->GetRowCount(); ++j)
+		{
             // 打印每条记录
-            for (k = 0; k < pUnPacker->GetColCount(); ++k)
-            {
-                switch (pUnPacker->GetColType(k))
-                {
-                case 'I':
-                    printf("%20d", pUnPacker->GetIntByIndex(k));
-                    break;
-                    
-                case 'C':
-                    printf("%20c", pUnPacker->GetCharByIndex(k));
-                    break;
-                    
-                case 'S':
-                    printf("%20s", pUnPacker->GetStrByIndex(k));
-                    break;
-                    
-                case 'F':
-                    printf("%20f", pUnPacker->GetDoubleByIndex(k));
-                    break;
-                    
-                case 'R':
-                    {
-                        break;
-                    }               
-                default:
+			for (k = 0; k < pUnPacker->GetColCount(); ++k)
+			{
+				switch (pUnPacker->GetColType(k))
+				{
+					case 'I':
+					printf("%20d", pUnPacker->GetIntByIndex(k));
+					break;
+
+					case 'C':
+					printf("%20c", pUnPacker->GetCharByIndex(k));
+					break;
+
+					case 'S':
+					printf("%20s", pUnPacker->GetStrByIndex(k));
+					break;
+
+					case 'F':
+					printf("%20f", pUnPacker->GetDoubleByIndex(k));
+					break;
+
+					case 'R':
+					{
+						break;
+					}               
+					default:
                     // 未知数据类型
-                    printf("未知数据类型。\n");
-                    break;
-                }
-            }       
-            putchar('\n');      
-            pUnPacker->Next();
-        }
-        putchar('\n');
-    }
+					printf("未知数据类型。\n");
+					break;
+				}
+			}       
+			putchar('\n');      
+			pUnPacker->Next();
+		}
+		putchar('\n');
+	}
 }
 
 SecuRequestMode::SecuRequestMode()
@@ -91,37 +91,37 @@ SecuRequestMode::SecuRequestMode()
 
 unsigned long CTradeCallback::QueryInterface(const char *iid, IKnown **ppv)
 {
-    return 0;
+	return 0;
 }
 
 unsigned long CTradeCallback::AddRef()
 {
-    return 0;
+	return 0;
 }
 
 unsigned long CTradeCallback::Release()
 {
-    return 0;
+	return 0;
 }
 
 
 void CTradeCallback::OnConnect(CConnectionInterface *lpConnection)
 {
-    puts("CTradeCallback::OnConnect");
+	puts("CTradeCallback::OnConnect");
 }
 
 void CTradeCallback::OnSafeConnect(CConnectionInterface *lpConnection)
 {
-    puts("CTradeCallback::OnSafeConnect");
+	puts("CTradeCallback::OnSafeConnect");
 }
 
 void CTradeCallback::OnRegister(CConnectionInterface *lpConnection)
 {
-    puts("CTradeCallback::OnRegister");
+	puts("CTradeCallback::OnRegister");
 }
 void CTradeCallback::OnClose(CConnectionInterface *lpConnection)
 {
-    puts("CTradeCallback::OnClose");
+	puts("CTradeCallback::OnClose");
 }
 
 void CTradeCallback::OnSent(CConnectionInterface *lpConnection, int hSend, void *reserved1, void *reserved2, int nQueuingData)
@@ -153,7 +153,7 @@ void CTradeCallback::OnReceivedBizMsg(CConnectionInterface *lpConnection, int hS
 		//成功,应用程序不能释放lpBizMessageRecv消息
 		if (lpMsg->GetErrorNo() ==0)
 		{
-			 
+
 			//如果要把消息放到其他线程处理，必须自行拷贝，操作如下：
 			//int iMsgLen = 0;
 			//void * lpMsgBuffer = lpBizMessageRecv->GetBuff(iMsgLen);
@@ -168,8 +168,8 @@ void CTradeCallback::OnReceivedBizMsg(CConnectionInterface *lpConnection, int hS
 			lpMsg->GetFunction();
 			switch(lpMsg->GetFunction())
 			{
-			case 331100:
-			    puts("show user meaasge");
+				case 331100:
+				puts("show user meaasge");
 				ShowPacket(lpUnPacker);
 				//puts("Get user_token and brnch_no");
 				OnResponse_331100(lpUnPacker);
@@ -180,7 +180,7 @@ void CTradeCallback::OnReceivedBizMsg(CConnectionInterface *lpConnection, int hS
 			/*case 338302:
 				OnResponse_338302(lpUnPacker);
 				break;*/
-			default:
+				default:
 				ShowPacket(lpUnPacker);
 				break;
 			}
@@ -199,7 +199,7 @@ void CTradeCallback::OnReceivedBiz(CConnectionInterface *lpConnection, int hSend
 
 int  CTradeCallback::Reserved3()
 {
-    return 0;
+	return 0;
 }
 
 void CTradeCallback::Reserved4()
@@ -221,7 +221,7 @@ void CTradeCallback::Reserved7()
 void CTradeCallback::SetRequestMode(SecuRequestMode* lpMode)
 {
 	lpReqMode = lpMode; 
-	  puts("CTradeCallback::SetRequestMode");
+	puts("CTradeCallback::SetRequestMode");
 }
 
 void CTradeCallback::OnResponse_331100(IF2UnPacker *lpUnPacker)
@@ -232,12 +232,12 @@ void CTradeCallback::OnResponse_331100(IF2UnPacker *lpUnPacker)
 	cout<<lpReqMode->m_BranchNo;*/
 	const char *pClientId = lpUnPacker->GetStr("client_id");
 	if(pClientId)
-	strcpy(lpReqMode->m_client_id, pClientId);
+		strcpy(lpReqMode->m_client_id, pClientId);
 	//cout<<"clientId:"<<lpReqMode->m_client_id;
 	if(lpUnPacker->GetStr("user_token") != NULL)
-		{
-			lpReqMode->m_opUserToken = lpUnPacker->GetStr("user_token");
-	    }
+	{
+		lpReqMode->m_opUserToken = lpUnPacker->GetStr("user_token");
+	}
 	cout<<"UserToken:"<<lpUnPacker->GetStr("user_token")<<endl;
 	if(lpUnPacker->GetStr("branch_no") != NULL)
 		lpReqMode->m_BranchNo = lpUnPacker->GetInt("branch_no");
@@ -246,7 +246,7 @@ void CTradeCallback::OnResponse_331100(IF2UnPacker *lpUnPacker)
 	//cout<<"iSystemNo:"<<lpUnPacker->GetInt("sysnode_id")<<endl;
 	if (lpUnPacker->GetInt("op_branch_no")!=NULL)
 		lpReqMode->m_op_branch_no=lpUnPacker->GetInt("op_branch_no");
-	    cout<<"op_branch_no:"<<lpReqMode->m_op_branch_no<<endl;
+	cout<<"op_branch_no:"<<lpReqMode->m_op_branch_no<<endl;
 
 	return;
 }
@@ -288,7 +288,7 @@ int SecuRequestMode::InitConn(char *ini_file, char *fund_account, char *password
 
 	
 	if (0 != (iRet = lpConnection->Create2BizMsg(&callback)))
-    {
+	{
 		cerr<<"初始化失败.iRet="<<iRet<<" msg:"<<lpConnection->GetErrorMsg(iRet)<<endl; 
 		return -1;
 	}
@@ -310,37 +310,37 @@ unsigned long SecuRequestMode::Release()
 
 int SecuRequestMode::Login(IF2UnPacker * &lpUnPacker)
 {
-    int hSend = 0, iSystemNo = -1;
+	int hSend = 0, iSystemNo = -1;
 
-    IBizMessage* lpBizMessage = T2NewBizMessage();
-    lpBizMessage->AddRef();
+	IBizMessage* lpBizMessage = T2NewBizMessage();
+	lpBizMessage->AddRef();
 
-    IBizMessage* lpBizMessageRecv = NULL;
+	IBizMessage* lpBizMessageRecv = NULL;
 
     //功能号
-    lpBizMessage->SetFunction(331100);
+	lpBizMessage->SetFunction(331100);
 
     //请求类型
-    lpBizMessage->SetPacketType(REQUEST_PACKET);
+	lpBizMessage->SetPacketType(REQUEST_PACKET);
 
     //设置营业部号
-    lpBizMessage->SetBranchNo(1);
+	lpBizMessage->SetBranchNo(1);
 
     //设置company_id
-    lpBizMessage->SetCompanyID(91000);
+	lpBizMessage->SetCompanyID(91000);
 
     //设置SenderCompanyID
-    lpBizMessage->SetSenderCompanyID(91000);
-    
-    ///获取版本为2类型的pack打包器
-    IF2Packer *pPacker = T2NewPacker(2);
+	lpBizMessage->SetSenderCompanyID(91000);
 
-    if(!pPacker)
-    {
-        printf("取打包器失败!\r\n");
-        return -1;
-    }
-    pPacker->AddRef();
+    ///获取版本为2类型的pack打包器
+	IF2Packer *pPacker = T2NewPacker(2);
+
+	if(!pPacker)
+	{
+		printf("取打包器失败!\r\n");
+		return -1;
+	}
+	pPacker->AddRef();
 
     ///定义解包器
     //IF2UnPacker *pUnPacker = NULL;
@@ -348,8 +348,8 @@ int SecuRequestMode::Login(IF2UnPacker * &lpUnPacker)
     ///其他的应答信息
     //LPRET_DATA pRetData = NULL;
     ///开始打包
-    pPacker->BeginPack();
-    
+	pPacker->BeginPack();
+
     ///加入字段名
     pPacker->AddField("op_entrust_way", 'C', 1);//委托方式 
 	pPacker->AddField("op_station", 'S', 255);//站点地址
@@ -369,42 +369,42 @@ int SecuRequestMode::Login(IF2UnPacker * &lpUnPacker)
 	pPacker->AddStr("0");	
 	pPacker->AddStr(m_Password);			
 	pPacker->AddChar(/*'2'*/'2');	
-    
-    ///结束打包
-    pPacker->EndPack();
 
-    lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
-    
+    ///结束打包
+	pPacker->EndPack();
+
+	lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
+
     ///同步发送登录请求，应答在RecvBizEx中处理。
     /*(hSend = lpConnection->SendBizEx(331100,pPacker,NULL,SYNCSEND,0,0,1,NULL)*/
-    if((hSend = lpConnection->SendBizMsg(lpBizMessage,0)) < 0)
-    {
-        printf("发送功能331100失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
-        goto EXIT;
-    }
+	if((hSend = lpConnection->SendBizMsg(lpBizMessage,0)) < 0)
+	{
+		printf("发送功能331100失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
+		goto EXIT;
+	}
 
-    printf("发送功能331100成功, 返回接收句柄: %d!\r\n", hSend);
-    
+	printf("发送功能331100成功, 返回接收句柄: %d!\r\n", hSend);
+
 
 
     //iRet = lpConnection->RecvBizEx(hSend, (void **)&pUnPacker, &pRetData, 1000);
     //int a;  int &ra=a;  //定义引用ra,它是变量a的引用，即别名
 
-    puts("before RecvBizMsg");
-    hSend = lpConnection->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
-    puts("after RecvBizMsg");
+	puts("before RecvBizMsg");
+	hSend = lpConnection->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
+	puts("after RecvBizMsg");
 
-    if(hSend != 0)
-    {
-        printf("接收功能331100失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
-        goto EXIT;
-    }else{
+	if(hSend != 0)
+	{
+		printf("接收功能331100失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
+		goto EXIT;
+	}else{
 
-        int iReturnCode = lpBizMessageRecv->GetReturnCode();
+		int iReturnCode = lpBizMessageRecv->GetReturnCode();
         if(iReturnCode!=0) //错误
         {
-            printf("接收功能331100失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetErrorNo(),lpBizMessageRecv->GetErrorInfo());
-                            
+        	printf("接收功能331100失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetErrorNo(),lpBizMessageRecv->GetErrorInfo());
+
         }
         else if(iReturnCode==0) // 正确
         {
@@ -414,50 +414,79 @@ int SecuRequestMode::Login(IF2UnPacker * &lpUnPacker)
                         //将lpMsgBuffer拷贝走，然后在其他线程中恢复成消息可进行如下操作：
                         //lpBizMessageRecv->SetBuff(lpMsgBuffer,iMsgLen);
                         //没有错误信息
-            puts("业务操作成功");
-            int iLen = 0;
+        	puts("业务操作成功");
+        	int iLen = 0;
             //接收包体       "包头|功能码|签名|包体";   例如“12|331100|XyIxtt..|username=sundsun,password=123456,”;
-            const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
+        	const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
             //
-            lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
-            // //设置系统号
-            // iSystemNo = lpUnPacker->GetInt("sysnode_id");
-            // printf("分支机构号："+iSystemNo);
-            // //分支机构
-            // m_branch_no = lpUnPacker->GetInt("branch_no");
-            // const char *pUserToken = lpUnPacker->GetStr("user_token");
-            // if(pUserToken){
-            //     strcpy(m_cUserToken, pUserToken);
-            //     //printf("\r\nuser_token[%s]\r\n",m_cUserToken);
-            // }
-            // //客户编号
-            // pUserToken = lpUnPacker->GetStr("client_id");
-            // if(pUserToken){
-            //     strcpy(m_client_id, pUserToken);
-            //     //printf("\r\nclient_id[%s]\r\n",m_client_id);
-            // }
-            // //资产账户
-            // pUserToken = lpUnPacker->GetStr("fund_account");
-            // if(pUserToken){
-            //     strcpy(m_fund_account, pUserToken);
-            //     //printf("\r\nfund_account[%s]\r\n",m_fund_account);
-            // }
-            ShowPacket(0,lpUnPacker);
+        	lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
+        	ShowPacket(0,lpUnPacker);
         }
     }
 
-EXIT:
+    EXIT:
     ///释放pack中申请的内存，如果不释放就直接release可能会内存泄漏
     if(pPacker)
     {
-        pPacker->FreeMem(pPacker->GetPackBuf());
+    	pPacker->FreeMem(pPacker->GetPackBuf());
         ///释放申请的pack
-        pPacker->Release();
+    	pPacker->Release();
     }
     if(lpBizMessage){
-        lpBizMessage->Release();
+    	lpBizMessage->Release();
     }
     return iSystemNo;
+}
+
+int SecuRequestMode::SendRequest(IBizMessage* lpBizMessage, int iSystemNo, IF2UnPacker * &lpUnPacker)
+{
+	int hSend = 0;
+
+	if((hSend = lpConnection->SendBizMsg(lpBizMessage,0)) < 0)
+	{
+		printf("发送功能333002失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
+		hSend=-2;
+		goto EXIT;
+	}
+
+	printf("发送功能333002成功, 返回接收句柄: %d!\r\n", hSend);
+
+        //iRet = T2SDK_G(g_pConnection)->RecvBizEx(hSend,(void **)&pUnPacker,&pRetData,1000);
+	hSend = lpConnection->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
+	if(hSend != 0)
+	{
+		printf("接收功能333002失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
+		goto EXIT;
+	}else{
+		int iReturnCode = lpBizMessageRecv->GetReturnCode();
+        if(iReturnCode!= 0) //错误
+        {
+        	printf("接收功能333002失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetReturnCode(),lpBizMessageRecv->GetErrorInfo());            
+        }
+        else if(iReturnCode==0) // 正确
+        {
+        	puts("业务操作成功");
+        	int iLen = 0;
+        	const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
+        	lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
+        	ShowPacket(0,lpUnPacker);
+        }
+
+    }
+
+    EXIT:
+        ///释放pack中申请的内存，如果不释放就直接release可能会内存泄漏
+    if(pPacker)
+    {
+    	pPacker->FreeMem(pPacker->GetPackBuf());
+            ///释放申请的pack
+    	pPacker->Release();
+    }
+    if(lpBizMessage){
+    	lpBizMessage->Release();
+    }
+
+    return hSend;
 }
 
 
@@ -471,8 +500,8 @@ int SecuRequestMode::ReqFunction331100()
 	IF2Packer *pPacker=T2NewPacker(2);
 	if (!pPacker)
 	{
-	  printf("取打包器失败！\r\n");
-	  return -1;
+		printf("取打包器失败！\r\n");
+		return -1;
 	}
 	pPacker->AddRef();
 	pPacker->BeginPack();
@@ -502,8 +531,8 @@ int SecuRequestMode::ReqFunction331100()
 	pPacker->EndPack();
 
 	lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
-    lpConnection->SendBizMsg(lpBizMessage, 1);
-    pPacker->FreeMem(pPacker->GetPackBuf());
+	lpConnection->SendBizMsg(lpBizMessage, 1);
+	pPacker->FreeMem(pPacker->GetPackBuf());
 	pPacker->Release();
 	lpBizMessage->Release();
 
@@ -520,8 +549,8 @@ int SecuRequestMode::ReqFunction400(char* exchange_type, char* stock_code)
 	
 	if (!pPacker)
 	{
-	  printf("取打包器失败！\r\n");
-	  return -1;
+		printf("取打包器失败！\r\n");
+		return -1;
 	}
 	pPacker->AddRef();
 	pPacker->BeginPack();
@@ -536,8 +565,8 @@ int SecuRequestMode::ReqFunction400(char* exchange_type, char* stock_code)
 
 	pPacker->EndPack();
 	lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
-    lpConnection->SendBizMsg(lpBizMessage, 1);
-    pPacker->FreeMem(pPacker->GetPackBuf());
+	lpConnection->SendBizMsg(lpBizMessage, 1);
+	pPacker->FreeMem(pPacker->GetPackBuf());
 	pPacker->Release();
 	lpBizMessage->Release();
 }
@@ -553,8 +582,8 @@ int SecuRequestMode::ReqFunction330300()
 	
 	if (!pPacker)
 	{
-	  printf("取打包器失败！\r\n");
-	  return -1;
+		printf("取打包器失败！\r\n");
+		return -1;
 	}
 	pPacker->AddRef();
 	pPacker->BeginPack();
@@ -585,8 +614,8 @@ int SecuRequestMode::ReqFunction330300()
 	pPacker->EndPack();
 
 	lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
-    lpConnection->SendBizMsg(lpBizMessage, 1);
-    pPacker->FreeMem(pPacker->GetPackBuf());
+	lpConnection->SendBizMsg(lpBizMessage, 1);
+	pPacker->FreeMem(pPacker->GetPackBuf());
 	pPacker->Release();
 	lpBizMessage->Release();
 }
@@ -603,8 +632,8 @@ int SecuRequestMode::ReqFunction333000(char* stock_code)
 	
 	if (!pPacker)
 	{
-	  printf("取打包器失败！\r\n");
-	  return -1;
+		printf("取打包器失败！\r\n");
+		return -1;
 	}
 	pPacker->AddRef();
 	pPacker->BeginPack();
@@ -628,7 +657,7 @@ int SecuRequestMode::ReqFunction333000(char* stock_code)
 	pPacker->AddInt(m_op_branch_no);
 	pPacker->AddChar(m_EntrustWay);				
 	pPacker->AddStr(m_opStation.c_str());				
-    pPacker->AddInt(m_BranchNo);			
+	pPacker->AddInt(m_BranchNo);			
 	//pPacker->AddStr(m_client_id);					
 	pPacker->AddStr(m_AccountName);			
 	pPacker->AddStr(m_Password);	
@@ -642,8 +671,8 @@ int SecuRequestMode::ReqFunction333000(char* stock_code)
 	pPacker->EndPack();
 
 	lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
-    lpConnection->SendBizMsg(lpBizMessage, 1);
-    pPacker->FreeMem(pPacker->GetPackBuf());
+	lpConnection->SendBizMsg(lpBizMessage, 1);
+	pPacker->FreeMem(pPacker->GetPackBuf());
 	pPacker->Release();
 	lpBizMessage->Release();
 	
@@ -713,8 +742,8 @@ int SecuRequestMode::ReqFunction333001(char* exchange_type, char* stock_code,dou
 	pPacker->EndPack();
 
 	lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
-    lpConnection->SendBizMsg(lpBizMessage, 1);
-    pPacker->FreeMem(pPacker->GetPackBuf());
+	lpConnection->SendBizMsg(lpBizMessage, 1);
+	pPacker->FreeMem(pPacker->GetPackBuf());
 	pPacker->Release();
 	lpBizMessage->Release();
 
@@ -793,8 +822,8 @@ int SecuRequestMode::ReqFunction333002(char* exchange_type,char* stock_code, dou
 	
 	pPacker->EndPack();
 	lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
-    lpConnection->SendBizMsg(lpBizMessage, 1);
-    pPacker->FreeMem(pPacker->GetPackBuf());
+	lpConnection->SendBizMsg(lpBizMessage, 1);
+	pPacker->FreeMem(pPacker->GetPackBuf());
 	pPacker->Release();
 	lpBizMessage->Release();
 }

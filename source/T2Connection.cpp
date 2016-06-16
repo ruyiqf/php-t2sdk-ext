@@ -13,49 +13,8 @@ extern packer T2NewPacker;
 extern unpacker T2NewUnPacker;
 extern biz_message T2NewBizMessage;
 
-T2Connection::T2Connection(char *lib_t2sdk_file, char *ini_file, char *fund_account, char *password)
+zval * packToZval(IF2UnPacker *pUnPacker)
 {
-    this->lib_t2sdk_file = lib_t2sdk_file;
-    this->ini_file = ini_file;
-    this->fund_account = fund_account;
-    this->password = password;
-}
-
-
-int T2Connection::connect(char * &error)
-{
-    void *handle = dlopen(this->lib_t2sdk_file, RTLD_LAZY | RTLD_GLOBAL);
-    if (!handle)  
-    {  
-       error = dlerror();
-       puts(error);
-    }  
-    
-    T2NewConfig = (config) dlsym(handle, "NewConfig");
-
-    T2NewConnection = (connection) dlsym(handle, "NewConnection");
-    T2NewPacker = (packer) dlsym(handle, "NewPacker");
-    T2NewUnPacker = (unpacker) dlsym(handle, "NewUnPacker");
-    T2NewBizMessage = (biz_message) dlsym(handle, "NewBizMessage");
-
-    lp_SecuRequestMode = new SecuRequestMode();
-    //lp_SecuRequestMode->InitConn("demo", "license.dat", "218.108.19.190:18002");
-    int ret = lp_SecuRequestMode->InitConn(this->ini_file, this->fund_account, this->password, error);
-    
-
-    return ret;
-}
-
-void T2Connection::disconnect()
-{
-    delete lp_SecuRequestMode;
-}
-
-zval* T2Connection::login()
-{
-    IF2UnPacker *pUnPacker;
-    iSystemNo = lp_SecuRequestMode->Login(pUnPacker);
-
     zval *result;
     ALLOC_INIT_ZVAL(result);
     array_init(result);
@@ -76,10 +35,6 @@ zval* T2Connection::login()
             for (k = 0; k < pUnPacker->GetColCount(); ++k)
             {
                 const char *col_name = pUnPacker->GetColName(k);
-                
-                    char *col = new char[100];
-                    strcpy(col, col_name);
-                    puts(col);
 
                 int ivalue;
                 char cvalue;
@@ -90,55 +45,159 @@ zval* T2Connection::login()
 
                 switch (pUnPacker->GetColType(k))
                 {
-                case 'I':
+                    case 'I':
                     //printf("%20d", pUnPacker->GetIntByIndex(k););
                     ivalue = pUnPacker->GetIntByIndex(k);
                     add_assoc_long(arr, col_name, ivalue);
                     break;
                     
-                case 'C':
-                    puts("0");
-                    printf("%20c", pUnPacker->GetCharByIndex(k));
-                    puts("1");
+                    case 'C':
+                    //printf("%20c", pUnPacker->GetCharByIndex(k));
                     cvalue = pUnPacker->GetCharByIndex(k);
-                    puts("2");
                     sprintf(ccvalue, "%20c", cvalue);
-                    puts("3");
                     add_assoc_string(arr, col_name, ccvalue, 1);
-                    puts("4");
                     break;
                     
-                case 'S':
+                    case 'S':
                     //printf("%20s", pUnPacker->GetStrByIndex(k));
                     csvalue = pUnPacker->GetStrByIndex(k);
                     strcpy(svalue, csvalue);
                     add_assoc_string(arr, col_name, svalue, 1);
                     break;
                     
-                case 'F':
+                    case 'F':
                     //printf("%20f", pUnPacker->GetDoubleByIndex(k));
                     fvalue = pUnPacker->GetDoubleByIndex(k);
                     add_assoc_double(arr, col_name, fvalue);
                     break;
                     
-                case 'R':
+                    case 'R':
                     {
                         break;
                     }               
-                default:
+                    default:
                     // 未知数据类型
                     printf("未知数据类型。\n");
                     break;
                 }
             }   
-            puts("add One");
             char index[8];
             sprintf(index, "%d", j);  
             add_assoc_zval(result, index, arr);    
             pUnPacker->Next();
         }
     }
-
-    puts("result");
     return result;
+}
+
+T2Connection::T2Connection(char *lib_t2sdk_file, char *ini_file, char *fund_account, char *password)
+{
+    this->lib_t2sdk_file = lib_t2sdk_file;
+    this->ini_file = ini_file;
+    this->fund_account = fund_account;
+    this->password = password;
+}
+
+
+int T2Connection::connect(char * &error)
+{
+    void *handle = dlopen(this->lib_t2sdk_file, RTLD_LAZY | RTLD_GLOBAL);
+    if (!handle)  
+    {  
+       error = dlerror();
+       puts(error);
+   }  
+
+   T2NewConfig = (config) dlsym(handle, "NewConfig");
+
+   T2NewConnection = (connection) dlsym(handle, "NewConnection");
+   T2NewPacker = (packer) dlsym(handle, "NewPacker");
+   T2NewUnPacker = (unpacker) dlsym(handle, "NewUnPacker");
+   T2NewBizMessage = (biz_message) dlsym(handle, "NewBizMessage");
+
+   lp_SecuRequestMode = new SecuRequestMode();
+    //lp_SecuRequestMode->InitConn("demo", "license.dat", "218.108.19.190:18002");
+   int ret = lp_SecuRequestMode->InitConn(this->ini_file, this->fund_account, this->password, error);
+
+
+   return ret;
+}
+
+void T2Connection::disconnect()
+{
+    delete lp_SecuRequestMode;
+}
+
+zval* T2Connection::login()
+{
+    IF2UnPacker *pUnPacker;
+    iSystemNo = lp_SecuRequestMode->Login(pUnPacker);
+
+    return packToZval(pUnPacker);
+}
+
+zval* T2Connection::req330300()
+{
+    IBizMessage* lpBizMessage = T2NewBizMessage();
+    lpBizMessage->AddRef();
+
+
+    IBizMessage* lpBizMessageRecv = NULL;
+
+        //功能号
+    lpBizMessage->SetFunction(330300);
+        //请求类型
+    lpBizMessage->SetPacketType(REQUEST_PACKET);
+        //设置营业部号
+    lpBizMessage->SetBranchNo(1);
+        //设置company_id
+    lpBizMessage->SetCompanyID(91000);
+       //设置SenderCompanyID
+    lpBizMessage->SetSenderCompanyID(91000);
+        //设置系统号
+    lpBizMessage->SetSystemNo(iSystemNo);
+
+        ///获取版本为2类型的pack打包器
+    IF2Packer *pPacker = T2NewPacker(2);
+    if(!pPacker)
+    {
+        printf("取打包器失败!\r\n");
+        return -1;
+    }
+    pPacker->AddRef();
+
+        ///开始打包
+    pPacker->BeginPack();
+    //加入字段名
+    //pPacker->AddField("op_branch_no", 'I', 5);//操作分支机构
+    pPacker->AddField("op_entrust_way", 'C', 1);//委托方式 
+    pPacker->AddField("op_station", 'S', 255);//站点地址
+    pPacker->AddField("branch_no", 'I', 5);     
+    pPacker->AddField("input_content", 'C'); 
+    pPacker->AddField("account_content", 'S', 30);
+    pPacker->AddField("content_type", 'S', 6);  
+    pPacker->AddField("password", 'S', 10);      
+    pPacker->AddField("password_type", 'C');   
+    ///加入对应的字段值
+    //pPacker->AddInt( );                       
+    pPacker->AddChar(lp_SecuRequestMode->GetEntrustWay()); 
+    char *opStation = lp_SecuRequestMode->GetOpStation();            
+    pPacker->AddStr(opStation.c_str());               
+    pPacker->AddInt(1);         
+    pPacker->AddChar('1');                  
+    pPacker->AddStr(lp_SecuRequestMode->GetAccountName());         
+    pPacker->AddStr("0");   
+    pPacker->AddStr(lp_SecuRequestMode->getPassword());            
+    pPacker->AddChar(/*'2'*/'2');   
+    
+    ///结束打包
+    pPacker->EndPack();
+
+    lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
+
+    IF2UnPacker *pUnPacker;
+
+    int send = lp_SecuRequestMode->SendRequest(lpBizMessage, iSystemNo, pUnPacker);
+
+    return packToZval(pUnPacker);
 }

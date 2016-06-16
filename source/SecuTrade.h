@@ -59,6 +59,8 @@ public:
 	int m_op_branch_no;
 
 	int Login(IF2UnPacker * &lpUnPacker);
+
+	int SendRequest(IBizMessage* lpBizMessage, int iSystemNo);
 	//331100 登入
 	int ReqFunction331100();
 	//400 证券行情查询
@@ -71,7 +73,28 @@ public:
 	int ReqFunction333001(char* exchange_type, char* stock_code,double entrust_price);
 	//333002 普通委托 
 	int ReqFunction333002(char* exchange_type,char* stock_code, double entrust_amount,double entrust_price,char entrust_bs);
-	//
+	
+	char* GetAccountName()
+	{
+		return m_AccountName;
+	}
+	char* GetPassword()
+	{
+		return m_Password;
+	}
+	char GetEntrustWay()
+	{
+		return m_EntrustWay;
+	}
+	string GetFuturesAccount()
+	{
+		return m_FuturesAccount;
+	}
+	string GetOpStation()
+	{
+		return m_opStation;
+	}
+
 private:
 	CConfigInterface* lpConfig;
 	CConnectionInterface *lpConnection;
@@ -82,7 +105,6 @@ private:
 	char m_EntrustWay;
 	string m_FuturesAccount;
 	string m_opStation;
-	
 };
 
 #endif /* T2SDK_SECUTRADE_H */
