@@ -472,11 +472,11 @@ int SecuRequestMode::SendRequest(/*IBizMessage * &lpBizMessage, IF2Packer * &lpP
         //请求类型
     lpBizMessage->SetPacketType(REQUEST_PACKET);
         //设置营业部号
-    lpBizMessage->SetBranchNo(1);
-        //设置company_id
-    lpBizMessage->SetCompanyID(91000);
-       //设置SenderCompanyID
-    lpBizMessage->SetSenderCompanyID(91000);
+    // lpBizMessage->SetBranchNo(1);
+    //     //设置company_id
+    // lpBizMessage->SetCompanyID(91000);
+    //    //设置SenderCompanyID
+    // lpBizMessage->SetSenderCompanyID(91000);
         //设置系统号
     lpBizMessage->SetSystemNo(iSystemNo);
 
