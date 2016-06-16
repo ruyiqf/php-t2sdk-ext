@@ -459,66 +459,10 @@ int SecuRequestMode::Login(IF2UnPacker * &lpUnPacker)
     return iSystemNo;
 }
 
-int SecuRequestMode::SendRequest(/*IBizMessage * &lpBizMessage, IF2Packer * &lpPacker, */int iSystemNo, IF2UnPacker * &lpUnPacker)
+int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPacker, int iSystemNo, IF2UnPacker * &lpUnPacker)
 {
-	IBizMessage* lpBizMessage = T2NewBizMessage();
-    lpBizMessage->AddRef();
-
-
-    IBizMessage* lpBizMessageRecv = NULL;
-
-        //功能号
-    lpBizMessage->SetFunction(330300);
-        //请求类型
-    lpBizMessage->SetPacketType(REQUEST_PACKET);
-        //设置营业部号
-    // lpBizMessage->SetBranchNo(1);
-    //     //设置company_id
-    // lpBizMessage->SetCompanyID(91000);
-    //    //设置SenderCompanyID
-    // lpBizMessage->SetSenderCompanyID(91000);
-        //设置系统号
-    lpBizMessage->SetSystemNo(iSystemNo);
-
-        ///获取版本为2类型的pack打包器
-    IF2Packer *pPacker = T2NewPacker(2);
-    if(!pPacker)
-    {
-        return -1;
-    }
-    pPacker->AddRef();
-
-        ///开始打包
-    pPacker->BeginPack();
-    //加入字段名
-    //pPacker->AddField("op_branch_no", 'I', 5);//操作分支机构
-    pPacker->AddField("op_branch_no", 'I', 5);//操作分支机构
-    pPacker->AddField("op_entrust_way", 'C', 1);//委托方式 
-    pPacker->AddField("op_station", 'S', 255);//站点地址
-    pPacker->AddField("query_type",'C');
-    pPacker->AddField("exchange_type",'S');
-    pPacker->AddField("stock_type",'S');
-    pPacker->AddField("stcok_code",'S');
-    pPacker->AddField("position_str",'S');
-    
-    
-    ///加入对应的字段值
-    pPacker->AddInt(m_op_branch_no);						
-	pPacker->AddChar(m_EntrustWay);				
-	pPacker->AddStr(m_opStation.c_str());
-	pPacker->AddChar('0');
-	pPacker->AddStr("1");
-	pPacker->AddStr("");
-	pPacker->AddStr("600570");
-	pPacker->AddStr(" "); 
-    ///加入对应的字段值
-    
-    ///结束打包
-    pPacker->EndPack();
-
-    lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
-
 	int hSend = 0;
+	IBizMessage* lpBizMessageRecv = NULL;
 
 	if((hSend = lpConnection->SendBizMsg(lpBizMessage,0)) < 0)
 	{
@@ -530,22 +474,22 @@ int SecuRequestMode::SendRequest(/*IBizMessage * &lpBizMessage, IF2Packer * &lpP
 	printf("发送功能333002成功, 返回接收句柄: %d!\r\n", hSend);
 
         //iRet = T2SDK_G(g_pConnection)->RecvBizEx(hSend,(void **)&pUnPacker,&pRetData,1000);
-	hSend = lpConnection->RecvBizMsg(hSend,&lpBizMessage,1000);
+	hSend = lpConnection->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
 	if(hSend != 0)
 	{
 		printf("接收功能333002失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
 		goto EXIT;
 	}else{
-		int iReturnCode = lpBizMessage->GetReturnCode();
+		int iReturnCode = lpBizMessageRecv->GetReturnCode();
         if(iReturnCode!= 0) //错误
         {
-        	printf("接收功能333002失败,errorNo:%d,errorInfo:%s\n",lpBizMessage->GetReturnCode(),lpBizMessage->GetErrorInfo());            
+        	printf("接收功能333002失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetReturnCode(),lpBizMessageRecv->GetErrorInfo());            
         }
         else if(iReturnCode==0) // 正确
         {
         	puts("业务操作成功");
         	int iLen = 0;
-        	const void * lpBuffer = lpBizMessage->GetContent(iLen);
+        	const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
         	lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
         	ShowPacket(0,lpUnPacker);
         }
@@ -554,12 +498,12 @@ int SecuRequestMode::SendRequest(/*IBizMessage * &lpBizMessage, IF2Packer * &lpP
 
     EXIT:
         ///释放pack中申请的内存，如果不释放就直接release可能会内存泄漏
-    if(pPacker)
+    if(lpPacker)
     {
-    	pPacker->FreeMem(pPacker->GetPackBuf());
+    	lpPacker->FreeMem(lpPacker->GetPackBuf());
 
             ///释放申请的pack
-    	pPacker->Release();
+    	lpPacker->Release();
     }
 
     if(lpBizMessage){
