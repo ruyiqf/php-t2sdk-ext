@@ -189,7 +189,7 @@ zval* T2Connection::req330300()
     pPacker->AddField("query_type",'C');
     pPacker->AddField("exchange_type",'S');
     pPacker->AddField("stock_type",'S');
-    pPacker->AddField("stcok_code",'S');
+    pPacker->AddField("stock_code",'S');
     pPacker->AddField("position_str",'S');
     pPacker->AddField("request_num",'I', 5);
     
