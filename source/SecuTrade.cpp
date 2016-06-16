@@ -438,7 +438,7 @@ int SecuRequestMode::Login(IF2UnPacker * &lpUnPacker)
     return iSystemNo;
 }
 
-int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPacker int iSystemNo, IF2UnPacker * &lpUnPacker)
+int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPacker, int iSystemNo, IF2UnPacker * &lpUnPacker)
 {
 	int hSend = 0;
 
