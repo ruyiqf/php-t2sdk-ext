@@ -143,7 +143,7 @@ void T2Connection::disconnect()
 zval* T2Connection::login()
 {
     IF2UnPacker *pUnPacker;
-    iSystemNo = lp_SecuRequestMode->Login(pUnPacker);
+    lp_SecuRequestMode->Login(pUnPacker);
 
     return packToZval(pUnPacker);
 }
@@ -167,13 +167,13 @@ zval* T2Connection::req330300()
        //设置SenderCompanyID
     lpBizMessage->SetSenderCompanyID(91000);
         //设置系统号
-    lpBizMessage->SetSystemNo(iSystemNo);
+    lpBizMessage->SetSystemNo(lp_SecuRequestMode->iSystemNo);
 
         ///获取版本为2类型的pack打包器
     IF2Packer *pPacker = T2NewPacker(2);
     if(!pPacker)
     {
-        return errorToZval(-1, "取打包器失败!\r\n");
+        return errorToZval(-1, "取打包器失败!");
     }
     pPacker->AddRef();
 
@@ -181,25 +181,27 @@ zval* T2Connection::req330300()
     pPacker->BeginPack();
     //加入字段名
     //pPacker->AddField("op_branch_no", 'I', 5);//操作分支机构
+    pPacker->AddField("op_branch_no", 'I', 5);//操作分支机构
     pPacker->AddField("op_entrust_way", 'C', 1);//委托方式 
     pPacker->AddField("op_station", 'S', 255);//站点地址
-    pPacker->AddField("branch_no", 'I', 5);     
-    pPacker->AddField("input_content", 'C'); 
-    pPacker->AddField("account_content", 'S', 30);
-    pPacker->AddField("content_type", 'S', 6);  
-    pPacker->AddField("password", 'S', 10);      
-    pPacker->AddField("password_type", 'C');   
+    pPacker->AddField("query_type",'C');
+    pPacker->AddField("exchange_type",'S');
+    pPacker->AddField("stock_type",'S');
+    pPacker->AddField("stcok_code",'S');
+    pPacker->AddField("position_str",'S');
+    
+    
     ///加入对应的字段值
-    //pPacker->AddInt( );                       
+    pPacker->AddInt(lp_SecuRequestMode->m_op_branch_no);                        
     pPacker->AddChar(lp_SecuRequestMode->GetEntrustWay()); 
     string opStation = lp_SecuRequestMode->GetOpStation();            
     pPacker->AddStr(opStation.c_str());               
-    pPacker->AddInt(1);         
-    pPacker->AddChar('1');                  
-    pPacker->AddStr(lp_SecuRequestMode->GetAccountName());         
-    pPacker->AddStr("0");   
-    pPacker->AddStr(lp_SecuRequestMode->GetPassword());            
-    pPacker->AddChar(/*'2'*/'2');   
+    pPacker->AddChar('0');
+    pPacker->AddStr("1");
+    pPacker->AddStr("");
+    pPacker->AddStr("600570");
+    pPacker->AddStr(" ");  
+    ///加入对应的字段值
     
     ///结束打包
     pPacker->EndPack();

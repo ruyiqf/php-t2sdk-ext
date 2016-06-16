@@ -420,7 +420,28 @@ int SecuRequestMode::Login(IF2UnPacker * &lpUnPacker)
         	const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
             //
         	lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
-        	ShowPacket(0,lpUnPacker);
+
+        	iSystemNo = lpUnPacker->GetInt("sysnode_id");
+            printf("分支机构号："+iSystemNo);
+            //分支机构
+            m_branch_no = lpUnPacker->GetInt("branch_no");
+            const char *pUserToken = lpUnPacker->GetStr("user_token");
+            if(pUserToken){
+                strcpy(m_cUserToken, pUserToken);
+                //printf("\r\nuser_token[%s]\r\n",m_cUserToken);
+            }
+            //客户编号
+            pUserToken = lpUnPacker->GetStr("client_id");
+            if(pUserToken){
+                strcpy(m_client_id, pUserToken);
+                //printf("\r\nclient_id[%s]\r\n",m_client_id);
+            }
+            //资产账户
+            pUserToken = lpUnPacker->GetStr("fund_account");
+            if(pUserToken){
+                strcpy(m_fund_account, pUserToken);
+                //printf("\r\nfund_account[%s]\r\n",m_fund_account);
+            }
         }
     }
 
