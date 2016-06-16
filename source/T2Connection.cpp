@@ -83,7 +83,7 @@ zval* T2Connection::login()
 
                 int ivalue;
                 char cvalue;
-                char *ccvalue;
+                char *ccvalue = new char[10];
                 char *svalue = new char[100];
                 const char * csvalue;
                 float fvalue;
@@ -97,10 +97,15 @@ zval* T2Connection::login()
                     break;
                     
                 case 'C':
+                    puts("0");
                     printf("%20c", pUnPacker->GetCharByIndex(k));
+                    puts("1");
                     cvalue = pUnPacker->GetCharByIndex(k);
+                    puts("2");
                     sprintf(ccvalue, "%s", cvalue);
+                    puts("3");
                     add_assoc_string(arr, col_name, ccvalue, 1);
+                    puts("4");
                     break;
                     
                 case 'S':
