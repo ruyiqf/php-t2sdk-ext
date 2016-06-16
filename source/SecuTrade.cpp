@@ -438,7 +438,7 @@ int SecuRequestMode::Login(IF2UnPacker * &lpUnPacker)
     return iSystemNo;
 }
 
-int SecuRequestMode::SendRequest(IBizMessage* lpBizMessage, int iSystemNo, IF2UnPacker * &lpUnPacker)
+int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPacker int iSystemNo, IF2UnPacker * &lpUnPacker)
 {
 	int hSend = 0;
 
@@ -452,22 +452,22 @@ int SecuRequestMode::SendRequest(IBizMessage* lpBizMessage, int iSystemNo, IF2Un
 	printf("发送功能333002成功, 返回接收句柄: %d!\r\n", hSend);
 
         //iRet = T2SDK_G(g_pConnection)->RecvBizEx(hSend,(void **)&pUnPacker,&pRetData,1000);
-	hSend = lpConnection->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
+	hSend = lpConnection->RecvBizMsg(hSend,&lpBizMessage,1000);
 	if(hSend != 0)
 	{
 		printf("接收功能333002失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
 		goto EXIT;
 	}else{
-		int iReturnCode = lpBizMessageRecv->GetReturnCode();
+		int iReturnCode = lpBizMessage->GetReturnCode();
         if(iReturnCode!= 0) //错误
         {
-        	printf("接收功能333002失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetReturnCode(),lpBizMessageRecv->GetErrorInfo());            
+        	printf("接收功能333002失败,errorNo:%d,errorInfo:%s\n",lpBizMessage->GetReturnCode(),lpBizMessage->GetErrorInfo());            
         }
         else if(iReturnCode==0) // 正确
         {
         	puts("业务操作成功");
         	int iLen = 0;
-        	const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
+        	const void * lpBuffer = lpBizMessage->GetContent(iLen);
         	lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
         	ShowPacket(0,lpUnPacker);
         }
@@ -478,9 +478,9 @@ int SecuRequestMode::SendRequest(IBizMessage* lpBizMessage, int iSystemNo, IF2Un
         ///释放pack中申请的内存，如果不释放就直接release可能会内存泄漏
     if(pPacker)
     {
-    	pPacker->FreeMem(pPacker->GetPackBuf());
+    	lpPacker->FreeMem(lpPacker->GetPackBuf());
             ///释放申请的pack
-    	pPacker->Release();
+    	lpPacker->Release();
     }
     if(lpBizMessage){
     	lpBizMessage->Release();

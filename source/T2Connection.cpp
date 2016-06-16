@@ -208,7 +208,7 @@ zval* T2Connection::req330300()
 
     IF2UnPacker *pUnPacker;
 
-    int send = lp_SecuRequestMode->SendRequest(lpBizMessage, iSystemNo, pUnPacker);
+    int send = lp_SecuRequestMode->SendRequest(lpBizMessage, pPacker, iSystemNo, pUnPacker);
 
     return packToZval(pUnPacker);
 }
