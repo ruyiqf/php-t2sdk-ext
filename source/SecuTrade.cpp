@@ -478,13 +478,13 @@ int SecuRequestMode::SendRequest(/*IBizMessage * &lpBizMessage, IF2Packer * &lpP
        //设置SenderCompanyID
     lpBizMessage->SetSenderCompanyID(91000);
         //设置系统号
-    lpBizMessage->SetSystemNo(lp_SecuRequestMode->iSystemNo);
+    lpBizMessage->SetSystemNo(liSystemNo);
 
         ///获取版本为2类型的pack打包器
     IF2Packer *pPacker = T2NewPacker(2);
     if(!pPacker)
     {
-        return errorToZval(-1, "取打包器失败!");
+        return -1;
     }
     pPacker->AddRef();
 
@@ -554,12 +554,12 @@ int SecuRequestMode::SendRequest(/*IBizMessage * &lpBizMessage, IF2Packer * &lpP
 
     EXIT:
         ///释放pack中申请的内存，如果不释放就直接release可能会内存泄漏
-    if(lpPacker)
+    if(pPacker)
     {
-    	lpPacker->FreeMem(lpPacker->GetPackBuf());
+    	pPacker->FreeMem(pPacker->GetPackBuf());
 
             ///释放申请的pack
-    	lpPacker->Release();
+    	pPacker->Release();
     }
 
     if(lpBizMessage){
