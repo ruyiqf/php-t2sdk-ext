@@ -427,7 +427,7 @@ int SecuRequestMode::Login(IF2UnPacker * &lpUnPacker)
             m_BranchNo = lpUnPacker->GetInt("branch_no");
             const char *pUserToken = lpUnPacker->GetStr("user_token");
             if(pUserToken){
-                sprintf(m_opUserToken, "%s", pUserToken);
+                m_opUserToken = (string) pUserToken;
                 //printf("\r\nuser_token[%s]\r\n",m_cUserToken);
             }
             //客户编号
