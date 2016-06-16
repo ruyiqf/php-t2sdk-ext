@@ -208,8 +208,8 @@ zval* T2Connection::req330300()
     pPacker->AddInt(1);
     ///加入对应的字段值
     
-    char * output;
-    sprintf(output, "op_branch_no:%d entrust_way:%20c", lp_SecuRequestMode->m_op_branch_no, entrust_way);
+    char output[100];
+    sprintf(output, "op_branch_no:%d entrust_way:%20c, op_station:%s", lp_SecuRequestMode->m_op_branch_no, entrust_way, opStation.c_str());
     puts(output);
     ///结束打包
     pPacker->EndPack();
