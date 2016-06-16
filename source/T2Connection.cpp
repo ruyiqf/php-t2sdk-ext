@@ -204,7 +204,7 @@ zval* T2Connection::req330300()
     pPacker->AddStr("");
     pPacker->AddStr("600570");
     pPacker->AddStr(" ");  
-    pPacker->AddStr(1)；
+    pPacker->AddStr(1);
     ///加入对应的字段值
     
     ///结束打包
