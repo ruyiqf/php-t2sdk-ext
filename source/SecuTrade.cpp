@@ -478,7 +478,7 @@ int SecuRequestMode::SendRequest(/*IBizMessage * &lpBizMessage, IF2Packer * &lpP
        //设置SenderCompanyID
     lpBizMessage->SetSenderCompanyID(91000);
         //设置系统号
-    lpBizMessage->SetSystemNo(SystemNo);
+    lpBizMessage->SetSystemNo(iSystemNo);
 
         ///获取版本为2类型的pack打包器
     IF2Packer *pPacker = T2NewPacker(2);
