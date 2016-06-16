@@ -60,7 +60,7 @@ public:
 
 	int Login(IF2UnPacker * &lpUnPacker);
 
-	int SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPacker, int iSystemNo, IF2UnPacker * &lpUnPacker);
+	int SendRequest(/*IBizMessage * &lpBizMessage, IF2Packer * &lpPacker, */int iSystemNo, IF2UnPacker * &lpUnPacker);
 	//331100 登入
 	int ReqFunction331100();
 	//400 证券行情查询
