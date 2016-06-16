@@ -39,6 +39,7 @@ zval * packToZval(IF2UnPacker *pUnPacker)
     const char * csvalue;
     float fvalue;
     char index[8];
+    char col = new char[100];
 
     for (i = 0; i < pUnPacker->GetDatasetCount(); ++i)
     {
@@ -54,6 +55,8 @@ zval * packToZval(IF2UnPacker *pUnPacker)
             for (k = 0; k < pUnPacker->GetColCount(); ++k)
             {
                 const char *col_name = pUnPacker->GetColName(k);
+                strcpy(col, col_name);
+                puts(col);
 
                 switch (pUnPacker->GetColType(k))
                 {
