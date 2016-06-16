@@ -152,67 +152,67 @@ zval* T2Connection::login()
 
 zval* T2Connection::req330300()
 {
-    IBizMessage* lpBizMessage = T2NewBizMessage();
-    lpBizMessage->AddRef();
+    // IBizMessage* lpBizMessage = T2NewBizMessage();
+    // lpBizMessage->AddRef();
 
 
-    IBizMessage* lpBizMessageRecv = NULL;
+    // IBizMessage* lpBizMessageRecv = NULL;
 
-        //功能号
-    lpBizMessage->SetFunction(330300);
-        //请求类型
-    lpBizMessage->SetPacketType(REQUEST_PACKET);
-        //设置营业部号
-    lpBizMessage->SetBranchNo(1);
-        //设置company_id
-    lpBizMessage->SetCompanyID(91000);
-       //设置SenderCompanyID
-    lpBizMessage->SetSenderCompanyID(91000);
-        //设置系统号
-    lpBizMessage->SetSystemNo(lp_SecuRequestMode->iSystemNo);
+    //     //功能号
+    // lpBizMessage->SetFunction(330300);
+    //     //请求类型
+    // lpBizMessage->SetPacketType(REQUEST_PACKET);
+    //     //设置营业部号
+    // lpBizMessage->SetBranchNo(1);
+    //     //设置company_id
+    // lpBizMessage->SetCompanyID(91000);
+    //    //设置SenderCompanyID
+    // lpBizMessage->SetSenderCompanyID(91000);
+    //     //设置系统号
+    // lpBizMessage->SetSystemNo(lp_SecuRequestMode->iSystemNo);
 
-        ///获取版本为2类型的pack打包器
-    IF2Packer *pPacker = T2NewPacker(2);
-    if(!pPacker)
-    {
-        return errorToZval(-1, "取打包器失败!");
-    }
-    pPacker->AddRef();
+    //     ///获取版本为2类型的pack打包器
+    // IF2Packer *pPacker = T2NewPacker(2);
+    // if(!pPacker)
+    // {
+    //     return errorToZval(-1, "取打包器失败!");
+    // }
+    // pPacker->AddRef();
 
-        ///开始打包
-    pPacker->BeginPack();
-    //加入字段名
-    //pPacker->AddField("op_branch_no", 'I', 5);//操作分支机构
-    pPacker->AddField("op_branch_no", 'I', 5);//操作分支机构
-    pPacker->AddField("op_entrust_way", 'C', 1);//委托方式 
-    pPacker->AddField("op_station", 'S', 255);//站点地址
-    pPacker->AddField("query_type",'C');
-    pPacker->AddField("exchange_type",'S');
-    pPacker->AddField("stock_type",'S');
-    pPacker->AddField("stcok_code",'S');
-    pPacker->AddField("position_str",'S');
+    //     ///开始打包
+    // pPacker->BeginPack();
+    // //加入字段名
+    // //pPacker->AddField("op_branch_no", 'I', 5);//操作分支机构
+    // pPacker->AddField("op_branch_no", 'I', 5);//操作分支机构
+    // pPacker->AddField("op_entrust_way", 'C', 1);//委托方式 
+    // pPacker->AddField("op_station", 'S', 255);//站点地址
+    // pPacker->AddField("query_type",'C');
+    // pPacker->AddField("exchange_type",'S');
+    // pPacker->AddField("stock_type",'S');
+    // pPacker->AddField("stcok_code",'S');
+    // pPacker->AddField("position_str",'S');
     
     
-    ///加入对应的字段值
-    pPacker->AddInt(lp_SecuRequestMode->m_op_branch_no);                        
-    pPacker->AddChar(lp_SecuRequestMode->GetEntrustWay()); 
-    string opStation = lp_SecuRequestMode->GetOpStation();            
-    pPacker->AddStr(opStation.c_str());               
-    pPacker->AddChar('0');
-    pPacker->AddStr("1");
-    pPacker->AddStr("");
-    pPacker->AddStr("600570");
-    pPacker->AddStr(" ");  
-    ///加入对应的字段值
+    // ///加入对应的字段值
+    // pPacker->AddInt(lp_SecuRequestMode->m_op_branch_no);                        
+    // pPacker->AddChar(lp_SecuRequestMode->GetEntrustWay()); 
+    // string opStation = lp_SecuRequestMode->GetOpStation();            
+    // pPacker->AddStr(opStation.c_str());               
+    // pPacker->AddChar('0');
+    // pPacker->AddStr("1");
+    // pPacker->AddStr("");
+    // pPacker->AddStr("600570");
+    // pPacker->AddStr(" ");  
+    // ///加入对应的字段值
     
-    ///结束打包
-    pPacker->EndPack();
+    // ///结束打包
+    // pPacker->EndPack();
 
-    lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
+    // lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
 
-    IF2UnPacker *pUnPacker;
+    // IF2UnPacker *pUnPacker;
 
-    int send = lp_SecuRequestMode->SendRequest(lpBizMessage, pPacker, iSystemNo, pUnPacker);
+    int send = lp_SecuRequestMode->SendRequest(iSystemNo, pUnPacker);
 
     return packToZval(pUnPacker);
 }
