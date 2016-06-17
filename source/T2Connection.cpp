@@ -141,7 +141,7 @@ void T2Connection::disconnect()
 {
     puts("disconnect");
     delete lp_SecuRequestMode;
-    puts("after disconnect")
+    puts("after disconnect");
 }
 
 zval* T2Connection::login()
