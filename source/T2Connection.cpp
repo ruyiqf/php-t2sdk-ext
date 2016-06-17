@@ -139,7 +139,9 @@ int T2Connection::connect(char * &error)
 
 void T2Connection::disconnect()
 {
+    puts("disconnect");
     delete lp_SecuRequestMode;
+    puts("after disconnect")
 }
 
 zval* T2Connection::login()
