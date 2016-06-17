@@ -151,15 +151,21 @@ PHP_METHOD(T2Connection, p_connect)
 
 PHP_METHOD(T2Connection, p_disconnect)
 {
+	puts("t2sdk begin disconnect");
 	T2Connection *t2connection;
     t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
         getThis() TSRMLS_CC);
+
+    	puts("t2sdk begin get obj");
 
     // if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name) == FAILURE) {
     //     RETURN_NULL();
     // }
 
     t2connection = obj->t2connection;
+
+        	puts("t2sdk begin get t2connection");
+
     if (t2connection != NULL) {
         t2connection->disconnect();
     }
