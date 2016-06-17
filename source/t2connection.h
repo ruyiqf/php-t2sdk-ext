@@ -17,6 +17,7 @@ typedef IBizMessage* (*biz_message)();
 class T2Connection {
 public:
     T2Connection(char *lib_t2sdk_file, char *ini_file, char *fund_account, char *password);
+    ~T2Connection();
     //void connect();
     int connect(char * &error);
     void disconnect();
