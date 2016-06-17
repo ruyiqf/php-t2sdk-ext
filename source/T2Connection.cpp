@@ -113,6 +113,12 @@ T2Connection::T2Connection(char *lib_t2sdk_file, char *ini_file, char *fund_acco
 }
 
 
+T2Connection::~T2Connection()
+{
+    puts("delete lp_SecuRequestMode;");
+    delete lp_SecuRequestMode;
+}
+
 int T2Connection::connect(char * &error)
 {
     void *handle = dlopen(this->lib_t2sdk_file, RTLD_LAZY | RTLD_GLOBAL);
