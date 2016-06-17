@@ -150,7 +150,7 @@ zval* T2Connection::login()
     return packToZval(pUnPacker);
 }
 
-zval* T2Connection::req330300()
+zval* T2Connection::req330300(char *stock_id)
 {
     IBizMessage* lpBizMessage = T2NewBizMessage();
     lpBizMessage->AddRef();
@@ -203,7 +203,7 @@ zval* T2Connection::req330300()
     pPacker->AddChar('0');
     pPacker->AddStr("1");
     pPacker->AddStr("");
-    pPacker->AddStr("600570");
+    pPacker->AddStr(stock_id);
     pPacker->AddStr(" ");  
     pPacker->AddInt(1);
     ///加入对应的字段值

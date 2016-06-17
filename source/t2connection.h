@@ -21,7 +21,7 @@ public:
     int connect(char * &error);
     void disconnect();
     zval* login();
-    zval* req330300();
+    zval* req330300(char *stockId);
 
 private:
     char *ini_file;

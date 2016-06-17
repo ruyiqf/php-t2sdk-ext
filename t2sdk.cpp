@@ -189,13 +189,15 @@ PHP_METHOD(T2Connection, p_req330300)
     t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
         getThis() TSRMLS_CC);
 
-    // if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name) == FAILURE) {
-    //     RETURN_NULL();
-    // }
+    char *stock_id;
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &stock_id) == FAILURE) {
+        RETURN_NULL();
+    }
+
     zval * result;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
-        result = t2connection->req330300();
+        result = t2connection->req330300(stock_id);
     }
 
     RETURN_ZVAL(result, 1, 0);
