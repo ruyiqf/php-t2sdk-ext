@@ -181,6 +181,8 @@ PHP_METHOD(T2Connection, p_login)
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &fund_account, &password) == FAILURE) {
         RETURN_NULL();
     }
+
+    pust(fund_account, password);
     zval * result;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
