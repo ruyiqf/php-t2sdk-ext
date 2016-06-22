@@ -58,7 +58,7 @@ public:
 	int iSystemNo;
 	int m_op_branch_no;
 
-	int Login(IF2UnPacker * &lpUnPacker);
+	int Login(char *fund_account, char *password, IF2UnPacker * &lpUnPacker);
 
 	int SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPacker, int iSystemNo, IF2UnPacker * &lpUnPacker);
 	//331100 登入
