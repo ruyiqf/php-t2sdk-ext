@@ -177,8 +177,11 @@ PHP_METHOD(T2Connection, p_login)
     t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
         getThis() TSRMLS_CC);
 
-    char *fund_account, *password;
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &fund_account, &password) == FAILURE) {
+    char *fund_account;
+    uint fund_account_len;
+    char *password;
+    uint password_len;
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &fund_account, &fund_account_len, &password, &password_len) == FAILURE) {
         RETURN_NULL();
     }
 
