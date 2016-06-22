@@ -251,13 +251,13 @@ void CTradeCallback::OnResponse_331100(IF2UnPacker *lpUnPacker)
 	return;
 }
 
-int SecuRequestMode::InitConn(char *ini_file, char *fund_account, char *password, char *&error)
+int SecuRequestMode::InitConn(char *ini_file, char *&error)
 {   
 	lpConfig->Load(ini_file);
 	// const char *p_fund_account = lpConfig->GetString("ufx", "fund_account", "");
 	// const char *p_password = lpConfig->GetString("ufx", "password", "");
-	strcpy(m_AccountName,fund_account);
-	strcpy(m_Password,password);
+	// strcpy(m_AccountName,fund_account);
+	// strcpy(m_Password,password);
 	m_EntrustWay='7';
 	
 	//配置连接对象
@@ -308,8 +308,11 @@ unsigned long SecuRequestMode::Release()
 	return 0;
 };
 
-int SecuRequestMode::Login(IF2UnPacker * &lpUnPacker)
+int SecuRequestMode::Login(char *fund_account, char *password, IF2UnPacker * &lpUnPacker)
 {
+	strcpy(m_AccountName,fund_account);
+	strcpy(m_Password,password);
+	
 	int hSend = 0, iSystemNo = -1;
 
 	IBizMessage* lpBizMessage = T2NewBizMessage();

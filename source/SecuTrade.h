@@ -49,7 +49,7 @@ public:
 		lpConfig->Release();
 	};
 
-	int InitConn(char *ini_file, char *fund_account, char *password, char *&error);
+	int InitConn(char *ini_file, char *&error);
 	unsigned long Release();
 public:
 	string m_opUserToken;

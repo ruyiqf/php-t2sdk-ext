@@ -104,12 +104,12 @@ zval * packToZval(IF2UnPacker *pUnPacker)
     return result;
 }
 
-T2Connection::T2Connection(char *lib_t2sdk_file, char *ini_file, char *fund_account, char *password)
+T2Connection::T2Connection(char *lib_t2sdk_file, char *ini_file)
 {
     this->lib_t2sdk_file = lib_t2sdk_file;
     this->ini_file = ini_file;
-    this->fund_account = fund_account;
-    this->password = password;
+    // this->fund_account = fund_account;
+    // this->password = password;
 }
 
 
@@ -137,7 +137,7 @@ int T2Connection::connect(char * &error)
 
  lp_SecuRequestMode = new SecuRequestMode();
     //lp_SecuRequestMode->InitConn("demo", "license.dat", "218.108.19.190:18002");
- int ret = lp_SecuRequestMode->InitConn(this->ini_file, this->fund_account, this->password, error);
+ int ret = lp_SecuRequestMode->InitConn(this->ini_file, error);
 
 
  return ret;
@@ -150,10 +150,13 @@ void T2Connection::disconnect()
     puts("after disconnect");
 }
 
-zval* T2Connection::login()
+zval* T2Connection::login(char *fund_account, char *password)
 {
+    this->fund_account = fund_account;
+    this->password = password;
+    
     IF2UnPacker *pUnPacker;
-    lp_SecuRequestMode->Login(pUnPacker);
+    lp_SecuRequestMode->Login(fund_account, password, pUnPacker);
 
     return packToZval(pUnPacker);
 }
@@ -217,8 +220,8 @@ zval* T2Connection::req330300(char *stock_id)
     ///加入对应的字段值
     
     char output[100];
-    sprintf(output, "op_branch_no:%d entrust_way:%20c, op_station:%s", lp_SecuRequestMode->m_op_branch_no, entrust_way, opStation.c_str());
-    puts(output);
+    // sprintf(output, "op_branch_no:%d entrust_way:%20c, op_station:%s", lp_SecuRequestMode->m_op_branch_no, entrust_way, opStation.c_str());
+    // puts(output);
     ///结束打包
     pPacker->EndPack();
 

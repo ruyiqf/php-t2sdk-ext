@@ -62,8 +62,8 @@ PHP_METHOD(T2Connection, __construct)
 {
 	char *ini_file;
 	char *lib_t2sdk_file;
-	char *fund_account;
-	char *password;
+	// char *fund_account;
+	// char *password;
 
 	// long maxGear;
     T2Connection *t2connection = NULL;
@@ -105,16 +105,16 @@ PHP_METHOD(T2Connection, __construct)
 	    		convert_to_string(&temp);
 	    		lib_t2sdk_file = Z_STRVAL(temp);
 	    	}
-	    	else if(strcmp(key, "fund_account") == 0)
-	    	{
-	    		convert_to_string(&temp);
-	    		fund_account = Z_STRVAL(temp);
-	    	}
-	    	else if(strcmp(key, "password") == 0)
-	    	{
-	    		convert_to_string(&temp);
-	    		password = Z_STRVAL(temp);
-	    	}
+	    	// else if(strcmp(key, "fund_account") == 0)
+	    	// {
+	    	// 	convert_to_string(&temp);
+	    	// 	fund_account = Z_STRVAL(temp);
+	    	// }
+	    	// else if(strcmp(key, "password") == 0)
+	    	// {
+	    	// 	convert_to_string(&temp);
+	    	// 	password = Z_STRVAL(temp);
+	    	// }
 	    	// else if(strcmp(key, "auto_reconnect") == 0)
 	    	// {
 	    	// 	convert_to_string(&temp);
@@ -123,7 +123,7 @@ PHP_METHOD(T2Connection, __construct)
 	    }
 	}
 
-    t2connection = new T2Connection(lib_t2sdk_file, ini_file, fund_account, password);
+    t2connection = new T2Connection(lib_t2sdk_file, ini_file);
     t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(object TSRMLS_CC);
     obj->t2connection = t2connection;
 }
@@ -177,13 +177,14 @@ PHP_METHOD(T2Connection, p_login)
     t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
         getThis() TSRMLS_CC);
 
-    // if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name) == FAILURE) {
-    //     RETURN_NULL();
-    // }
+    char *fund_account, *password;
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &fund_account, &password) == FAILURE) {
+        RETURN_NULL();
+    }
     zval * result;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
-        result = t2connection->login();
+        result = t2connection->login(fund_account, password);
     }
 
     RETURN_ZVAL(result, 1, 0);
