@@ -182,7 +182,8 @@ PHP_METHOD(T2Connection, p_login)
         RETURN_NULL();
     }
 
-    puts(fund_account, password);
+    puts(fund_account);
+    puts(password);
     zval * result;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
