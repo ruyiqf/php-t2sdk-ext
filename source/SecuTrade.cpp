@@ -388,7 +388,7 @@ int SecuRequestMode::Login(char *fund_account, char *password, IF2UnPacker * &lp
 
 	printf("发送功能331100成功, 返回接收句柄: %d!\r\n", hSend);
 
-
+	goto EXIT;
 
     //iRet = lpConnection->RecvBizEx(hSend, (void **)&pUnPacker, &pRetData, 1000);
     //int a;  int &ra=a;  //定义引用ra,它是变量a的引用，即别名
