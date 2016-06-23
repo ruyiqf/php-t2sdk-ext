@@ -33,6 +33,7 @@ zval * packToZval(IF2UnPacker *pUnPacker)
 
     if(!pUnPacker)
     {
+        puts("before return");
         return result;
     }
     
@@ -163,6 +164,7 @@ zval* T2Connection::login(char *fund_account, char *password)
     IF2UnPacker *pUnPacker;
     lp_SecuRequestMode->Login(fund_account, password, pUnPacker);
 
+    puts("before packtozval");
     return packToZval(pUnPacker);
 }
 
