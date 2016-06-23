@@ -33,7 +33,6 @@ zval * packToZval(IF2UnPacker *pUnPacker)
 
     if(NULL == pUnPacker)
     {
-        puts("before return");
         return result;
     }
 
@@ -235,7 +234,7 @@ zval* T2Connection::req330300(char *stock_id)
 
     lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
 
-    IF2UnPacker *pUnPacker;
+    IF2UnPacker *pUnPacker = NULL;
 
     int send = lp_SecuRequestMode->SendRequest(lpBizMessage, pPacker, iSystemNo, pUnPacker);
 
@@ -290,7 +289,7 @@ zval* T2Connection::req400(char* stock_id, char* exchange_type)
 
     lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
 
-    IF2UnPacker *pUnPacker;
+    IF2UnPacker *pUnPacker = NULL;
 
     int send = lp_SecuRequestMode->SendRequest(lpBizMessage, pPacker, iSystemNo, pUnPacker);
 
@@ -369,7 +368,7 @@ zval* T2Connection::req333001(char* stock_id, char* exchange_type, double entrus
 
     lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
 
-    IF2UnPacker *pUnPacker;
+    IF2UnPacker *pUnPacker = NULL;
 
     int send = lp_SecuRequestMode->SendRequest(lpBizMessage, pPacker, iSystemNo, pUnPacker);
 
