@@ -36,6 +36,8 @@ zval * packToZval(IF2UnPacker *pUnPacker)
         puts("before return");
         return result;
     }
+
+    puts("pUnPacker not null");
     
     int i = 0, t = 0, j = 0, k = 0;
     int ivalue;
