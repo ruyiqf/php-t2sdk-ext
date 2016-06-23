@@ -163,10 +163,9 @@ zval* T2Connection::login(char *fund_account, char *password)
     this->fund_account = fund_account;
     this->password = password;
     
-    IF2UnPacker *pUnPacker;
+    IF2UnPacker *pUnPacker = NULL;
     lp_SecuRequestMode->Login(fund_account, password, pUnPacker);
 
-    puts("before packtozval");
     return packToZval(pUnPacker);
 }
 
