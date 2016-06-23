@@ -31,7 +31,7 @@ zval * packToZval(IF2UnPacker *pUnPacker)
     ALLOC_INIT_ZVAL(result);
     array_init(result);
 
-    if(!pUnPacker)
+    if(NULL == pUnPacker)
     {
         puts("before return");
         return result;
