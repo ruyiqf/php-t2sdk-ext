@@ -22,7 +22,15 @@ public:
     int connect(char * &error);
     void disconnect();
     zval* login(char *fund_account, char *password);
-    zval* req330300(char *stockId);
+
+    //股票代码查询
+    zval* req330300(char *stock_id);
+
+    //代码行情查询
+    zval* req400(char* stock_id, char* exchange_type);
+
+    //大约可买获取
+    zval* req333001(char* stock_id, char* exchange_type, double entrust_price);
 
 private:
     char *ini_file;
