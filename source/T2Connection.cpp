@@ -239,7 +239,7 @@ zval* T2Connection::req330300(char *stock_id)
     return packToZval(pUnPacker);
 }
 
-zval* T2Connection::req400(char* stock_id, char* exchange_type)
+zval* T2Connection::req400(char *stock_id, char *exchange_type)
 {
     IBizMessage* lpBizMessage = T2NewBizMessage();
     lpBizMessage->AddRef();

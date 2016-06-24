@@ -255,6 +255,9 @@ PHP_METHOD(T2Connection, p_req333001)
         RETURN_NULL();
     }
 
+    puts(stock_id);
+    puts(exchange_type);
+
     zval * result;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
