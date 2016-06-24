@@ -185,8 +185,6 @@ PHP_METHOD(T2Connection, p_login)
         RETURN_NULL();
     }
 
-    puts(fund_account);
-    puts(password);
     zval * result;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
@@ -198,12 +196,14 @@ PHP_METHOD(T2Connection, p_login)
 
 PHP_METHOD(T2Connection, p_req330300)
 {
+    puts("t2sdk req330300");
 	T2Connection *t2connection;
     t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
         getThis() TSRMLS_CC);
 
     char *stock_id;
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &stock_id) == FAILURE) {
+    uint stock_id_len;
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &stock_id, &stock_id_len) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -258,7 +258,7 @@ PHP_METHOD(T2Connection, p_req333001)
     zval * result;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
-        result = t2connection->req333001(stock_id, exchange_type, entrust_price);
+        result = t2connection->req333001(stock_id, exchange_type, entrust_prices);
     }
 
     RETURN_ZVAL(result, 1, 0);

@@ -159,9 +159,6 @@ void T2Connection::disconnect()
 
 zval* T2Connection::login(char *fund_account, char *password)
 {
-    this->fund_account = fund_account;
-    this->password = password;
-    
     IF2UnPacker *pUnPacker = NULL;
     lp_SecuRequestMode->Login(fund_account, password, pUnPacker);
 
@@ -170,6 +167,7 @@ zval* T2Connection::login(char *fund_account, char *password)
 
 zval* T2Connection::req330300(char *stock_id)
 {
+    puts("begin req330300");
     IBizMessage* lpBizMessage = T2NewBizMessage();
     lpBizMessage->AddRef();
 
