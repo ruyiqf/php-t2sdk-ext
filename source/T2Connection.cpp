@@ -271,8 +271,8 @@ zval* T2Connection::req400(char* stock_id, char* exchange_type)
         ///开始打包
     pPacker->BeginPack();
     //加入字段名
-    pPacker->AddField("exchange_type",'S');
-    pPacker->AddField("stock_code",'S');
+    pPacker->AddField("exchange_type",'S',4);
+    pPacker->AddField("stock_code",'S',6);
 
     //加入字段值
     pPacker->AddStr(exchange_type);
