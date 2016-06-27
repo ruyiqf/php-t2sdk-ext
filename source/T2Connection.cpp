@@ -62,8 +62,8 @@ zval * packToZval(IF2UnPacker *pUnPacker)
             for (k = 0; k < pUnPacker->GetColCount(); ++k)
             {
                 const char *col_name = pUnPacker->GetColName(k);
-                 strcpy(col, col_name);
-                 puts(col);
+                 // strcpy(col, col_name);
+                 // puts(col);
 
                 switch (pUnPacker->GetColType(k))
                 {
@@ -108,7 +108,6 @@ zval * packToZval(IF2UnPacker *pUnPacker)
             pUnPacker->Next();
         }
     }
-    puts("after packToZval");
     return result;
 }
 

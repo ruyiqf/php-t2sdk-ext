@@ -293,6 +293,7 @@ PHP_METHOD(T2Connection, p_req333002)
         result = t2connection->req333002(stock_id, exchange_type, entrust_amount, entrust_price, entrust_bs[0], entrust_prop);
     }
 
+    puts("return_zval");
     RETURN_ZVAL(result, 1, 0);
 }
 
