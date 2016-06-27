@@ -290,7 +290,7 @@ PHP_METHOD(T2Connection, p_req333002)
     zval * result;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
-        result = t2connection->req333002(stock_id, exchange_type, entrust_amount, entrust_price, *entrust_bs, entrust_prop);
+        result = t2connection->req333002(stock_id, exchange_type, entrust_amount, entrust_price, entrust_bs[0], entrust_prop);
     }
 
     RETURN_ZVAL(result, 1, 0);
