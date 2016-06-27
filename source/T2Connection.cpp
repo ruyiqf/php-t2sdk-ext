@@ -435,21 +435,21 @@ zval* T2Connection::req333002(char *stock_id, char *exchange_type, double entrus
     pPacker->AddChar(entrust_way); 
     pPacker->AddStr(opStation.c_str());                  
     pPacker->AddInt(lp_SecuRequestMode->m_BranchNo);
-    puts("4-1");                
     pPacker->AddStr(lp_SecuRequestMode->m_client_id);            
     pPacker->AddStr(lp_SecuRequestMode->GetAccountName());         
     pPacker->AddStr(lp_SecuRequestMode->GetPassword());                
     pPacker->AddChar('2');  
-    puts("4-2");                    
     pPacker->AddStr(lp_SecuRequestMode->m_opUserToken.c_str());         
     pPacker->AddStr(exchange_type);                 
     pPacker->AddStr("");
     pPacker->AddStr(stock_id);                
     pPacker->AddDouble(entrust_amount);  
-    puts("4-3");    
     pPacker->AddDouble(entrust_price);  
+    puts("price");
     pPacker->AddChar('0');  
+    puts("0");
     pPacker->AddStr(entrust_prop);  
+    puts("prop");
     //pPacker->AddInt(13);  
     
      // char output[1000];
