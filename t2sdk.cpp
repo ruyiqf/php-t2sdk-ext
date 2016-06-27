@@ -286,8 +286,6 @@ PHP_METHOD(T2Connection, p_req333002)
         RETURN_NULL();
     }
 
-    printf("%s %s %f", stock_id, exchange_type, entrust_price);
-
     zval * result;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
@@ -305,6 +303,7 @@ zend_function_entry t2connection_methods[] = {
     PHP_ME(T2Connection,  p_req330300,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req400,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req333001,  NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(T2Connection,  p_req333002,  NULL, ZEND_ACC_PUBLIC)
     {NULL, NULL, NULL}
 };
 
