@@ -62,8 +62,8 @@ zval * packToZval(IF2UnPacker *pUnPacker)
             for (k = 0; k < pUnPacker->GetColCount(); ++k)
             {
                 const char *col_name = pUnPacker->GetColName(k);
-                // strcpy(col, col_name);
-                // puts(col);
+                 strcpy(col, col_name);
+                 puts(col);
 
                 switch (pUnPacker->GetColType(k))
                 {
@@ -445,11 +445,8 @@ zval* T2Connection::req333002(char *stock_id, char *exchange_type, double entrus
     pPacker->AddStr(stock_id);                
     pPacker->AddDouble(entrust_amount);  
     pPacker->AddDouble(entrust_price);  
-    puts("price");
-    pPacker->AddChar('0');  
-    puts("0");
+    pPacker->AddChar(entrust_bs);  
     pPacker->AddStr(entrust_prop);  
-    puts("prop");
     //pPacker->AddInt(13);  
     
      // char output[1000];
@@ -457,8 +454,6 @@ zval* T2Connection::req333002(char *stock_id, char *exchange_type, double entrus
      // puts(output);
     ///结束打包
     pPacker->EndPack();
-
-    puts("after pack");
 
     lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
 
