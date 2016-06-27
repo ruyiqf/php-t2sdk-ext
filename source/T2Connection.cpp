@@ -445,7 +445,7 @@ zval* T2Connection::req333002(char *stock_id, char *exchange_type, double entrus
     pPacker->AddStr(stock_id);                
     pPacker->AddDouble(entrust_amount);  
     pPacker->AddDouble(entrust_price);  
-    pPacker->AddChar(entrust_bs);  
+    pPacker->AddChar('0');  
     pPacker->AddStr(entrust_prop);  
     //pPacker->AddInt(13);  
     
