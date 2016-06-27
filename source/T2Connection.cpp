@@ -68,7 +68,7 @@ zval * packToZval(IF2UnPacker *pUnPacker)
                 switch (pUnPacker->GetColType(k))
                 {
                     case 'I':
-                    printf("%20d", pUnPacker->GetIntByIndex(k););
+                    printf("%20d", pUnPacker->GetIntByIndex(k));
                     ivalue = pUnPacker->GetIntByIndex(k);
                     add_assoc_long(arr, col_name, ivalue);
                     break;
