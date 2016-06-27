@@ -446,9 +446,9 @@ zval* T2Connection::req333002(char *stock_id, char *exchange_type, double entrus
     pPacker->AddStr(entrust_prop);  
     //pPacker->AddInt(13);  
     
-    // char output[1000];
-    // sprintf(output, "op_branch_no:%d entrust_way:%20c, op_station:%s client_id:%s account_name:%s password:%s token:%s", lp_SecuRequestMode->m_op_branch_no, entrust_way, opStation.c_str(), lp_SecuRequestMode->m_client_id, lp_SecuRequestMode->GetAccountName(), lp_SecuRequestMode->GetPassword(),lp_SecuRequestMode->m_opUserToken.c_str());
-    // puts(output);
+     char output[1000];
+     sprintf(output, "op_branch_no:%d entrust_way:%20c, op_station:%s client_id:%s account_name:%s password:%s token:%s entrust_bs:%c entrust_prop:%s", lp_SecuRequestMode->m_op_branch_no, entrust_way, opStation.c_str(), lp_SecuRequestMode->m_client_id, lp_SecuRequestMode->GetAccountName(), lp_SecuRequestMode->GetPassword(),lp_SecuRequestMode->m_opUserToken.c_str(), entrust_bs, entrust_prop);
+     puts(output);
     ///结束打包
     pPacker->EndPack();
 
