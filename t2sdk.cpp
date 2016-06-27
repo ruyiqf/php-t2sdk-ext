@@ -283,7 +283,7 @@ PHP_METHOD(T2Connection, p_req333002)
     char *entrust_prop;
     uint entrust_prop_len;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssddss", &stock_id, &stock_id_len, &exchange_type, &exchange_type_len, &entrust_amount, &entrust_price, &entrust_bs, &entrust_prop) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssddss", &stock_id, &stock_id_len, &exchange_type, &exchange_type_len, &entrust_amount, &entrust_price, &entrust_bs, &entrust_bs_len, &entrust_prop) == FAILURE) {
         RETURN_NULL();
     }
 
