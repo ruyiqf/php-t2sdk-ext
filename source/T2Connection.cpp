@@ -377,7 +377,7 @@ zval* T2Connection::req333002(char *stock_id, char *exchange_type, double entrus
 {
     puts("begin 333002");
     char output[1000];
-     sprintf(output, " entrust_bs:%c entrust_prop:%s", entrust_bs, entrust_prop);
+     sprintf(output, " entrust_bs:%20c entrust_prop:%s", entrust_bs, entrust_prop);
      puts(output);
 
     IBizMessage* lpBizMessage = T2NewBizMessage();
