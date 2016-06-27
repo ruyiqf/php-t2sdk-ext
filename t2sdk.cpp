@@ -278,18 +278,19 @@ PHP_METHOD(T2Connection, p_req333002)
     uint exchange_type_len;
     double entrust_amount;
     double entrust_price;
-    char entrust_bs;
+    char *entrust_bs;
+    int entrust_bs_len;
     char *entrust_prop;
     uint entrust_prop_len;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssddcs", &stock_id, &stock_id_len, &exchange_type, &exchange_type_len, &entrust_amount, &entrust_price, &entrust_bs, &entrust_prop) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssddss", &stock_id, &stock_id_len, &exchange_type, &exchange_type_len, &entrust_amount, &entrust_price, &entrust_bs, &entrust_prop) == FAILURE) {
         RETURN_NULL();
     }
 
     zval * result;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
-        result = t2connection->req333001(stock_id, exchange_type, entrust_price);
+        result = t2connection->req333002(stock_id, exchange_type, entrust_amount, entrust_price, *entrust_bs, entrust_prop);
     }
 
     RETURN_ZVAL(result, 1, 0);

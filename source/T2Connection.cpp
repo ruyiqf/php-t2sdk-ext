@@ -422,7 +422,7 @@ zval* T2Connection::req333002(char *stock_id, char *exchange_type, double entrus
     pPacker->AddField("entrust_price", 'F', 18, 3);
     pPacker->AddField("entrust_bs", 'C', 1);
     pPacker->AddField("entrust_prop", 'S', 3);  
-    pPacker->AddField("batch_no", 'I', 8);
+    //pPacker->AddField("batch_no", 'I', 8);
 
     //加入字段值
     char entrust_way = lp_SecuRequestMode->GetEntrustWay();                        
@@ -444,7 +444,7 @@ zval* T2Connection::req333002(char *stock_id, char *exchange_type, double entrus
     pPacker->AddDouble(entrust_price);  
     pPacker->AddChar(entrust_bs);  
     pPacker->AddStr(entrust_prop);  
-    pPacker->AddInt(13);  
+    //pPacker->AddInt(13);  
     
     // char output[1000];
     // sprintf(output, "op_branch_no:%d entrust_way:%20c, op_station:%s client_id:%s account_name:%s password:%s token:%s", lp_SecuRequestMode->m_op_branch_no, entrust_way, opStation.c_str(), lp_SecuRequestMode->m_client_id, lp_SecuRequestMode->GetAccountName(), lp_SecuRequestMode->GetPassword(),lp_SecuRequestMode->m_opUserToken.c_str());
