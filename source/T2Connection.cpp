@@ -108,6 +108,7 @@ zval * packToZval(IF2UnPacker *pUnPacker)
             pUnPacker->Next();
         }
     }
+    after("after packToZval");
     return result;
 }
 
