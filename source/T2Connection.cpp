@@ -358,9 +358,97 @@ zval* T2Connection::req333001(char *stock_id, char *exchange_type, double entrus
     pPacker->AddStr(stock_id);                
     pPacker->AddDouble(entrust_price);  
     
-    char output[1000];
-    sprintf(output, "op_branch_no:%d entrust_way:%20c, op_station:%s client_id:%s account_name:%s password:%s token:%s", lp_SecuRequestMode->m_op_branch_no, entrust_way, opStation.c_str(), lp_SecuRequestMode->m_client_id, lp_SecuRequestMode->GetAccountName(), lp_SecuRequestMode->GetPassword(),lp_SecuRequestMode->m_opUserToken.c_str());
-    puts(output);
+    // char output[1000];
+    // sprintf(output, "op_branch_no:%d entrust_way:%20c, op_station:%s client_id:%s account_name:%s password:%s token:%s", lp_SecuRequestMode->m_op_branch_no, entrust_way, opStation.c_str(), lp_SecuRequestMode->m_client_id, lp_SecuRequestMode->GetAccountName(), lp_SecuRequestMode->GetPassword(),lp_SecuRequestMode->m_opUserToken.c_str());
+    // puts(output);
+    ///结束打包
+    pPacker->EndPack();
+
+    lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
+
+    IF2UnPacker *pUnPacker = NULL;
+
+    int send = lp_SecuRequestMode->SendRequest(lpBizMessage, pPacker, iSystemNo, pUnPacker);
+
+    return packToZval(pUnPacker);
+}
+
+zval* T2Connection::req333002(char *stock_id, char *exchange_type, double entrust_amount, double entrust_price, char entrust_bs, char * entrust_prop)
+{
+
+    IBizMessage* lpBizMessage = T2NewBizMessage();
+    lpBizMessage->AddRef();
+
+
+    IBizMessage* lpBizMessageRecv = NULL;
+
+        //功能号
+    lpBizMessage->SetFunction(333001);
+        //请求类型
+    lpBizMessage->SetPacketType(REQUEST_PACKET);
+        //设置营业部号
+    lpBizMessage->SetBranchNo(1);
+        //设置company_id
+    lpBizMessage->SetCompanyID(91000);
+       //设置SenderCompanyID
+    lpBizMessage->SetSenderCompanyID(91000);
+        //设置系统号
+    lpBizMessage->SetSystemNo(lp_SecuRequestMode->iSystemNo);
+
+        ///获取版本为2类型的pack打包器
+    IF2Packer *pPacker = T2NewPacker(2);
+    if(!pPacker)
+    {
+        return errorToZval(-1, "取打包器失败!");
+    }
+    pPacker->AddRef();
+
+        ///开始打包
+    pPacker->BeginPack();
+    //加入字段名
+    pPacker->AddField("op_branch_no", 'I', 5);//名字 类型 长度
+    pPacker->AddField("op_entrust_way", 'C', 1);
+    pPacker->AddField("op_station", 'S', 255);
+    pPacker->AddField("branch_no", 'I', 5); 
+    pPacker->AddField("client_id", 'S', 18);//客户ID
+    pPacker->AddField("fund_account", 'S', 18);//资金账号
+    pPacker->AddField("password", 'S', 10);
+    pPacker->AddField("password_type", 'C', 1); 
+    pPacker->AddField("user_token", 'S', 40);
+    pPacker->AddField("exchange_type", 'S', 4);
+    pPacker->AddField("stock_account", 'S', 15);
+    pPacker->AddField("stock_code", 'S', 6);
+    pPacker->AddField("entrust_amount", 'F', 18, 3);
+    pPacker->AddField("entrust_price", 'F', 18, 3);
+    pPacker->AddField("entrust_bs", 'C', 1);
+    pPacker->AddField("entrust_prop", 'S', 3);  
+    pPacker->AddField("batch_no", 'I', 8);
+
+    //加入字段值
+    char entrust_way = lp_SecuRequestMode->GetEntrustWay();                        
+    string opStation = lp_SecuRequestMode->GetOpStation(); 
+    
+    pPacker->AddInt(lp_SecuRequestMode->m_op_branch_no);                        
+    pPacker->AddChar(entrust_way); 
+    pPacker->AddStr(opStation.c_str());                  
+    pPacker->AddInt(lp_SecuRequestMode->m_BranchNo);                
+    pPacker->AddStr(lp_SecuRequestMode->m_client_id);            
+    pPacker->AddStr(lp_SecuRequestMode->GetAccountName());         
+    pPacker->AddStr(lp_SecuRequestMode->GetPassword());                
+    pPacker->AddChar('2');                  
+    pPacker->AddStr(lp_SecuRequestMode->m_opUserToken.c_str());         
+    pPacker->AddStr(exchange_type);                 
+    pPacker->AddStr("");
+    pPacker->AddStr(stock_id);                
+    pPacker->AddDouble(entrust_amount);  
+    pPacker->AddDouble(entrust_price);  
+    pPacker->addChar(entrust_bs);  
+    pPacker->AddStr(entrust_prop);  
+    pPacker->AddInt(13);  
+    
+    // char output[1000];
+    // sprintf(output, "op_branch_no:%d entrust_way:%20c, op_station:%s client_id:%s account_name:%s password:%s token:%s", lp_SecuRequestMode->m_op_branch_no, entrust_way, opStation.c_str(), lp_SecuRequestMode->m_client_id, lp_SecuRequestMode->GetAccountName(), lp_SecuRequestMode->GetPassword(),lp_SecuRequestMode->m_opUserToken.c_str());
+    // puts(output);
     ///结束打包
     pPacker->EndPack();
 

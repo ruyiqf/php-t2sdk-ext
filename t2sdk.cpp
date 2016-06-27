@@ -266,6 +266,37 @@ PHP_METHOD(T2Connection, p_req333001)
     RETURN_ZVAL(result, 1, 0);
 }
 
+PHP_METHOD(T2Connection, p_req333002)
+{
+    T2Connection *t2connection;
+    t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
+        getThis() TSRMLS_CC);
+
+    char *stock_id;
+    uint stock_id_len;
+    char *exchange_type;
+    uint exchange_type_len;
+    double entrust_amount;
+    double entrust_price;
+    char entrust_bs;
+    char *entrust_prop;
+    uint entrust_prop_len;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssddcs", &stock_id, &stock_id_len, &exchange_type, &exchange_type_len, &entrust_amount, &entrust_price, &entrust_bs, &entrust_prop) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    printf("%s %s %f", stock_id, exchange_type, entrust_price);
+
+    zval * result;
+    t2connection = obj->t2connection;
+    if (t2connection != NULL) {
+        result = t2connection->req333001(stock_id, exchange_type, entrust_price);
+    }
+
+    RETURN_ZVAL(result, 1, 0);
+}
+
 zend_function_entry t2connection_methods[] = {
     PHP_ME(T2Connection,  __construct,     NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     PHP_ME(T2Connection,  p_connect,  NULL, ZEND_ACC_PUBLIC)
