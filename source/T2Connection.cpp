@@ -376,9 +376,6 @@ zval* T2Connection::req333001(char *stock_id, char *exchange_type, double entrus
 zval* T2Connection::req333002(char *stock_id, char *exchange_type, double entrust_amount, double entrust_price, char entrust_bs, char * entrust_prop)
 {
     puts("begin 333002");
-    char output[1000];
-     sprintf(output, " entrust_bs:%20c entrust_prop:%s", entrust_bs, entrust_prop);
-     puts(output);
 
     IBizMessage* lpBizMessage = T2NewBizMessage();
     lpBizMessage->AddRef();
@@ -406,6 +403,8 @@ zval* T2Connection::req333002(char *stock_id, char *exchange_type, double entrus
         return errorToZval(-1, "取打包器失败!");
     }
     pPacker->AddRef();
+
+    puts("before pack");
 
         ///开始打包
     pPacker->BeginPack();
@@ -455,6 +454,8 @@ zval* T2Connection::req333002(char *stock_id, char *exchange_type, double entrus
      // puts(output);
     ///结束打包
     pPacker->EndPack();
+
+    puts("after pack");
 
     lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
 
