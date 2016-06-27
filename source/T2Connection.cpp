@@ -64,11 +64,11 @@ zval * packToZval(IF2UnPacker *pUnPacker)
                 const char *col_name = pUnPacker->GetColName(k);
                   strcpy(col, col_name);
                   puts(col);
-
+                puts(pUnPacker->GetColType(k));
                 switch (pUnPacker->GetColType(k))
                 {
                     case 'I':
-                    printf("%20d", pUnPacker->GetIntByIndex(k));
+                    printf("%20d", pUnPacker->GetIntByIndex(k););
                     ivalue = pUnPacker->GetIntByIndex(k);
                     add_assoc_long(arr, col_name, ivalue);
                     break;
