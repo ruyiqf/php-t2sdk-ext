@@ -383,7 +383,7 @@ int SecuRequestMode::Login(char *fund_account, char *password, IF2UnPacker * &lp
 	if((hSend = lpConnection->SendBizMsg(lpBizMessage,0)) < 0)
 	{
 		errorNo = hSend;
-		errorMsg = lpConnection->GetErrorMsg(hSend);
+		strcpy(errorMsg, lpConnection->GetErrorMsg(hSend));
 		//printf("发送功能331100失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
 		goto EXIT;
 	}
@@ -400,7 +400,7 @@ int SecuRequestMode::Login(char *fund_account, char *password, IF2UnPacker * &lp
 	if(hSend != 0)
 	{
 		errorNo = hSend;
-		errorMsg = lpConnection->GetErrorMsg(hSend);
+		strcpy(errorMsg, lpConnection->GetErrorMsg(hSend));
 		//printf("接收功能331100失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
 		goto EXIT;
 	}else{
@@ -467,7 +467,7 @@ int SecuRequestMode::Login(char *fund_account, char *password, IF2UnPacker * &lp
     return iSystemNo;
 }
 
-int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPacker, int iSystemNo, IF2UnPacker * &lpUnPacker, int &errroNo, char *&errorMsg)
+int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPacker, int iSystemNo, IF2UnPacker * &lpUnPacker, int &errorNo, char *&errorMsg)
 {
 	int hSend = 0;
 	IBizMessage* lpBizMessageRecv = NULL;
@@ -486,7 +486,7 @@ int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPac
 	hSend = lpConnection->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
 	if(hSend != 0){
 		errorNo = hSend;
-		errorMsg = lpConnection->GetErrorMsg(hSend);
+		strcpy(errorMsg, lpConnection->GetErrorMsg(hSend));
 		//printf("接收功能333002失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
 		goto EXIT;
 	}
@@ -495,7 +495,7 @@ int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPac
         if(iReturnCode!= 0) //错误
         {
         	errorNo = iReturnCode;
-			errorMsg = lpBizMessageRecv->GetErrorInfo();
+			strcpy(errorMsg, lpConnection->GetErrorMsg(hSend));
 			hSend = iReturnCode;
         	//printf("接收功能333002失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetReturnCode(),lpBizMessageRecv->GetErrorInfo());            
         }
