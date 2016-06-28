@@ -294,8 +294,8 @@ PHP_METHOD(T2Connection, p_req333002)
     }
 
     puts("return zval !!!");
-    //RETURN_ZVAL(result, 1, 0);
-    RETURN_NULL();
+    RETURN_ZVAL(result, 2, 0);
+    //RETURN_NULL();
 }
 
 zend_function_entry t2connection_methods[] = {
@@ -320,7 +320,7 @@ PHP_MINIT_FUNCTION(t2sdk)
     t2connection_ce->create_object = t2connection_create_handler;
     memcpy(&t2connection_object_handlers,
         zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-    t2connection_object_handlers.clone_obj = NULL;
+    .clone_obj = NULL;t2connection_object_handlers
     return SUCCESS;
 }
 
