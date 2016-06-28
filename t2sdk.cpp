@@ -294,7 +294,8 @@ PHP_METHOD(T2Connection, p_req333002)
     }
 
     puts("return zval !!!");
-    RETURN_ZVAL(result, 1, 0);
+    //RETURN_ZVAL(result, 1, 0);
+    RETURN_NULL();
 }
 
 zend_function_entry t2connection_methods[] = {
