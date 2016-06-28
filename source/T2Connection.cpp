@@ -162,7 +162,7 @@ zval* T2Connection::login(char *fund_account, char *password)
 {
     IF2UnPacker *pUnPacker = NULL;
     int errorNo = 0;
-    char *errorMsg = "";
+    char errorMsg[] = "";
     int iSystemNo = lp_SecuRequestMode->Login(fund_account, password, pUnPacker, errorNo, errorMsg);
     if(iSystemNo == -1)
     {
