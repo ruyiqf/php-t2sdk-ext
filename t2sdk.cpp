@@ -320,7 +320,7 @@ PHP_MINIT_FUNCTION(t2sdk)
     t2connection_ce->create_object = t2connection_create_handler;
     memcpy(&t2connection_object_handlers,
         zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-    .clone_obj = NULL;t2connection_object_handlers
+    t2connection_object_handlers.clone_obj = NULL;
     return SUCCESS;
 }
 
