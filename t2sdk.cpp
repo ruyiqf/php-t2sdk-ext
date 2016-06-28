@@ -1,7 +1,11 @@
 #include "php_t2sdk.h"
 #include "source/t2connection.h"
 #include <string.h>
+/*
+ *  zend_parse_parameters 接受参数不全会导致Segmentation fault
+ */
 
+//全局变量初始化
 ZEND_DECLARE_MODULE_GLOBALS(t2sdk);
 
 zend_class_entry *t2connection_ce;
@@ -283,6 +287,8 @@ PHP_METHOD(T2Connection, p_req333002)
     char *entrust_prop;
     uint entrust_prop_len;
 
+
+    //zend_parse_parameters 接受参数不全会导致Segmentation fault
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssddss", &stock_id, &stock_id_len, &exchange_type, &exchange_type_len, &entrust_amount, &entrust_price, &entrust_bs, &entrust_bs_len, &entrust_prop, &entrust_prop_len) == FAILURE) {
         RETURN_NULL();
     }

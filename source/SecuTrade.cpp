@@ -308,7 +308,7 @@ unsigned long SecuRequestMode::Release()
 	return 0;
 };
 
-int SecuRequestMode::Login(char *fund_account, char *password, IF2UnPacker * &lpUnPacker)
+int SecuRequestMode::Login(char *fund_account, char *password, IF2UnPacker * &lpUnPacker, int &errorNo, char *&errorMsg)
 {
 	strcpy(m_AccountName,fund_account);
 	strcpy(m_Password,password);
@@ -382,7 +382,9 @@ int SecuRequestMode::Login(char *fund_account, char *password, IF2UnPacker * &lp
     /*(hSend = lpConnection->SendBizEx(331100,pPacker,NULL,SYNCSEND,0,0,1,NULL)*/
 	if((hSend = lpConnection->SendBizMsg(lpBizMessage,0)) < 0)
 	{
-		printf("发送功能331100失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
+		errorNo = hSend;
+		errorMsg = lpConnection->GetErrorMsg(hSend);
+		//printf("发送功能331100失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
 		goto EXIT;
 	}
 
@@ -397,15 +399,18 @@ int SecuRequestMode::Login(char *fund_account, char *password, IF2UnPacker * &lp
 
 	if(hSend != 0)
 	{
-		printf("接收功能331100失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
+		errorNo = hSend;
+		errorMsg = lpConnection->GetErrorMsg(hSend);
+		//printf("接收功能331100失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
 		goto EXIT;
 	}else{
 
 		int iReturnCode = lpBizMessageRecv->GetReturnCode();
         if(iReturnCode!=0) //错误
         {
-        	printf("接收功能331100失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetErrorNo(),lpBizMessageRecv->GetErrorInfo());
-
+        	errorNo = lpBizMessageRecv->GetErrorNo();
+			errorMsg = lpBizMessageRecv->GetErrorInfo();
+        	//printf("接收功能331100失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetErrorNo(),lpBizMessageRecv->GetErrorInfo());
         }
         else if(iReturnCode==0) // 正确
         {
@@ -427,7 +432,7 @@ int SecuRequestMode::Login(char *fund_account, char *password, IF2UnPacker * &lp
             //分支机构
             m_BranchNo = lpUnPacker->GetInt("branch_no");
             const char *pUserToken = lpUnPacker->GetStr("user_token");
-            if(pUserToken){
+            if(pUserToken){ 
                 m_opUserToken = (string) pUserToken;
                 //printf("\r\nuser_token[%s]\r\n",m_cUserToken);
             }
@@ -462,15 +467,16 @@ int SecuRequestMode::Login(char *fund_account, char *password, IF2UnPacker * &lp
     return iSystemNo;
 }
 
-int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPacker, int iSystemNo, IF2UnPacker * &lpUnPacker)
+int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPacker, int iSystemNo, IF2UnPacker * &lpUnPacker, int &errroNo, char *&errorMsg)
 {
 	int hSend = 0;
 	IBizMessage* lpBizMessageRecv = NULL;
 
 	if((hSend = lpConnection->SendBizMsg(lpBizMessage,0)) < 0)
 	{
-		printf("发送功能333002失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
-		hSend=-2;
+		errorNo = hSend;
+		errorMsg = lpConnection->GetErrorMsg(hSend);
+		//printf("发送功能333002失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
 		goto EXIT;
 	}
 
@@ -478,15 +484,20 @@ int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPac
 
         //iRet = T2SDK_G(g_pConnection)->RecvBizEx(hSend,(void **)&pUnPacker,&pRetData,1000);
 	hSend = lpConnection->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
-	if(hSend != 0)
-	{
-		printf("接收功能333002失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
+	if(hSend != 0){
+		errorNo = hSend;
+		errorMsg = lpConnection->GetErrorMsg(hSend);
+		//printf("接收功能333002失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
 		goto EXIT;
-	}else{
+	}
+	else{
 		int iReturnCode = lpBizMessageRecv->GetReturnCode();
         if(iReturnCode!= 0) //错误
         {
-        	printf("接收功能333002失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetReturnCode(),lpBizMessageRecv->GetErrorInfo());            
+        	errorNo = iReturnCode;
+			errorMsg = lpBizMessageRecv->GetErrorInfo();
+			hSend = iReturnCode;
+        	//printf("接收功能333002失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetReturnCode(),lpBizMessageRecv->GetErrorInfo());            
         }
         else if(iReturnCode==0) // 正确
         {

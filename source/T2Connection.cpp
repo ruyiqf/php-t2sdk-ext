@@ -112,64 +112,6 @@ zval * packToZval(IF2UnPacker *pUnPacker)
     return result;
 }
 
-void ShowPacket1(int iIssueType, IF2UnPacker *pUnPacker)
-{
-    int i = 0, t = 0, j = 0, k = 0;
-
-    for (i = 0; i < pUnPacker->GetDatasetCount(); ++i)
-    {
-        // 设置当前结果集
-        pUnPacker->SetCurrentDatasetByIndex(i);
-
-        // 打印字段
-        for (t = 0; t < pUnPacker->GetColCount(); ++t)
-        {
-            printf("%20s", pUnPacker->GetColName(t));
-        }
-
-        putchar('\n');
-
-        // 打印所有记录
-        for (j = 0; j < (int)pUnPacker->GetRowCount(); ++j)
-        {
-            // 打印每条记录
-            for (k = 0; k < pUnPacker->GetColCount(); ++k)
-            {
-                switch (pUnPacker->GetColType(k))
-                {
-                    case 'I':
-                    printf("%20d", pUnPacker->GetIntByIndex(k));
-                    break;
-
-                    case 'C':
-                    printf("%20c", pUnPacker->GetCharByIndex(k));
-                    break;
-
-                    case 'S':
-                    printf("%20s", pUnPacker->GetStrByIndex(k));
-                    break;
-
-                    case 'F':
-                    printf("%20f", pUnPacker->GetDoubleByIndex(k));
-                    break;
-
-                    case 'R':
-                    {
-                        break;
-                    }               
-                    default:
-                    // 未知数据类型
-                    printf("未知数据类型。\n");
-                    break;
-                }
-            }       
-            putchar('\n');      
-            pUnPacker->Next();
-        }
-        putchar('\n');
-    }
-}
-
 T2Connection::T2Connection(char *lib_t2sdk_file, char *ini_file)
 {
     this->lib_t2sdk_file = lib_t2sdk_file;
@@ -219,7 +161,13 @@ void T2Connection::disconnect()
 zval* T2Connection::login(char *fund_account, char *password)
 {
     IF2UnPacker *pUnPacker = NULL;
-    lp_SecuRequestMode->Login(fund_account, password, pUnPacker);
+    int errorNo = 0;
+    char *errorMsg = "";
+    int iSystemNo = lp_SecuRequestMode->Login(fund_account, password, pUnPacker, errorNo, errorMsg);
+    if(iSystemNo == -1)
+    {
+        return errorToZval(errorNo, errorMsg);
+    }
 
     return packToZval(pUnPacker);
 }
@@ -292,8 +240,14 @@ zval* T2Connection::req330300(char *stock_id)
     lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
 
     IF2UnPacker *pUnPacker = NULL;
+    int errorNo = 0;
+    char *errorMsg = "";
 
     int send = lp_SecuRequestMode->SendRequest(lpBizMessage, pPacker, iSystemNo, pUnPacker);
+    if(send != 0)
+    {
+        return errorToZval(errorNo, errorMsg);
+    }
 
     return packToZval(pUnPacker);
 }
@@ -347,8 +301,14 @@ zval* T2Connection::req400(char *stock_id, char *exchange_type)
     lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
 
     IF2UnPacker *pUnPacker = NULL;
+    int errorNo = 0;
+    char *errorMsg = "";
 
     int send = lp_SecuRequestMode->SendRequest(lpBizMessage, pPacker, iSystemNo, pUnPacker);
+    if(send != 0)
+    {
+        return errorToZval(errorNo, errorMsg);
+    }
 
     return packToZval(pUnPacker);
 }
@@ -426,8 +386,14 @@ zval* T2Connection::req333001(char *stock_id, char *exchange_type, double entrus
     lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
 
     IF2UnPacker *pUnPacker = NULL;
+    int errorNo = 0;
+    char *errorMsg = "";
 
     int send = lp_SecuRequestMode->SendRequest(lpBizMessage, pPacker, iSystemNo, pUnPacker);
+    if(send != 0)
+    {
+        return errorToZval(errorNo, errorMsg);
+    }
 
     return packToZval(pUnPacker);
 }
@@ -516,8 +482,14 @@ zval* T2Connection::req333002(char *stock_id, char *exchange_type, double entrus
     lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
 
     IF2UnPacker *pUnPacker = NULL;
+    int errorNo = 0;
+    char *errorMsg = "";
 
     int send = lp_SecuRequestMode->SendRequest(lpBizMessage, pPacker, iSystemNo, pUnPacker);
+    if(send != 0)
+    {
+        return errorToZval(errorNo, errorMsg);
+    }
 
     return packToZval(pUnPacker);
 }
@@ -599,8 +571,14 @@ zval* T2Connection::req333104(char *stock_id, char *exchange_type, char query_mo
     lpBizMessage->SetContent(pPacker->GetPackBuf(),pPacker->GetPackLen());
 
     IF2UnPacker *pUnPacker = NULL;
+    int errorNo = 0;
+    char *errorMsg = "";
 
-    int send = lp_SecuRequestMode->SendRequest(lpBizMessage, pPacker, iSystemNo, pUnPacker);
+    int send = lp_SecuRequestMode->SendRequest(lpBizMessage, pPacker, iSystemNo, pUnPacker, errorNo, errorMsg);
+    if(send != 0)
+    {
+        return errorToZval(errorNo, errorMsg);
+    }
 
     return packToZval(pUnPacker);
 }
