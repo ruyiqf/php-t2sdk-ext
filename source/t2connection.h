@@ -35,6 +35,9 @@ public:
     //普通委托
     zval* req333002(char *stock_id, char *exchange_type, double entrust_amount, double entrust_price, char entrust_bs, char * entrust_prop);
     
+    //证券持仓查询
+    zval* req333104(char *stock_id, char *exchange_type, char query_mode, char *position_str, int request_num);
+    
 private:
     char *ini_file;
     char *lib_t2sdk_file;

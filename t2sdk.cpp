@@ -279,7 +279,7 @@ PHP_METHOD(T2Connection, p_req333002)
     double entrust_amount;
     double entrust_price;
     char *entrust_bs;
-    int entrust_bs_len;
+    uint entrust_bs_len;
     char *entrust_prop;
     uint entrust_prop_len;
 
@@ -298,6 +298,36 @@ PHP_METHOD(T2Connection, p_req333002)
     //RETURN_NULL();
 }
 
+PHP_METHOD(T2Connection, p_req333104)
+{
+    T2Connection *t2connection;
+    t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
+        getThis() TSRMLS_CC);
+
+    char *stock_id;
+    uint stock_id_len;
+    char *exchange_type;
+    uint exchange_type_len;
+    char *query_mode;
+    uint query_mode_len;
+    char *position_str;
+    uint position_str_len;
+    uint request_num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssssl", &stock_id, &stock_id_len, &exchange_type, &exchange_type_len, &query_mode, &query_mode_len, &position_str, &position_str_len, &request_num) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    zval * result;
+    t2connection = obj->t2connection;
+    if (t2connection != NULL) {
+        result = t2connection->req333104(stock_id, exchange_type, query_mode[0], position_str, request_num);
+    }
+
+    RETURN_ZVAL(result, 1, 0);
+    //RETURN_NULL();
+}
+
 zend_function_entry t2connection_methods[] = {
     PHP_ME(T2Connection,  __construct,     NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     PHP_ME(T2Connection,  p_connect,  NULL, ZEND_ACC_PUBLIC)
@@ -307,6 +337,7 @@ zend_function_entry t2connection_methods[] = {
     PHP_ME(T2Connection,  p_req400,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req333001,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req333002,  NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(T2Connection,  p_req333104,  NULL, ZEND_ACC_PUBLIC)
     {NULL, NULL, NULL}
 };
 
