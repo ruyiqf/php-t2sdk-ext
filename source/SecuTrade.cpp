@@ -409,11 +409,9 @@ int SecuRequestMode::Login(char *fund_account, char *password, IF2UnPacker * &lp
 		int iReturnCode = lpBizMessageRecv->GetReturnCode();
         if(iReturnCode!=0) //错误
         {
-        	printf("return code error errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetErrorNo(),lpBizMessageRecv->GetErrorInfo());
-        	errorNo = lpBizMessageRecv->GetErrorNo();
-        	const char * tmp = lpBizMessageRecv->GetErrorInfo();
-			strcpy(errorMsg, tmp);
-        	//printf("接收功能331100失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetErrorNo(),lpBizMessageRecv->GetErrorInfo());
+        	errorNo = iReturnCode;
+			strcpy(errorMsg, lpBizMessageRecv->GetErrorInfo());
+        	printf("接收功能331100失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetErrorNo(),lpBizMessageRecv->GetErrorInfo());
         }
         else if(iReturnCode==0) // 正确
         {

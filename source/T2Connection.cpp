@@ -302,7 +302,7 @@ zval* T2Connection::req400(char *stock_id, char *exchange_type)
 
     IF2UnPacker *pUnPacker = NULL;
     int errorNo = 0;
-    char *errorMsg = "";
+    char *errorMsg = (char *)malloc(256);
 
     int send = lp_SecuRequestMode->SendRequest(lpBizMessage, pPacker, iSystemNo, pUnPacker, errorNo, errorMsg);
     if(send != 0)
@@ -387,7 +387,7 @@ zval* T2Connection::req333001(char *stock_id, char *exchange_type, double entrus
 
     IF2UnPacker *pUnPacker = NULL;
     int errorNo = 0;
-    char *errorMsg = "";
+    char *errorMsg = (char *)malloc(256);
 
     int send = lp_SecuRequestMode->SendRequest(lpBizMessage, pPacker, iSystemNo, pUnPacker, errorNo, errorMsg);
     if(send != 0)
@@ -483,7 +483,7 @@ zval* T2Connection::req333002(char *stock_id, char *exchange_type, double entrus
 
     IF2UnPacker *pUnPacker = NULL;
     int errorNo = 0;
-    char *errorMsg = "";
+    char *errorMsg = (char *)malloc(256);
 
     int send = lp_SecuRequestMode->SendRequest(lpBizMessage, pPacker, iSystemNo, pUnPacker, errorNo, errorMsg);
     if(send != 0)
@@ -572,7 +572,7 @@ zval* T2Connection::req333104(char *stock_id, char *exchange_type, char query_mo
 
     IF2UnPacker *pUnPacker = NULL;
     int errorNo = 0;
-    char *errorMsg = "";
+    char *errorMsg = (char *)malloc(256);
 
     int send = lp_SecuRequestMode->SendRequest(lpBizMessage, pPacker, iSystemNo, pUnPacker, errorNo, errorMsg);
     if(send != 0)
