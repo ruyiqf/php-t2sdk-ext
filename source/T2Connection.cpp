@@ -64,7 +64,7 @@ zval * packToZval(IF2UnPacker *pUnPacker)
                 const char *col_name = pUnPacker->GetColName(k);
                   //strcpy(col, col_name);
                   //puts(col);
-                printf("%20c", pUnPacker->GetColType(k));
+                //printf("%20c", pUnPacker->GetColType(k));
                 switch (pUnPacker->GetColType(k))
                 {
                     case 'I':

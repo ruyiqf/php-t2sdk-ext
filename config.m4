@@ -65,3 +65,11 @@ if test "$PHP_T2SDK" != "no"; then
   PHP_ADD_LIBRARY(stdc++, 1, T2SDK_SHARED_LIBADD)
 	PHP_NEW_EXTENSION(t2sdk, t2sdk.cpp source/T2Connection.cpp source/SecuTrade.cpp source/SecuMD.cpp Common/tool.cpp Common/analyStr.cpp, $ext_shared)
 fi
+
+if test -z "$PHP_DEBUG"; then   
+    AC_ARG_ENABLE(debug,  
+    [   --enable-debug          compile with debugging symbols],[  
+        PHP_DEBUG=$enableval  
+    ],[ PHP_DEBUG=no  
+    ])  
+fi 
