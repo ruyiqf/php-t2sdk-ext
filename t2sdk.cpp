@@ -294,7 +294,7 @@ PHP_METHOD(T2Connection, p_req333002)
     }
 
     puts("return zval !!!");
-    RETURN_ZVAL(result, 2, 0);
+    RETURN_ZVAL(result, 1, 0);
     //RETURN_NULL();
 }
 
