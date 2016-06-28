@@ -409,7 +409,7 @@ int SecuRequestMode::Login(char *fund_account, char *password, IF2UnPacker * &lp
         if(iReturnCode!=0) //错误
         {
         	errorNo = lpBizMessageRecv->GetErrorNo();
-			errorMsg = lpBizMessageRecv->GetErrorInfo();
+			strcpy(errorMsg, lpBizMessageRecv->GetErrorInfo());
         	//printf("接收功能331100失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetErrorNo(),lpBizMessageRecv->GetErrorInfo());
         }
         else if(iReturnCode==0) // 正确
@@ -475,7 +475,7 @@ int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPac
 	if((hSend = lpConnection->SendBizMsg(lpBizMessage,0)) < 0)
 	{
 		errorNo = hSend;
-		errorMsg = lpConnection->GetErrorMsg(hSend);
+		strcpy(errorMsg, lpConnection->GetErrorMsg(hSend));
 		//printf("发送功能333002失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
 		goto EXIT;
 	}
@@ -495,7 +495,7 @@ int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPac
         if(iReturnCode!= 0) //错误
         {
         	errorNo = iReturnCode;
-			strcpy(errorMsg, lpConnection->GetErrorMsg(hSend));
+			strcpy(errorMsg, lpBizMessageRecv->GetErrorInfo());
 			hSend = iReturnCode;
         	//printf("接收功能333002失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetReturnCode(),lpBizMessageRecv->GetErrorInfo());            
         }
