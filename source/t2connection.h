@@ -34,6 +34,7 @@ public:
 
     //普通委托
     zval* req333002(char *stock_id, char *exchange_type, double entrust_amount, double entrust_price, char entrust_bs, char * entrust_prop);
+    
 private:
     char *ini_file;
     char *lib_t2sdk_file;

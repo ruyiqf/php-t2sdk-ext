@@ -329,7 +329,6 @@ PHP_RINIT_FUNCTION(t2sdk)
 	return SUCCESS;
 }
 
-
 zend_module_entry t2sdk_module_entry = {
 #if ZEND_MODULE_API_NO >= 20010901
     STANDARD_MODULE_HEADER,
