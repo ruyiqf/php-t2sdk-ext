@@ -111,7 +111,7 @@ zval * packToZval(IF2UnPacker *pUnPacker)
     return result;
 }
 
-void ShowPacket(int iIssueType, IF2UnPacker *pUnPacker)
+void ShowPacket1(int iIssueType, IF2UnPacker *pUnPacker)
 {
     int i = 0, t = 0, j = 0, k = 0;
 
@@ -518,7 +518,7 @@ zval* T2Connection::req333002(char *stock_id, char *exchange_type, double entrus
 
     int send = lp_SecuRequestMode->SendRequest(lpBizMessage, pPacker, iSystemNo, pUnPacker);
 
-    ShowPacket(0, pUnPacker);
+    ShowPacket1(0, pUnPacker);
 
     return packToZval(pUnPacker);
 }
