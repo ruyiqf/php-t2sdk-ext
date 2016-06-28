@@ -409,7 +409,7 @@ int SecuRequestMode::Login(char *fund_account, char *password, IF2UnPacker * &lp
 		int iReturnCode = lpBizMessageRecv->GetReturnCode();
         if(iReturnCode!=0) //错误
         {
-        	puts("return code error errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetErrorNo(),lpBizMessageRecv->GetErrorInfo());
+        	printf("return code error errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetErrorNo(),lpBizMessageRecv->GetErrorInfo());
         	errorNo = lpBizMessageRecv->GetErrorNo();
         	const char * tmp = lpBizMessageRecv->GetErrorInfo();
 			strcpy(errorMsg, tmp);
