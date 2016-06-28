@@ -421,7 +421,7 @@ zval* T2Connection::req333002(char *stock_id, char *exchange_type, double entrus
     pPacker->AddField("exchange_type", 'S', 4);
     pPacker->AddField("stock_account", 'S', 15);
     pPacker->AddField("stock_code", 'S', 6);
-    pPacker->AddField("entrust_amount", 'F', 18, 3);
+    pPacker->AddField("entrust_amount", 'F', 19, 2);
     pPacker->AddField("entrust_price", 'F', 18, 3);
     pPacker->AddField("entrust_bs", 'C', 1);
     pPacker->AddField("entrust_prop", 'S', 3);  
@@ -445,7 +445,7 @@ zval* T2Connection::req333002(char *stock_id, char *exchange_type, double entrus
     pPacker->AddStr(stock_id);                
     pPacker->AddDouble(entrust_amount);  
     pPacker->AddDouble(entrust_price);  
-    pPacker->AddChar(entrust_bs);  
+    pPacker->AddChar('1');  
     pPacker->AddStr(entrust_prop);  
     //pPacker->AddInt(13);  
     
