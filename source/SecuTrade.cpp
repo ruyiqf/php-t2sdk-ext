@@ -399,8 +399,10 @@ int SecuRequestMode::Login(char *fund_account, char *password, IF2UnPacker * &lp
 
 	if(hSend != 0)
 	{
+		printf("hsend error %d %s", hSend, lpConnection->GetErrorMsg(hSend));
 		errorNo = hSend;
 		strcpy(errorMsg, lpConnection->GetErrorMsg(hSend));
+		puts("error?");
 		//printf("接收功能331100失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
 		goto EXIT;
 	}else{
