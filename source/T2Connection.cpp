@@ -653,7 +653,7 @@ zval* T2Connection::req333101(char sort_direction, int action_in, char query_typ
     //pPacker->AddStr(exchange_type);                 
     pPacker->AddStr("");
     pPacker->AddStr(""); 
-    pPacker->AddChar(sort_direction)               
+    pPacker->AddChar(sort_direction);               
     pPacker->AddInt(0);  
     pPacker->AddInt(action_in);  
     pPacker->AddInt(0);
