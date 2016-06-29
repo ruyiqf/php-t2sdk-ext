@@ -207,7 +207,9 @@ PHP_METHOD(T2Connection, p_req330300)
 
     char *stock_id;
     uint stock_id_len;
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &stock_id, &stock_id_len) == FAILURE) {
+    char *exchange_type;
+    uint exchange_type_len;
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &stock_id, &stock_id_len, &exchange_type, &exchange_type_len) == FAILURE) {
         RETURN_NULL();
     }
 

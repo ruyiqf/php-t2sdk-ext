@@ -172,7 +172,7 @@ zval* T2Connection::login(char *fund_account, char *password)
     return packToZval(pUnPacker);
 }
 
-zval* T2Connection::req330300(char *stock_id)
+zval* T2Connection::req330300(char *stock_id, char *exchange_type)
 {
     puts("begin req330300");
     IBizMessage* lpBizMessage = T2NewBizMessage();
@@ -224,7 +224,7 @@ zval* T2Connection::req330300(char *stock_id)
     string opStation = lp_SecuRequestMode->GetOpStation();            
     pPacker->AddStr(opStation.c_str());               
     pPacker->AddChar('0');
-    pPacker->AddStr("1");
+    pPacker->AddStr(exchange_type);
     pPacker->AddStr("");
     pPacker->AddStr(stock_id);
     pPacker->AddStr(" ");  

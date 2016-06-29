@@ -24,7 +24,7 @@ public:
     zval* login(char *fund_account, char *password);
 
     //股票代码查询
-    zval* req330300(char *stock_id);
+    zval* req330300(char *stock_id, char *exchange_type);
 
     //代码行情查询
     zval* req400(char* stock_id, char* exchange_type);
