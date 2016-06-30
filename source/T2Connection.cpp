@@ -878,7 +878,7 @@ zval* T2Connection::req333017(int entrust_no)
     IBizMessage* lpBizMessageRecv = NULL;
 
         //功能号
-    lpBizMessage->SetFunction(333103);
+    lpBizMessage->SetFunction(333017);
         //请求类型
     lpBizMessage->SetPacketType(REQUEST_PACKET);
         //设置营业部号
