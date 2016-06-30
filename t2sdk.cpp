@@ -394,11 +394,12 @@ PHP_METHOD(T2Connection, p_req333102)
     }
 
     RETURN_ZVAL(result, 1, 0);
-    //RETURN_NULL();
 }
 
 PHP_METHOD(T2Connection, p_req333103)
 {
+        puts("p_req333103 start");
+
     T2Connection *t2connection;
     t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
         getThis() TSRMLS_CC);
