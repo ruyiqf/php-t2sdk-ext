@@ -407,12 +407,9 @@ PHP_METHOD(T2Connection, p_req333103)
     uint position_str_len;
     uint request_num;
 
-    puts("before parse");
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sl", position_str, &position_str_len, &request_num) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sl", &position_str, &position_str_len, &request_num) == FAILURE) {
         RETURN_NULL();
     }
-
-    puts("parse_param");
 
     zval * result;
     t2connection = obj->t2connection;
