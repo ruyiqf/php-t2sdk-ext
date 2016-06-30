@@ -412,6 +412,8 @@ PHP_METHOD(T2Connection, p_req333103)
         RETURN_NULL();
     }
 
+    puts("parse_param");
+
     zval * result;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
