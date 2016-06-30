@@ -783,7 +783,6 @@ zval* T2Connection::req333102(char sort_direction, char query_type, char query_m
 
 zval* T2Connection::req333103(char *position_str, int request_num)
 {
-    puts("req333103");
     IBizMessage* lpBizMessage = T2NewBizMessage();
     lpBizMessage->AddRef();
 
@@ -795,11 +794,11 @@ zval* T2Connection::req333103(char *position_str, int request_num)
         //请求类型
     lpBizMessage->SetPacketType(REQUEST_PACKET);
         //设置营业部号
-    lpBizMessage->SetBranchNo(1);
-        //设置company_id
-    lpBizMessage->SetCompanyID(91000);
-       //设置SenderCompanyID
-    lpBizMessage->SetSenderCompanyID(91000);
+    // lpBizMessage->SetBranchNo(1);
+    //     //设置company_id
+    // lpBizMessage->SetCompanyID(91000);
+    //    //设置SenderCompanyID
+    // lpBizMessage->SetSenderCompanyID(91000);
         //设置系统号
     lpBizMessage->SetSystemNo(lp_SecuRequestMode->iSystemNo);
 
@@ -849,9 +848,9 @@ zval* T2Connection::req333103(char *position_str, int request_num)
     pPacker->AddStr(position_str);  
     pPacker->AddInt(request_num);  
     
-    char output[1000];
-    sprintf(output, "op_branch_no:%d entrust_way:%20c, op_station:%s client_id:%s account_name:%s password:%s token:%s", lp_SecuRequestMode->m_op_branch_no, entrust_way, opStation.c_str(), lp_SecuRequestMode->m_client_id, lp_SecuRequestMode->GetAccountName(), lp_SecuRequestMode->GetPassword(),lp_SecuRequestMode->m_opUserToken.c_str());
-    puts(output);
+    // char output[1000];
+    // sprintf(output, "op_branch_no:%d entrust_way:%20c, op_station:%s client_id:%s account_name:%s password:%s token:%s", lp_SecuRequestMode->m_op_branch_no, entrust_way, opStation.c_str(), lp_SecuRequestMode->m_client_id, lp_SecuRequestMode->GetAccountName(), lp_SecuRequestMode->GetPassword(),lp_SecuRequestMode->m_opUserToken.c_str());
+    // puts(output);
     ///结束打包
     pPacker->EndPack();
 
