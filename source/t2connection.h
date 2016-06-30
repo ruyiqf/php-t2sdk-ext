@@ -46,6 +46,9 @@ public:
     
     //证券持仓快速查询
     zval* req333103(char *position_str, int request_num);
+
+    //委托撤单
+    zval* req333017(int entrust_no);
 private:
     char *ini_file;
     char *lib_t2sdk_file;
