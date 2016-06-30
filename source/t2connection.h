@@ -43,6 +43,9 @@ public:
     
     //证券成交查询
     zval* req333102(char sort_direction, char query_type, char query_mode, char *position_str, int request_num);
+    
+    //证券持仓快速查询
+    zval* req333103(char *position_str, int request_num);
 private:
     char *ini_file;
     char *lib_t2sdk_file;
