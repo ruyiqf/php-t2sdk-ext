@@ -415,7 +415,7 @@ PHP_METHOD(T2Connection, p_req333103)
     zval * result;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
-        result = t2connection->req333103s(position_str, request_num);
+        result = t2connection->req333103(position_str, request_num);
     }
 
     RETURN_ZVAL(result, 1, 0);
