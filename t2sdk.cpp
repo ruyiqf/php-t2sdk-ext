@@ -464,7 +464,7 @@ PHP_METHOD(T2Connection, p_req332200)
     zval * result;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
-        result = t2connection->req332200(transfer_direction[0], occur_balance, fund_password, bank_password);
+        result = t2connection->req332200(bank_no, transfer_direction[0], occur_balance, fund_password, bank_password);
     }
 
     RETURN_ZVAL(result, 1, 0);
@@ -517,7 +517,7 @@ PHP_METHOD(T2Connection, p_req332253)
     zval * result;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
-        result = t2connection->req332253(fund_password, bank_password);
+        result = t2connection->req332253(bank_no, fund_password, bank_password);
     }
 
     RETURN_ZVAL(result, 1, 0);
