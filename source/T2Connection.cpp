@@ -955,7 +955,7 @@ zval* T2Connection::req333017(int entrust_no)
     return packToZval(pUnPacker);
 }
 
-zval* T2Connection::req332200(char transfer_direction, double occur_balance, char *fund_password, char *bank_password)
+zval* T2Connection::req332200(char *bank_no, char transfer_direction, double occur_balance, char *fund_password, char *bank_password)
 {
     IBizMessage* lpBizMessage = T2NewBizMessage();
     lpBizMessage->AddRef();
@@ -1020,7 +1020,7 @@ zval* T2Connection::req332200(char transfer_direction, double occur_balance, cha
 
     //pPacker->AddStr(exchange_type);                 
     pPacker->AddStr("0");
-    pPacker->AddStr("0"); 
+    pPacker->AddStr(bank_no); 
     pPacker->AddChar(transfer_direction);  
     pPacker->AddDouble(occur_balance);  
     pPacker->AddStr(fund_password);  
@@ -1047,7 +1047,7 @@ zval* T2Connection::req332200(char transfer_direction, double occur_balance, cha
     return packToZval(pUnPacker);
 }
 
-zval* T2Connection::req332250(int entrust_no, int action_in, char *position_str, int request_num)
+zval* T2Connection::req332250(char *bank_no, int entrust_no, int action_in, char *position_str, int request_num)
 {
     IBizMessage* lpBizMessage = T2NewBizMessage();
     lpBizMessage->AddRef();
@@ -1110,7 +1110,7 @@ zval* T2Connection::req332250(int entrust_no, int action_in, char *position_str,
     pPacker->AddStr(lp_SecuRequestMode->m_opUserToken.c_str());
 
     //pPacker->AddStr(exchange_type);                 
-    pPacker->AddStr(" ");
+    pPacker->AddStr(bank_no);
     pPacker->AddInt(entrust_no);  
     pPacker->AddInt(action_in);  
     pPacker->AddStr(position_str);  
@@ -1138,7 +1138,7 @@ zval* T2Connection::req332250(int entrust_no, int action_in, char *position_str,
 
 }
 
-zval* T2Connection::req332253(char *fund_password, char *bank_password)
+zval* T2Connection::req332253(char *bank_no, char *fund_password, char *bank_password)
 {
     IBizMessage* lpBizMessage = T2NewBizMessage();
     lpBizMessage->AddRef();
@@ -1201,7 +1201,7 @@ zval* T2Connection::req332253(char *fund_password, char *bank_password)
 
     //pPacker->AddStr(exchange_type);                 
     pPacker->AddStr("0");
-    pPacker->AddStr("0");
+    pPacker->AddStr(bank_no);
     pPacker->AddStr(fund_password);
     pPacker->AddStr(bank_password);
     

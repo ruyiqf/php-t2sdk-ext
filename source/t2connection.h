@@ -51,13 +51,13 @@ public:
     zval* req333017(int entrust_no);
 
     //银行转账
-    zval* req332200(char transfer_direction, double occur_balance, char *fund_password, char *bank_password);
+    zval* req332200(char *bank_no, char transfer_direction, double occur_balance, char *fund_password, char *bank_password);
 
     //存款资金账户转账日志查询
-    zval* req332250(int entrust_no, int action_in, char *position_str, int request_num);
+    zval* req332250(char *bank_no, int entrust_no, int action_in, char *position_str, int request_num);
 
     //银行余额查询
-    zval* req332253(char *fund_password, char *bank_password);
+    zval* req332253(char *bank_no, char *fund_password, char *bank_password);
 
     //客户资金快速查询
     zval* req332254();

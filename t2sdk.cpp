@@ -447,6 +447,8 @@ PHP_METHOD(T2Connection, p_req332200)
     t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
         getThis() TSRMLS_CC);
     
+    char *bank_no;
+    int bank_no_len;
     char *transfer_direction;
     uint transfer_direction_len;
     double occur_balance;
@@ -455,7 +457,7 @@ PHP_METHOD(T2Connection, p_req332200)
     char *bank_password;
     uint bank_password_len;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sdss", &transfer_direction, &transfer_direction_len, &occur_balance, &fund_password, &fund_password_len, &bank_password, &bank_password_len) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssdss", &bank_no, &bank_no_len, &transfer_direction, &transfer_direction_len, &occur_balance, &fund_password, &fund_password_len, &bank_password, &bank_password_len) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -474,20 +476,22 @@ PHP_METHOD(T2Connection, p_req332250)
     t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
         getThis() TSRMLS_CC);
     
+    char *bank_no;
+    int bank_no_len;
     int entrust_no;
     int action_in;
     char *position_str;
     int position_str_len;
     int request_num;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llsl", &entrust_no, &action_in, &position_str, &position_str_len, &request_num) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sllsl", &bank_no, &bank_no_len, &entrust_no, &action_in, &position_str, &position_str_len, &request_num) == FAILURE) {
         RETURN_NULL();
     }
 
     zval * result;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
-        result = t2connection->req332250(entrust_no, action_in, position_str, request_num);
+        result = t2connection->req332250(bank_no, entrust_no, action_in, position_str, request_num);
     }
 
     RETURN_ZVAL(result, 1, 0);
@@ -499,12 +503,14 @@ PHP_METHOD(T2Connection, p_req332253)
     t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
         getThis() TSRMLS_CC);
     
+    char *bank_no;
+    int bank_no_len;
     char *fund_password;
     uint fund_password_len;
     char *bank_password;
     uint bank_password_len;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llsl", &fund_password, &fund_password_len, &bank_password, &bank_password_len) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sllsl", &bank_no, &bank_no_len, &fund_password, &fund_password_len, &bank_password, &bank_password_len) == FAILURE) {
         RETURN_NULL();
     }
 
