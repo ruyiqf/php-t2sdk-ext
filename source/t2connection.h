@@ -62,6 +62,8 @@ public:
     //客户资金快速查询
     zval* req332254();
 
+    zval* req331157();
+
 private:
     char *ini_file;
     char *lib_t2sdk_file;
