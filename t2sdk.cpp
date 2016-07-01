@@ -441,6 +441,57 @@ PHP_METHOD(T2Connection, p_req333017)
     RETURN_ZVAL(result, 1, 0);
 }
 
+PHP_METHOD(T2Connection, p_req332200)
+{
+    T2Connection *t2connection;
+    t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
+        getThis() TSRMLS_CC);
+    
+    char *transfer_direction;
+    uint transfer_direction_len;
+    double occur_balance;
+    char *fund_password;
+    uint fund_password_len;
+    char *bank_password;
+    uint bank_password_len;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sdss", &transfer_direction, &transfer_direction_len, &occur_balance, &fund_password, &fund_password_len, &bank_password, &bank_password_len) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    zval * result;
+    t2connection = obj->t2connection;
+    if (t2connection != NULL) {
+        result = t2connection->req332200(transfer_direction[0], occur_balance, fund_password, bank_password);
+    }
+
+    RETURN_ZVAL(result, 1, 0);
+}
+
+PHP_METHOD(T2Connection, p_req332250)
+{
+    T2Connection *t2connection;
+    t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
+        getThis() TSRMLS_CC);
+    
+    int entrust_no;
+    int action_in;
+    char *position_str;
+    int position_str_len;
+    int request_num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llsl", &entrust_no, &action_in, &position_str, &position_str_len, &request_num) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    zval * result;
+    t2connection = obj->t2connection;
+    if (t2connection != NULL) {
+        result = t2connection->req332250(entrust_no, action_in, position_str, request_num);
+    }
+
+    RETURN_ZVAL(result, 1, 0);
+}
 
 zend_function_entry t2connection_methods[] = {
     PHP_ME(T2Connection,  __construct,     NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
@@ -456,6 +507,8 @@ zend_function_entry t2connection_methods[] = {
     PHP_ME(T2Connection,  p_req333102,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req333103,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req333017,  NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(T2Connection,  p_req332200,  NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(T2Connection,  p_req332250,  NULL, ZEND_ACC_PUBLIC)
     {NULL, NULL, NULL}
 };
 

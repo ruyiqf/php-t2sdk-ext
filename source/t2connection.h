@@ -49,6 +49,13 @@ public:
 
     //委托撤单
     zval* req333017(int entrust_no);
+
+    //银行转账
+    zval* req332200(char transfer_direction, double occur_balance, char *fund_password, char *bank_password);
+
+    //存款资金账户转账日志查询
+    zval* req332250(int entrust_no, int action_in, char *position_str, int request_num);
+
 private:
     char *ini_file;
     char *lib_t2sdk_file;
