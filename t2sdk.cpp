@@ -510,7 +510,7 @@ PHP_METHOD(T2Connection, p_req332253)
     char *bank_password;
     uint bank_password_len;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sllsl", &bank_no, &bank_no_len, &fund_password, &fund_password_len, &bank_password, &bank_password_len) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sss", &bank_no, &bank_no_len, &fund_password, &fund_password_len, &bank_password, &bank_password_len) == FAILURE) {
         RETURN_NULL();
     }
 
