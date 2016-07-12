@@ -21,6 +21,8 @@ public:
     //void connect();
     int connect(char * &error);
     void disconnect();
+
+    //用户登录
     zval* login(char *fund_account, char *password);
 
     //股票代码查询
@@ -62,7 +64,11 @@ public:
     //客户资金快速查询
     zval* req332254();
 
+    //客户银行账户查询
     zval* req331157();
+
+    //历史转账流水查询
+    zval* req339204(int start_date, int end_date, char *bank_no, int action_in, char *position_str, int request_num);
 
 private:
     char *ini_file;
