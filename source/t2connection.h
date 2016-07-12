@@ -73,6 +73,9 @@ public:
     //历史转账流水查询
     zval* req339204(int start_date, int end_date, char *bank_no, int action_in, char *position_str, int request_num);
 
+    //历史交割信息查询
+    zval* req339300(int start_date, int end_date, char *position_str, int request_num);
+
 
 
 private:

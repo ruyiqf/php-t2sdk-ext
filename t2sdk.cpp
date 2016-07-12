@@ -607,6 +607,31 @@ PHP_METHOD(T2Connection, p_req339204)
     RETURN_ZVAL(result, 1, 0);
 }
 
+PHP_METHOD(T2Connection, p_req339300)
+{
+    T2Connection *t2connection;
+    t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
+        getThis() TSRMLS_CC);
+    
+    int start_date;
+    int end_date;
+    char *position_str;
+    int position_str_len;
+    int request_num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llsl", &start_date, &end_date, &position_str, &position_str_len, &request_num) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    zval * result;
+    t2connection = obj->t2connection;
+    if (t2connection != NULL) {
+        result = t2connection->req339300(start_date, end_date, position_str, request_num);
+    }
+
+    RETURN_ZVAL(result, 1, 0);
+}
+
 
 zend_function_entry t2connection_methods[] = {
     PHP_ME(T2Connection,  __construct,     NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
@@ -629,6 +654,7 @@ zend_function_entry t2connection_methods[] = {
     PHP_ME(T2Connection,  p_req331157,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req339200,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req339204,  NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(T2Connection,  p_req339300,  NULL, ZEND_ACC_PUBLIC)
     {NULL, NULL, NULL}
 };
 
