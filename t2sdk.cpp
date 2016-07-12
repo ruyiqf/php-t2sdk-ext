@@ -565,7 +565,7 @@ PHP_METHOD(T2Connection, p_req339200)
     int position_str_len;
     int request_num;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llsl", &start_date, &end_date, &position_str, &position_str_len) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llsl", &start_date, &end_date, &position_str, &position_str_len, &request_num) == FAILURE) {
         RETURN_NULL();
     }
 
