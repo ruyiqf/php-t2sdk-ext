@@ -676,6 +676,7 @@ zend_function_entry t2connection_methods[] = {
     PHP_ME(T2Connection,  p_req400,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req333001,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req333002,  NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(T2Connection,  p_req333140,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req333104,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req333101,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req333102,  NULL, ZEND_ACC_PUBLIC)
