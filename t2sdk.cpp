@@ -367,7 +367,6 @@ PHP_METHOD(T2Connection, p_req333104)
     }
 
     RETURN_ZVAL(result, 1, 0);
-    //RETURN_NULL();
 }
 
 PHP_METHOD(T2Connection, p_req333101)
@@ -398,7 +397,30 @@ PHP_METHOD(T2Connection, p_req333101)
     }
 
     RETURN_ZVAL(result, 1, 0);
-    //RETURN_NULL();
+}
+
+PHP_METHOD(T2Connection, p_req339303)
+{
+    T2Connection *t2connection;
+    t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
+        getThis() TSRMLS_CC);
+
+    int start_date;
+    int end_date;
+    char *position_str;
+    int position_str_len;
+    int request_num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llsl", &start_date, &end_date, &position_str, &position_str_len, &request_num) == FAILURE) {
+        RETURN_NULL();
+    }
+    zval * result;
+    t2connection = obj->t2connection;
+    if (t2connection != NULL) {
+        result = t2connection->req339303(start_date, end_date, position_str, request_num);
+    }
+
+    RETURN_ZVAL(result, 1, 0);
 }
 
 PHP_METHOD(T2Connection, p_req333102)
@@ -724,10 +746,11 @@ zend_function_entry t2connection_methods[] = {
     PHP_ME(T2Connection,  p_req330300,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req400,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req333001,  NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(T2Connection,  p_req333002,  NULL, ZEND_ACC_PUBLIC)  //委托
+    PHP_ME(T2Connection,  p_req333002,  NULL, ZEND_ACC_PUBLIC)  //证券委托
     PHP_ME(T2Connection,  p_req333140,  NULL, ZEND_ACC_PUBLIC)  //预约委托
     PHP_ME(T2Connection,  p_req333104,  NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(T2Connection,  p_req333101,  NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(T2Connection,  p_req333101,  NULL, ZEND_ACC_PUBLIC)  //证券委托查询  
+    PHP_ME(T2Connection,  p_req339303,  NULL, ZEND_ACC_PUBLIC)  //历史证券委托查询
     PHP_ME(T2Connection,  p_req333102,  NULL, ZEND_ACC_PUBLIC)  //成交查询
     PHP_ME(T2Connection,  p_req339304,  NULL, ZEND_ACC_PUBLIC)  //历史成交查询
     PHP_ME(T2Connection,  p_req333103,  NULL, ZEND_ACC_PUBLIC)
