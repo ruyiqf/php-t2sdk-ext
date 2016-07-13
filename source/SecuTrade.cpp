@@ -481,7 +481,7 @@ int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPac
 		goto EXIT;
 	}
 
-	printf("发送功能333002成功, 返回接收句柄: %d!\r\n", hSend);
+	//printf("发送功能333002成功, 返回接收句柄: %d!\r\n", hSend);
 
         //iRet = T2SDK_G(g_pConnection)->RecvBizEx(hSend,(void **)&pUnPacker,&pRetData,1000);
 	hSend = lpConnection->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
@@ -502,7 +502,6 @@ int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPac
         }
         else if(iReturnCode==0) // 正确
         {
-        	puts("业务操作成功");
         	int iLen = 0;
         	const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
         	lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
