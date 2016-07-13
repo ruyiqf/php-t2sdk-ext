@@ -494,7 +494,7 @@ zval* T2Connection::req333002(char *stock_id, char *exchange_type, int entrust_a
     return packToZval(pUnPacker);
 }
 
-zval* T2Connection::req333140(char *stock_id, char *exchange_type, double entrust_amount, double entrust_price, char entrust_bs, char * entrust_prop, int valid_date, int begin_date, char adventrust_type)
+zval* T2Connection::req333140(char *stock_id, char *exchange_type, int entrust_amount, double entrust_price, char entrust_bs, char * entrust_prop, int valid_date, int begin_date, char adventrust_type)
 {
     puts("begin 333002");
 
