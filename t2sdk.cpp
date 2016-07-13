@@ -475,6 +475,30 @@ PHP_METHOD(T2Connection, p_req333017)
     RETURN_ZVAL(result, 1, 0);
 }
 
+PHP_METHOD(T2Connection, p_req333142)
+{
+    T2Connection *t2connection;
+    t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
+        getThis() TSRMLS_CC);
+    
+    int entrust_no;
+    int entrust_date;
+    char *exchange_type;
+    int exchange_type_len;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lls", &entrust_no, &entrust_date, &exchange_type, &exchange_type_len) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    zval * result;
+    t2connection = obj->t2connection;
+    if (t2connection != NULL) {
+        result = t2connection->req333142(entrust_no, entrust_date, exchange_type);
+    }
+
+    RETURN_ZVAL(result, 1, 0);
+}
+
 PHP_METHOD(T2Connection, p_req332200)
 {
     T2Connection *t2connection;
@@ -682,6 +706,7 @@ zend_function_entry t2connection_methods[] = {
     PHP_ME(T2Connection,  p_req333102,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req333103,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req333017,  NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(T2Connection,  p_req333142,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req332200,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req332250,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_req332253,  NULL, ZEND_ACC_PUBLIC)

@@ -55,6 +55,9 @@ public:
     //委托撤单
     zval* req333017(int entrust_no);
 
+    //预约委托撤单
+    zval* req333142(int entrust_no, int entrust_date, char *exchange_type);
+
     //银行转账
     zval* req332200(char *bank_no, char transfer_direction, double occur_balance, char *fund_password, char *bank_password);
 
