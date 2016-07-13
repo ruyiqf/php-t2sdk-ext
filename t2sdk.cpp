@@ -282,7 +282,7 @@ PHP_METHOD(T2Connection, p_req333002)
     uint stock_id_len;
     char *exchange_type;
     uint exchange_type_len;
-    double entrust_amount;
+    int entrust_amount;
     double entrust_price;
     char *entrust_bs;
     uint entrust_bs_len;
@@ -291,7 +291,7 @@ PHP_METHOD(T2Connection, p_req333002)
 
 
     //zend_parse_parameters 接受参数不全会导致Segmentation fault
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssddss", &stock_id, &stock_id_len, &exchange_type, &exchange_type_len, &entrust_amount, &entrust_price, &entrust_bs, &entrust_bs_len, &entrust_prop, &entrust_prop_len) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssldss", &stock_id, &stock_id_len, &exchange_type, &exchange_type_len, &entrust_amount, &entrust_price, &entrust_bs, &entrust_bs_len, &entrust_prop, &entrust_prop_len) == FAILURE) {
         RETURN_NULL();
     }
 
@@ -301,9 +301,43 @@ PHP_METHOD(T2Connection, p_req333002)
         result = t2connection->req333002(stock_id, exchange_type, entrust_amount, entrust_price, entrust_bs[0], entrust_prop);
     }
 
-    puts("return zval !!!");
     RETURN_ZVAL(result, 1, 0);
-    //RETURN_NULL();
+}
+
+PHP_METHOD(T2Connection, p_req333140)
+{
+    T2Connection *t2connection;
+    t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
+        getThis() TSRMLS_CC);
+
+    char *stock_id;
+    int stock_id_len;
+    char *exchange_type;
+    int exchange_type_len;
+    int entrust_amount;
+    double entrust_price;
+    char *entrust_bs;
+    int entrust_bs_len;
+    char *entrust_prop;
+    int entrust_prop_len;
+    int valid_date;
+    int begin_date;
+    char *adventrust_type;
+    int adventrust_type_len;
+
+
+    //zend_parse_parameters 接受参数不全会导致Segmentation fault
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssldsslls", &stock_id, &stock_id_len, &exchange_type, &exchange_type_len, &entrust_amount, &entrust_price, &entrust_bs, &entrust_bs_len, &entrust_prop, &entrust_prop_len, &valid_date, &begin_date, &adventrust_type, &adventrust_type_len) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    zval * result;
+    t2connection = obj->t2connection;
+    if (t2connection != NULL) {
+        result = t2connection->req333140(stock_id, exchange_type, entrust_amount, entrust_price, entrust_bs[0], entrust_prop, $valid_date, $begin_date, adventrust_type[0]);
+    }
+
+    RETURN_ZVAL(result, 1, 0);
 }
 
 PHP_METHOD(T2Connection, p_req333104)
