@@ -884,7 +884,7 @@ zval* T2Connection::req333102(char sort_direction, char query_type, char query_m
     return packToZval(pUnPacker);
 }
 
-zval* T2Connection::req339304(char sort_direction, char query_type, char query_mode, char *position_str, int request_num)
+zval* T2Connection::req339304(int start_date, int end_date, char *position_str, int request_num)
 {
     IBizMessage* lpBizMessage = T2NewBizMessage();
     lpBizMessage->AddRef();
