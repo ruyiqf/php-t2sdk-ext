@@ -216,19 +216,18 @@ zval* T2Connection::req330300(char *stock_id, char query_type, char *exchange_ty
     pPacker->AddField("position_str",'S');
     pPacker->AddField("request_num",'I', 5);
     
-    
+    char entrust_way = lp_SecuRequestMode->GetEntrustWay();                        
+    string opStation = lp_SecuRequestMode->GetOpStation();            
     ///加入对应的字段值
     pPacker->AddInt(lp_SecuRequestMode->m_op_branch_no);
-    char entrust_way = lp_SecuRequestMode->GetEntrustWay();                        
     pPacker->AddChar(entrust_way); 
-    string opStation = lp_SecuRequestMode->GetOpStation();            
     pPacker->AddStr(opStation.c_str());               
-    pPacker->AddChar('0');
+    pPacker->AddChar(query_type);
     pPacker->AddStr(exchange_type);
     pPacker->AddStr("");
     pPacker->AddStr(stock_id);
-    pPacker->AddStr(" ");  
-    pPacker->AddInt(1);
+    pPacker->AddStr(position_str);  
+    pPacker->AddInt(request_num);
     ///加入对应的字段值
     
     //char output[100];
