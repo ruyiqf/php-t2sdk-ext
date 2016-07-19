@@ -485,6 +485,7 @@ int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPac
 
         //iRet = T2SDK_G(g_pConnection)->RecvBizEx(hSend,(void **)&pUnPacker,&pRetData,1000);
 	hSend = lpConnection->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
+	printf("hSend:%d",hSend);
 	if(hSend != 0){
 		errorNo = hSend;
 		strcpy(errorMsg, lpConnection->GetErrorMsg(hSend));
