@@ -212,7 +212,7 @@ zval* T2Connection::req330300(char *stock_id, char query_type, char *exchange_ty
     pPacker->AddField("query_type",'C');
     pPacker->AddField("exchange_type",'S');
     pPacker->AddField("stock_type",'S');
-    pPacker->AddField("stock_code",'S', 16);
+    pPacker->AddField("stock_code",'S');
     pPacker->AddField("position_str",'S');
     pPacker->AddField("request_num",'I', 5);
     
@@ -222,16 +222,16 @@ zval* T2Connection::req330300(char *stock_id, char query_type, char *exchange_ty
     pPacker->AddInt(lp_SecuRequestMode->m_op_branch_no);
     pPacker->AddChar(entrust_way); 
     pPacker->AddStr(opStation.c_str());               
-    pPacker->AddChar('0');
+    pPacker->AddChar(query_type);
+    pPacker->AddStr(exchange_type);
     pPacker->AddStr("");
-    pPacker->AddStr("");
-    pPacker->AddStr("6000");
-    pPacker->AddStr("");  
-    pPacker->AddInt(10);
+    pPacker->AddStr(stock_id);
+    pPacker->AddStr(position_str);  
+    pPacker->AddInt(request_num);
     ///加入对应的字段值
     
     //char output[100];
-    printf("query_type:%c, exchange_type:%s, stock_id:%s, position_str:%s, request_num:%d", query_type, exchange_type, stock_id, position_str, request_num);
+    //printf("query_type:%20c, exchange_type:%s, stock_id:%s, position_str:%s, request_num:%d", query_type, exchange_type, stock_id, position_str, request_num);
     // puts(output);
     ///结束打包
     pPacker->EndPack();
