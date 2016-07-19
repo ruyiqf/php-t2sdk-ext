@@ -481,14 +481,14 @@ int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPac
 		goto EXIT;
 	}
 
-	//printf("发送功能333002成功, 返回接收句柄: %d!\r\n", hSend);
+	printf("发送功能333002成功, 返回接收句柄: %d!\r\n", hSend);
 
         //iRet = T2SDK_G(g_pConnection)->RecvBizEx(hSend,(void **)&pUnPacker,&pRetData,1000);
 	hSend = lpConnection->RecvBizMsg(hSend,&lpBizMessageRecv,1000);
 	if(hSend != 0){
 		errorNo = hSend;
 		strcpy(errorMsg, lpConnection->GetErrorMsg(hSend));
-		//printf("接收功能333002失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
+		printf("接收功能333002失败, 错误号: %d, 原因: %s!\r\n", hSend, lpConnection->GetErrorMsg(hSend));
 		goto EXIT;
 	}
 	else{
@@ -498,7 +498,7 @@ int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPac
         	errorNo = iReturnCode;
 			strcpy(errorMsg, lpBizMessageRecv->GetErrorInfo());
 			hSend = iReturnCode;
-        	//printf("接收功能333002失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetReturnCode(),lpBizMessageRecv->GetErrorInfo());            
+        	printf("接收功能333002失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetReturnCode(),lpBizMessageRecv->GetErrorInfo());            
         }
         else if(iReturnCode==0) // 正确
         {
