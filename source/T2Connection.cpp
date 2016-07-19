@@ -172,7 +172,7 @@ zval* T2Connection::login(char *fund_account, char *password)
     return packToZval(pUnPacker);
 }
 
-zval* T2Connection::req330300(char *stock_id, char *exchange_type)
+zval* T2Connection::req330300(char *stock_id, char query_type, char *exchange_type, char *position_str, int request_num)
 {
     puts("begin req330300");
     IBizMessage* lpBizMessage = T2NewBizMessage();

@@ -206,17 +206,23 @@ PHP_METHOD(T2Connection, p_req330300)
         getThis() TSRMLS_CC);
 
     char *stock_id;
-    uint stock_id_len;
+    int stock_id_len;
+    char *query_type;
+    int query_type_len;
     char *exchange_type;
-    uint exchange_type_len;
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &stock_id, &stock_id_len, &exchange_type, &exchange_type_len) == FAILURE) {
+    int exchange_type_len;
+    char *position_str;
+    int position_str_len;
+    int request_num;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssssl", &stock_id, &stock_id_len, &query_type, &query_type_len, &exchange_type, &exchange_type_len, &position_str, &position_str_len, &request_num) == FAILURE) {
         RETURN_NULL();
     }
 
     zval * result;
     t2connection = obj->t2connection;
     if (t2connection != NULL) {
-        result = t2connection->req330300(stock_id, exchange_type);
+        result = t2connection->req330300(stock_id, query_type[0], exchange_type, position_str, request_num);
     }
 
     RETURN_ZVAL(result, 1, 0);
@@ -742,28 +748,28 @@ zend_function_entry t2connection_methods[] = {
     PHP_ME(T2Connection,  __construct,     NULL, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     PHP_ME(T2Connection,  p_connect,  NULL, ZEND_ACC_PUBLIC)
     PHP_ME(T2Connection,  p_disconnect,  NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(T2Connection,  p_login,  NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(T2Connection,  p_req330300,  NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(T2Connection,  p_req400,  NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(T2Connection,  p_req333001,  NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(T2Connection,  p_login,  NULL, ZEND_ACC_PUBLIC)      //用户登录
+    PHP_ME(T2Connection,  p_req330300,  NULL, ZEND_ACC_PUBLIC)  //股票代码查询
+    PHP_ME(T2Connection,  p_req400,  NULL, ZEND_ACC_PUBLIC)     //代码行情查询
+    PHP_ME(T2Connection,  p_req333001,  NULL, ZEND_ACC_PUBLIC)  //大约可以买获取
     PHP_ME(T2Connection,  p_req333002,  NULL, ZEND_ACC_PUBLIC)  //证券委托
     PHP_ME(T2Connection,  p_req333140,  NULL, ZEND_ACC_PUBLIC)  //预约委托
-    PHP_ME(T2Connection,  p_req333104,  NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(T2Connection,  p_req333104,  NULL, ZEND_ACC_PUBLIC)  //证券持仓查询
     PHP_ME(T2Connection,  p_req333101,  NULL, ZEND_ACC_PUBLIC)  //证券委托查询  
     PHP_ME(T2Connection,  p_req339303,  NULL, ZEND_ACC_PUBLIC)  //历史证券委托查询
     PHP_ME(T2Connection,  p_req333102,  NULL, ZEND_ACC_PUBLIC)  //成交查询
     PHP_ME(T2Connection,  p_req339304,  NULL, ZEND_ACC_PUBLIC)  //历史成交查询
-    PHP_ME(T2Connection,  p_req333103,  NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(T2Connection,  p_req333103,  NULL, ZEND_ACC_PUBLIC)  //证券持仓快速查询
     PHP_ME(T2Connection,  p_req333017,  NULL, ZEND_ACC_PUBLIC)  //委托撤销
     PHP_ME(T2Connection,  p_req333142,  NULL, ZEND_ACC_PUBLIC)  //预约委托撤销
-    PHP_ME(T2Connection,  p_req332200,  NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(T2Connection,  p_req332250,  NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(T2Connection,  p_req332253,  NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(T2Connection,  p_req332254,  NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(T2Connection,  p_req331157,  NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(T2Connection,  p_req339200,  NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(T2Connection,  p_req339204,  NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(T2Connection,  p_req339300,  NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(T2Connection,  p_req332200,  NULL, ZEND_ACC_PUBLIC)  //银行转账
+    PHP_ME(T2Connection,  p_req332250,  NULL, ZEND_ACC_PUBLIC)  //存款资金账户转账日志查询  
+    PHP_ME(T2Connection,  p_req332253,  NULL, ZEND_ACC_PUBLIC)  //银行余额查询
+    PHP_ME(T2Connection,  p_req332254,  NULL, ZEND_ACC_PUBLIC)  //客户资金快速查询
+    PHP_ME(T2Connection,  p_req331157,  NULL, ZEND_ACC_PUBLIC)  //客户银行账户查询
+    PHP_ME(T2Connection,  p_req339200,  NULL, ZEND_ACC_PUBLIC)  //历史资金流水查询 
+    PHP_ME(T2Connection,  p_req339204,  NULL, ZEND_ACC_PUBLIC)  //历史转账流水查询
+    PHP_ME(T2Connection,  p_req339300,  NULL, ZEND_ACC_PUBLIC)  //历史交割信息查询
     {NULL, NULL, NULL}
 };
 

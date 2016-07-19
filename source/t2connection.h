@@ -26,7 +26,7 @@ public:
     zval* login(char *fund_account, char *password);
 
     //股票代码查询
-    zval* req330300(char *stock_id, char *exchange_type);
+    zval* req330300(char *stock_id, char query_type, char *exchange_type, char *position_str, int request_num);
 
     //代码行情查询
     zval* req400(char* stock_id, char *exchange_type);
@@ -37,7 +37,7 @@ public:
     //普通委托
     zval* req333002(char *stock_id, char *exchange_type, int entrust_amount, double entrust_price, char entrust_bs, char * entrust_prop);
     
-    //预约委托等级
+    //预约委托登记
     zval* req333140(char *stock_id, char *exchange_type, int entrust_amount, double entrust_price, char entrust_bs, char * entrust_prop, int valid_date, int begin_date, char adventrust_type);
     
     //证券持仓查询
