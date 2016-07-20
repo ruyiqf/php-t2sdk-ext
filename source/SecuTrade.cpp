@@ -498,7 +498,10 @@ int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPac
         if(iReturnCode!= 0) //错误
         {
         	errorNo = iReturnCode;
-			//strcpy(errorMsg, lpBizMessageRecv->GetErrorInfo());
+        	char *errorInfo = (char *)malloc(256);
+        	errorInfo = "";
+			strcpy(errorInfo, lpBizMessageRecv->GetErrorInfo());
+			strcpy(errorMsg, errorInfo);
 			hSend = iReturnCode;
         	printf("接收功能333002失败,errorNo:%d,errorInfo:%s\n",lpBizMessageRecv->GetReturnCode(),lpBizMessageRecv->GetErrorInfo());            
         }
