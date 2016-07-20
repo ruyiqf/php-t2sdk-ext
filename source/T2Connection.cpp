@@ -19,8 +19,8 @@ zval * errorToZval(int errorNo, char *errorMsg)
     ALLOC_INIT_ZVAL(result);
     array_init(result);
 
-    add_assoc_long(result, "errorNo", errorNo);
-    add_assoc_string(result, "errorMsg", errorMsg, 1);
+    add_assoc_long(result, "error_no", errorNo);
+    add_assoc_string(result, "error_info", errorMsg, 1);
 
     return result;
 }
@@ -132,30 +132,27 @@ int T2Connection::connect(char * &error)
     void *handle = dlopen(this->lib_t2sdk_file, RTLD_LAZY | RTLD_GLOBAL);
     if (!handle)  
     {  
-     error = dlerror();
-     puts(error);
- }  
+        error = dlerror();
+        return -1;
+    }  
 
- T2NewConfig = (config) dlsym(handle, "NewConfig");
+    T2NewConfig = (config) dlsym(handle, "NewConfig");
 
- T2NewConnection = (connection) dlsym(handle, "NewConnection");
- T2NewPacker = (packer) dlsym(handle, "NewPacker");
- T2NewUnPacker = (unpacker) dlsym(handle, "NewUnPacker");
- T2NewBizMessage = (biz_message) dlsym(handle, "NewBizMessage");
+    T2NewConnection = (connection) dlsym(handle, "NewConnection");
+    T2NewPacker = (packer) dlsym(handle, "NewPacker");
+    T2NewUnPacker = (unpacker) dlsym(handle, "NewUnPacker");
+    T2NewBizMessage = (biz_message) dlsym(handle, "NewBizMessage");
 
- lp_SecuRequestMode = new SecuRequestMode();
+    lp_SecuRequestMode = new SecuRequestMode();
     //lp_SecuRequestMode->InitConn("demo", "license.dat", "218.108.19.190:18002");
- int ret = lp_SecuRequestMode->InitConn(this->ini_file, error);
+    int ret = lp_SecuRequestMode->InitConn(this->ini_file, error);
 
-
- return ret;
+    return ret;
 }
 
 void T2Connection::disconnect()
 {
-    puts("disconnect");
     delete lp_SecuRequestMode;
-    puts("after disconnect");
 }
 
 zval* T2Connection::login(char *fund_account, char *password)
@@ -851,7 +848,7 @@ zval* T2Connection::req339303(int start_date, int end_date, char *position_str, 
     pPacker->AddStr(lp_SecuRequestMode->m_opUserToken.c_str());
 
     //pPacker->AddStr(exchange_type);
-                     
+
     pPacker->AddInt(start_date);
     pPacker->AddInt(end_date);
     pPacker->AddStr("");
@@ -1045,7 +1042,7 @@ zval* T2Connection::req339304(int start_date, int end_date, char *position_str, 
     pPacker->AddStr(lp_SecuRequestMode->m_opUserToken.c_str());
 
     //pPacker->AddStr(exchange_type);
-                     
+
     pPacker->AddInt(start_date);
     pPacker->AddInt(end_date);
     pPacker->AddStr("");
