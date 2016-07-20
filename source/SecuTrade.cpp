@@ -497,6 +497,7 @@ int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPac
 		int iReturnCode = lpBizMessageRecv->GetReturnCode();
         if(iReturnCode!= 0) //错误
         {
+        	puts("123");
         	errorNo = iReturnCode;
 			strcpy(errorMsg, lpBizMessageRecv->GetErrorInfo());
 			hSend = iReturnCode;
