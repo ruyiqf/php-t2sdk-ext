@@ -484,9 +484,9 @@ int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPac
 	//printf("发送功能333002成功, 返回接收句柄: %d!\r\n", hSend);
 
         //iRet = T2SDK_G(g_pConnection)->RecvBizEx(hSend,(void **)&pUnPacker,&pRetData,1000);
-    printf("hSend1:%d", hSend);
+    printf("hSend1:%d \n", hSend);
 	hSend = lpConnection->RecvBizMsg(hSend, &lpBizMessageRecv, 5000);
-	printf("hSend2:%d", hSend);
+	printf("hSend2:%d \n", hSend);
 	if(hSend != 0){
 		errorNo = hSend;
 		strcpy(errorMsg, lpConnection->GetErrorMsg(hSend));
