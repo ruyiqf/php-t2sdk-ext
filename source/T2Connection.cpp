@@ -82,7 +82,7 @@ zval * packToZval(IF2UnPacker *pUnPacker)
                     break;
                     
                     case 'S':
-                    //printf("%20s", pUnPacker->GetStrByIndex(k));
+                    printf("%20s", pUnPacker->GetStrByIndex(k));
                     csvalue = pUnPacker->GetStrByIndex(k);
                     strcpy(svalue, csvalue);
                     add_assoc_string(arr, col_name, svalue, 1);
