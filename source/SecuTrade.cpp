@@ -507,7 +507,7 @@ int SecuRequestMode::SendRequest(IBizMessage * &lpBizMessage, IF2Packer * &lpPac
         	int iLen = 0;
         	const void * lpBuffer = lpBizMessageRecv->GetContent(iLen);
         	lpUnPacker = T2NewUnPacker((void *)lpBuffer,iLen);
-        	ShowPacket(0,lpUnPacker);
+        	//ShowPacket(0,lpUnPacker);
         }
 
     }
