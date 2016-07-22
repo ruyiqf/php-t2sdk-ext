@@ -13,7 +13,7 @@ extern packer T2NewPacker;
 extern unpacker T2NewUnPacker;
 extern biz_message T2NewBizMessage;
 
-zval * errorToZval(int errorNo, char *errorMsg)
+zval * errorToZval(int errorNo, const char *errorMsg)
 {
     zval *result;
     ALLOC_INIT_ZVAL(result);
@@ -54,12 +54,12 @@ zval * packToZval(IF2UnPacker *pUnPacker)
         pUnPacker->SetCurrentDatasetByIndex(i);
         
         int row_count = (int)pUnPacker->GetRowCount();
-        zval arr_list[row_count];
         // 打印所有记录
-        for (j = 0; j < row_count; ++j)
+        for (j = 0; j < row; ++j)
         {
-            ALLOC_INIT_ZVAL(arr_list[j]);
-            array_init(arr_list[j]);
+            zval *arr = NULL;
+            ALLOC_INIT_ZVAL(arr);
+            array_init(arr);
             for (k = 0; k < pUnPacker->GetColCount(); ++k)
             {
                 const char *col_name = pUnPacker->GetColName(k);
@@ -71,27 +71,27 @@ zval * packToZval(IF2UnPacker *pUnPacker)
                     case 'I':
                     //printf("%20d", pUnPacker->GetIntByIndex(k));
                     ivalue = pUnPacker->GetIntByIndex(k);
-                    add_assoc_long(arr_list[j], col_name, ivalue);
+                    add_assoc_long(arr, col_name, ivalue);
                     break;
                     
                     case 'C':
                     //printf("%20c", pUnPacker->GetCharByIndex(k));
                     cvalue = pUnPacker->GetCharByIndex(k);
                     sprintf(ccvalue, "%20c", cvalue);
-                    add_assoc_string(arr_list[j], col_name, ccvalue, 1);
+                    add_assoc_string(arr, col_name, ccvalue, 1);
                     break;
                     
                     case 'S':
                     //printf("%20s", pUnPacker->GetStrByIndex(k));
                     csvalue = pUnPacker->GetStrByIndex(k);
                     strcpy(svalue, csvalue);
-                    add_assoc_string(arr_list[j], col_name, svalue, 1);
+                    add_assoc_string(arr, col_name, svalue, 1);
                     break;
                     
                     case 'F':
                     //printf("%20f", pUnPacker->GetDoubleByIndex(k));
                     fvalue = pUnPacker->GetDoubleByIndex(k);
-                    add_assoc_double(arr_list[j], col_name, fvalue);
+                    add_assoc_double(arr, col_name, fvalue);
                     break;
                     
                     case 'R':
@@ -106,7 +106,7 @@ zval * packToZval(IF2UnPacker *pUnPacker)
             }
             printf("index:%d", j) ;  
             sprintf(index, "%d", j);  
-            add_assoc_zval(result, index, arr_list[j]);    
+            add_assoc_zval(result, index, arr);    
             pUnPacker->Next();
         }
     }
