@@ -52,6 +52,7 @@ zval * packToZval(IF2UnPacker *pUnPacker)
     float fvalue;
     char index[8];
     char *col = new char[100];
+    zval *arr;
 
     for (i = 0; i < pUnPacker->GetDatasetCount(); ++i)
     {
@@ -62,8 +63,6 @@ zval * packToZval(IF2UnPacker *pUnPacker)
         // 打印所有记录
         for (j = 0; j < row_count; ++j)
         {
-            zval *arr;
-            zval *element;
             MAKE_STD_ZVAL(arr);
             //ALLOC_INIT_ZVAL(arr);
             array_init(arr);
@@ -114,10 +113,7 @@ zval * packToZval(IF2UnPacker *pUnPacker)
             printf("index:%d", j) ;  
             sprintf(index, "%d", j);  
 
-            MAKE_STD_ZVAL(element);
-            ZVAL_ZVAL(element, arr, 1, 0);
-
-            add_assoc_zval(result, index, element);    
+            add_assoc_zval(result, index, arr);    
             pUnPacker->Next();
         }
     }
