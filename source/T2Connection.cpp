@@ -55,7 +55,7 @@ zval * packToZval(IF2UnPacker *pUnPacker)
         
         int row_count = (int)pUnPacker->GetRowCount();
         // 打印所有记录
-        for (j = 0; j < row; ++j)
+        for (j = 0; j < row_count; ++j)
         {
             zval *arr = NULL;
             ALLOC_INIT_ZVAL(arr);
@@ -238,7 +238,7 @@ zval* T2Connection::req330300(char *stock_id, char query_type, char *exchange_ty
 
     IF2UnPacker *pUnPacker = NULL;
     int errorNo = 0;
-    char *errorMsg = "";
+    char *errorMsg = (char *)malloc(256);
 
     int send = lp_SecuRequestMode->SendRequest(lpBizMessage, pPacker, iSystemNo, pUnPacker, errorNo, errorMsg);
     if(send != 0)
