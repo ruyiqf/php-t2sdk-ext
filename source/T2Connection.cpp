@@ -59,9 +59,6 @@ zval * packToZval(IF2UnPacker *pUnPacker)
         pUnPacker->SetCurrentDatasetByIndex(i);
         
         int row_count = (int)pUnPacker->GetRowCount();
-
-        zval *list = new zval[row_count];
-
         // 打印所有记录
         for (j = 0; j < row_count; ++j)
         {
@@ -74,17 +71,17 @@ zval * packToZval(IF2UnPacker *pUnPacker)
                 const char *col_name = pUnPacker->GetColName(k);
                   //strcpy(col, col_name);
                   //puts(col);
-                //printf("%20c", pUnPacker->GetColType(k));
+                printf("%20c", pUnPacker->GetColType(k));
                 switch (pUnPacker->GetColType(k))
                 {
                     case 'I':
-                    //printf("%20d", pUnPacker->GetIntByIndex(k));
+                    printf("%20d", pUnPacker->GetIntByIndex(k));
                     ivalue = pUnPacker->GetIntByIndex(k);
                     add_assoc_long(arr, col_name, ivalue);
                     break;
                     
                     case 'C':
-                    //printf("%20c", pUnPacker->GetCharByIndex(k));
+                    printf("%20c", pUnPacker->GetCharByIndex(k));
                     cvalue = pUnPacker->GetCharByIndex(k);
                     sprintf(ccvalue, "%20c", cvalue);
                     add_assoc_string(arr, col_name, ccvalue, 1);
@@ -98,7 +95,7 @@ zval * packToZval(IF2UnPacker *pUnPacker)
                     break;
                     
                     case 'F':
-                    //printf("%20f", pUnPacker->GetDoubleByIndex(k));
+                    printf("%20f", pUnPacker->GetDoubleByIndex(k));
                     fvalue = pUnPacker->GetDoubleByIndex(k);
                     add_assoc_double(arr, col_name, fvalue);
                     break;
@@ -114,8 +111,7 @@ zval * packToZval(IF2UnPacker *pUnPacker)
                 }
             }
 
-            memcpy(*(list+j), arr, sizeof(zval));
-            add_next_index_zval(result, *(list+j));    
+            add_next_index_zval(result, arr);    
             pUnPacker->Next();
         }
     }
