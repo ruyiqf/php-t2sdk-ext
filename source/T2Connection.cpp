@@ -13,7 +13,7 @@ extern packer T2NewPacker;
 extern unpacker T2NewUnPacker;
 extern biz_message T2NewBizMessage;
 
-zval * errorToZval(int errorNo, const char *errorMsg)
+zval * errorToZval(int errorNo, char *errorMsg)
 {
     zval *result;
     ALLOC_INIT_ZVAL(result);
