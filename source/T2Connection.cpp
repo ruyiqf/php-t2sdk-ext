@@ -113,7 +113,7 @@ zval * packToZval(IF2UnPacker *pUnPacker)
                 }
             }
 
-            add_next_index_zval(result, arr[j]);    
+            add_next_index_zval(result, *arr[j]);    
             pUnPacker->Next();
         }
     }
