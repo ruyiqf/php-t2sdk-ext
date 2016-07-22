@@ -28,8 +28,9 @@ zval * errorToZval(int errorNo, char *errorMsg)
 zval * packToZval(IF2UnPacker *pUnPacker)
 {
     zval *result;
-    ALLOC_INIT_ZVAL(result);
-    array_init(result);
+    MAKE_STD_ZVAL(result);
+    //ALLOC_INIT_ZVAL(result);
+    //array_init(result);
 
     if(NULL == pUnPacker)
     {
@@ -57,9 +58,10 @@ zval * packToZval(IF2UnPacker *pUnPacker)
         // 打印所有记录
         for (j = 0; j < row_count; ++j)
         {
-            zval *arr = NULL;
-            ALLOC_INIT_ZVAL(arr);
-            array_init(arr);
+            zval *arr;
+            MAKE_STD_ZVAL(arr);
+            //ALLOC_INIT_ZVAL(arr);
+            //array_init(arr);
             for (k = 0; k < pUnPacker->GetColCount(); ++k)
             {
                 const char *col_name = pUnPacker->GetColName(k);
