@@ -649,6 +649,21 @@ PHP_METHOD(T2Connection, p_req332254)
     RETURN_ZVAL(result, 1, 0);
 }
 
+PHP_METHOD(T2Connection, p_req332255)
+{
+    T2Connection *t2connection;
+    t2connection_object *obj = (t2connection_object *)zend_object_store_get_object(
+        getThis() TSRMLS_CC);
+    
+    zval * result;
+    t2connection = obj->t2connection;
+    if (t2connection != NULL) {
+        result = t2connection->req332255();
+    }
+
+    RETURN_ZVAL(result, 1, 0);
+}
+
 PHP_METHOD(T2Connection, p_req331157)
 {
     T2Connection *t2connection;
@@ -766,6 +781,7 @@ zend_function_entry t2connection_methods[] = {
     PHP_ME(T2Connection,  p_req332250,  NULL, ZEND_ACC_PUBLIC)  //存款资金账户转账日志查询  
     PHP_ME(T2Connection,  p_req332253,  NULL, ZEND_ACC_PUBLIC)  //银行余额查询
     PHP_ME(T2Connection,  p_req332254,  NULL, ZEND_ACC_PUBLIC)  //客户资金快速查询
+    PHP_ME(T2Connection,  p_req332255,  NULL, ZEND_ACC_PUBLIC)  //客户资金精确查询
     PHP_ME(T2Connection,  p_req331157,  NULL, ZEND_ACC_PUBLIC)  //客户银行账户查询
     PHP_ME(T2Connection,  p_req339200,  NULL, ZEND_ACC_PUBLIC)  //历史资金流水查询 
     PHP_ME(T2Connection,  p_req339204,  NULL, ZEND_ACC_PUBLIC)  //历史转账流水查询

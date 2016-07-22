@@ -8,6 +8,12 @@ extern packer T2NewPacker;
 extern unpacker T2NewUnPacker;
 extern biz_message T2NewBizMessage;
 
+/**
+ * 打印T2的返回结果
+ * 调用该方法会将pUnPacker的指针移到数组末尾，因此调试的时候要小心。
+ * @param iIssueType [description]
+ * @param pUnPacker  [description]
+ */
 void ShowPacket(int iIssueType, IF2UnPacker *pUnPacker)
 {
 	int i = 0, t = 0, j = 0, k = 0;
