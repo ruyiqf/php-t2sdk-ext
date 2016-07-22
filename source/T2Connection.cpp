@@ -13,64 +13,6 @@ extern packer T2NewPacker;
 extern unpacker T2NewUnPacker;
 extern biz_message T2NewBizMessage;
 
-void ShowPacket1(int iIssueType, IF2UnPacker *pUnPacker)
-{
-    int i = 0, t = 0, j = 0, k = 0;
-
-    for (i = 0; i < pUnPacker->GetDatasetCount(); ++i)
-    {
-        // 设置当前结果集
-        pUnPacker->SetCurrentDatasetByIndex(i);
-
-        // 打印字段
-        for (t = 0; t < pUnPacker->GetColCount(); ++t)
-        {
-            printf("%20s", pUnPacker->GetColName(t));
-        }
-
-        putchar('\n');
-
-        // 打印所有记录
-        for (j = 0; j < (int)pUnPacker->GetRowCount(); ++j)
-        {
-            // 打印每条记录
-            for (k = 0; k < pUnPacker->GetColCount(); ++k)
-            {
-                switch (pUnPacker->GetColType(k))
-                {
-                    case 'I':
-                    printf("%20d", pUnPacker->GetIntByIndex(k));
-                    break;
-
-                    case 'C':
-                    printf("%20c", pUnPacker->GetCharByIndex(k));
-                    break;
-
-                    case 'S':
-                    printf("%20s", pUnPacker->GetStrByIndex(k));
-                    break;
-
-                    case 'F':
-                    printf("%20f", pUnPacker->GetDoubleByIndex(k));
-                    break;
-
-                    case 'R':
-                    {
-                        break;
-                    }               
-                    default:
-                    // 未知数据类型
-                    printf("未知数据类型。\n");
-                    break;
-                }
-            }       
-            putchar('\n');      
-            pUnPacker->Next();
-        }
-        putchar('\n');
-    }
-}
-
 zval * errorToZval(int errorNo, char *errorMsg)
 {
     zval *result;
@@ -89,7 +31,6 @@ zval * errorToZval(int errorNo, char *errorMsg)
  */
 zval * packToZval(IF2UnPacker *pUnPacker)
 {
-    ShowPacket1(0, pUnPacker);
     zval *result;
     MAKE_STD_ZVAL(result);
     //ALLOC_INIT_ZVAL(result);
