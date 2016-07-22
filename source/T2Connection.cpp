@@ -13,7 +13,7 @@ extern packer T2NewPacker;
 extern unpacker T2NewUnPacker;
 extern biz_message T2NewBizMessage;
 
-void ShowPacket(IF2UnPacker *pUnPacker)
+void ShowPacket1(IF2UnPacker *pUnPacker)
 {
     int i = 0, t = 0, j = 0, k = 0;
 
@@ -89,7 +89,7 @@ zval * errorToZval(int errorNo, char *errorMsg)
  */
 zval * packToZval(IF2UnPacker *pUnPacker)
 {
-    ShowPacket(pUnPacker);
+    ShowPacket1(pUnPacker);
     zval *result;
     MAKE_STD_ZVAL(result);
     //ALLOC_INIT_ZVAL(result);
