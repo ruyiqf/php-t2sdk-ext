@@ -110,10 +110,8 @@ zval * packToZval(IF2UnPacker *pUnPacker)
                     break;
                 }
             }
-            printf("index:%d", j) ;  
-            sprintf(index, "%d", j);  
 
-            add_assoc_zval(result, index, arr);    
+            add_next_index_zval(result, arr);    
             pUnPacker->Next();
         }
     }
