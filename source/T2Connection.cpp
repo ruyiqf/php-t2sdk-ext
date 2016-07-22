@@ -24,13 +24,17 @@ zval * errorToZval(int errorNo, char *errorMsg)
 
     return result;
 }
-
+/**
+ * Zend不会复制zval，只会简单的储存其指针，并且不关心任何引用计数，因此不能将其他变量的zval或者是栈上的zval传给它，只能用MAKE_STD_ZVAL()宏构建。
+ * @param  pUnPacker [description]
+ * @return           [description]
+ */
 zval * packToZval(IF2UnPacker *pUnPacker)
 {
     zval *result;
     MAKE_STD_ZVAL(result);
     //ALLOC_INIT_ZVAL(result);
-    //array_init(result);
+    array_init(result);
 
     if(NULL == pUnPacker)
     {
@@ -61,7 +65,7 @@ zval * packToZval(IF2UnPacker *pUnPacker)
             zval *arr;
             MAKE_STD_ZVAL(arr);
             //ALLOC_INIT_ZVAL(arr);
-            //array_init(arr);
+            array_init(arr);
             for (k = 0; k < pUnPacker->GetColCount(); ++k)
             {
                 const char *col_name = pUnPacker->GetColName(k);
