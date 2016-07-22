@@ -114,8 +114,8 @@ zval * packToZval(IF2UnPacker *pUnPacker)
                 }
             }
 
-            ZVAL_ZVAL(list[j], arr, 1, 0);
-            add_next_index_zval(result, arr[j]);    
+            memcpy(list[j], arr, sizeof(zval));
+            add_next_index_zval(result, *list[j]);    
             pUnPacker->Next();
         }
     }
